@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "pi-autonomous-rsi-development-baseline.v1",
+  "baselineId": "r09-method-v140-runtime",
+  "codeIdentity": {
+    "historicalRevisionCommit": "7ba7710c9c99acb33b184d93307dd7ac79c81e19",
+    "historicalRevisionTree": "1b7ff5656ff9b8d14f3b1f8597c22787893a3156",
+    "historicalTag": "human/revision/v0005/r09",
+    "executableRuntimeCommit": "3302ba25cc80f2a987668c31ea597eb6ff1dc0a8",
+    "executableRuntimeTree": "844fcb516b570bed506aeb21efbc2ca15c72b452",
+    "executableRuntimeTag": "v1.4.0",
+    "variantCodePolicy": "r09_scientific_product_closure_with_exact_iclr_latest_controller"
+  },
+  "runtimeBinding": {
+    "modelProvider": "openai-codex",
+    "modelId": "gpt-5.6-sol",
+    "thinkingLevel": "high",
+    "maxCandidates": 128,
+    "maxDonorContexts": 12,
+    "genomePath": "genomes/human-v0005-mainline-semantic-reasoner-r9.json",
+    "genomeSha256": "2d665b486163e3a6052d36be47a1e7b9d2ebcef2e8392171c8ca651fc9c16f16"
+  },
+  "retrospectiveObservation": {
+    "status": "human_directed_retrospective_engineering",
+    "eligibleForProspectivePromotion": false,
+    "openedHistoricalResultsImported": false
+  },
+  "evidenceBindings": [
+    {
+      "path": "config/r09-v140-source-provenance.json",
+      "sha256": "82757e49fe4e20940d63d12220240db25550225b29777b54ca61e12d59d4542a"
+    }
+  ],
+  "claimBoundary": "R09/v1.4 generation-0 code identity only; no historical benchmark result, candidate, selection, formal promotion, or sealed claim is inherited.",
+  "requiredConfirmation": "Any scientific selection requires a separately frozen evaluator contract, common-data manifest, starting-toolbox manifest and fresh development/sealed campaign.",
+  "canonicalHash": "c31ee0ff2576b39cfba8b0d0ca0fd6248f9a5b9cde5e18cb318e478ddaf92858"
+}

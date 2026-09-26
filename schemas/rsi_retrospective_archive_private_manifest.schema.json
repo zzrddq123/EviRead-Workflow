@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-retrospective-archive-private-manifest.v1",
+  "title": "Owner-only inventory for private retrospective RSI artifacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "archiveKind",
+    "specHash",
+    "publicManifestHash",
+    "artifacts",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-retrospective-archive-private-manifest.v1"
+    },
+    "archiveKind": {
+      "const": "rsi_retrospective_private_artifacts"
+    },
+    "specHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "publicManifestHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f](?:[^\\\\\\u0000-\\u001f\\u007f]*[^/\\\\\\u0000-\\u001f\\u007f])?$"
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relativePath",
+        "sha256",
+        "size"
+      ],
+      "properties": {
+        "relativePath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactId",
+        "sourceRelativePath",
+        "sourceKind",
+        "directories",
+        "files"
+      ],
+      "properties": {
+        "artifactId": {
+          "$ref": "#/$defs/id"
+        },
+        "sourceRelativePath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sourceKind": {
+          "enum": [
+            "file",
+            "directory"
+          ]
+        },
+        "directories": {
+          "type": "array",
+          "maxItems": 1000000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          }
+        },
+        "files": {
+          "type": "array",
+          "maxItems": 1000000,
+          "items": {
+            "$ref": "#/$defs/file"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sourceKind": {
+                "const": "file"
+              }
+            },
+            "required": [
+              "sourceKind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "directories": {
+                "maxItems": 0
+              },
+              "files": {
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

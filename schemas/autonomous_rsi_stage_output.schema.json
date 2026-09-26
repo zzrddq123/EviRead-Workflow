@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-stage-output.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "iteration", "stage", "status", "summary", "payload", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-stage-output.v1" },
+    "campaignId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,95}$" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "stage": { "enum": ["evaluate", "diagnose", "research", "plan", "develop", "verify"] },
+    "status": { "enum": ["completed", "stop", "retryable_failure", "fatal_failure"] },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "payload": { "type": "object" },
+    "canonicalHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

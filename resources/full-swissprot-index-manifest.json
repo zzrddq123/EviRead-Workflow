@@ -1,0 +1,35 @@
+{
+  "schema": "biolm-index.v1",
+  "count": 573661,
+  "smoke_only": false,
+  "pooling": "residue-weighted-1022-chunks-l2.v1",
+  "fasta_sha256": "6a9a6c21d0d3f5074a0d6487b6f07e0861d915e6783167b3ff4a73f50f6c7ed4",
+  "terms_sha256": "8385347c0b941c4bb4f3da08ba71e852563d7d69b27d265a2b17ee39ca528405",
+  "model_receipt_sha256": "d61e51a670042d3745f030cc0a4f31f3279396e5a5de7e7523f369306aeac529",
+  "files": {
+    "references.json": "bff469a7be9ac81f63537602e22bf019126c34592b18ec878db60be13b851834",
+    "esm2.npy": "57353ed7a8d48461ad28088bc0178b2b875f914f860de213a2b299661e9c8c37",
+    "esmc.npy": "3779ba8269b4930bbf0f249624988eebee12e205259195658ca4f9d531fa2f68",
+    "protrek.npy": "6c319823609706ebd3d60561256f88f083d8ada95146ab10935c7fe026335eb2"
+  },
+  "shapes": {
+    "esm2.npy": [
+      573661,
+      1280
+    ],
+    "esmc.npy": [
+      573661,
+      1152
+    ],
+    "protrek.npy": [
+      573661,
+      1024
+    ]
+  },
+  "resource_plane": "full-swissprot-2025_03",
+  "checkpointing": {
+    "shard_size": 2000,
+    "resume": true,
+    "retry_per_shard": 3
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "pi-agent-genome-snapshot.v1",
+  "genome": {
+    "schemaVersion": "pi-agent-genome.v1",
+    "genomeId": "rsi-v08-baseline__outer_01",
+    "parentGenomeId": "rsi-v08-baseline",
+    "generation": 6,
+    "evidencePolicy": {
+      "mode": "fixed_full_pipeline",
+      "requiredInputs": [
+        "amino_acid_fasta"
+      ]
+    },
+    "goPolicy": {
+      "methodId": "strict-blind-evidence-reasoned-go-v3",
+      "evidenceWeights": {
+        "EXP": 1,
+        "IDA": 1,
+        "IPI": 1,
+        "IMP": 1,
+        "IGI": 1,
+        "IEP": 1,
+        "HTP": 1,
+        "HDA": 1,
+        "HMP": 1,
+        "HGI": 1,
+        "HEP": 1,
+        "TAS": 0.85,
+        "IC": 0.85,
+        "IBA": 0.7,
+        "ISS": 0.55,
+        "ISO": 0.55,
+        "ISA": 0.55,
+        "ISM": 0.55,
+        "IGC": 0.55,
+        "RCA": 0.55,
+        "IEA": 0.3,
+        "ND": 0
+      },
+      "unknownEvidenceWeight": 0,
+      "lineageFloor": 0.85,
+      "lineageRange": 0.15,
+      "domainStructurePenalty": 0.5,
+      "globalStructureCoverageFloor": 0.7,
+      "minimumDonorGroupSupport": 0.05,
+      "minimumIndependentProvenanceRoots": 2,
+      "thresholds": {
+        "molecular_function": 0.15,
+        "biological_process": 0.25,
+        "cellular_component": 0.25
+      },
+      "maxSelectedTermsPerAspect": 20,
+      "requireTwoStructureDonorGroups": true,
+      "sequenceEligibilityMode": "retained_sequence",
+      "ontologyPolicy": {
+        "mode": "ancestor_closure",
+        "maxDepth": 8,
+        "scoreDecay": 1,
+        "excludeRoots": true,
+        "relations": [
+          "is_a",
+          "part_of"
+        ]
+      },
+      "candidateSourcePolicy": {
+        "mode": "disabled",
+        "minimumBaseScore": 0.35,
+        "minimumQueryCoverage": 0.2,
+        "minimumEvidenceWeight": 0.45,
+        "requireIndependentRoots": 1,
+        "allowedSources": [
+          "interpro",
+          "pfam",
+          "panther",
+          "ec",
+          "oma_ortholog",
+          "oma_fastmap"
+        ]
+      },
+      "phylogenyPolicy": {
+        "mode": "disabled",
+        "relationWeights": {
+          "one_to_one": 1,
+          "one_to_many": 0.82,
+          "many_to_one": 0.82,
+          "many_to_many": 0.68,
+          "coortholog": 0.76,
+          "unresolved_ortholog": 0.55,
+          "post_duplication_paralog": 0.25
+        },
+        "aspectDistanceDecay": {
+          "molecular_function": 0.12,
+          "biological_process": 0.28,
+          "cellular_component": 0.22
+        },
+        "lineageFloor": 0.72,
+        "lineageRange": 0.28,
+        "paralogLeafTransferAllowed": false,
+        "cladeCollapseDepth": 6
+      },
+      "goJudgePolicy": {
+        "mode": "disabled",
+        "executionMode": "deterministic",
+        "maxCandidates": 128
+      },
+      "selectionPolicy": {
+        "mode": "evidence_frontier_v1",
+        "aspects": [
+          "biological_process"
+        ]
+      }
+    },
+    "narrativePolicy": {
+      "defaultMode": "pi",
+      "maxRevisionCycles": 2
+    },
+    "improvementPolicy": {
+      "enabled": false,
+      "externalFeedbackRequired": true,
+      "promotionEvaluator": "not_configured_in_mvp"
+    },
+    "claimBoundary": "Outer-harness candidate bound to contract d7e002d7619914d39b07c80a78df6ce6e1e1eb6feb911a743ec8ac87d25ac52f; not deployed without one-shot selection and promotion."
+  },
+  "genomeHash": "e1afeaffed01e4aff98c9399ba10302964919453fd071a1a452f443bb25af6e6",
+  "immutableContractHash": "d998ced653edd5783daa586c75624816ba8947f35f0820546d0df847aa35ea5e"
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "pi-omamer-runtime-lock.v1",
+  "resourceId": "omamer-runtime-2.0.3",
+  "runtime": {
+    "python": "3.11",
+    "environmentManager": "uv",
+    "environmentRelativePath": ".venv",
+    "supportedPlatforms": [
+      "linux-64",
+      "linux-aarch64",
+      "osx-64",
+      "osx-arm64"
+    ],
+    "directRequirementsPath": "bootstrap/omamer-requirements.in",
+    "directRequirementsSha256": "4bc5a018268b9a2160f2f4fb11cff3c7713a2ff94ea7f40261cbfb3a95819a8e",
+    "platformLocks": {
+      "linux-64": {
+        "path": "bootstrap/locks/omamer/linux-64.txt",
+        "sha256": "bdd65a9a5d265de5f7d339743861383fd85c0521ca69e92ae6cd735f1c4c4ca3"
+      },
+      "linux-aarch64": {
+        "path": "bootstrap/locks/omamer/linux-aarch64.txt",
+        "sha256": "bdd65a9a5d265de5f7d339743861383fd85c0521ca69e92ae6cd735f1c4c4ca3"
+      },
+      "osx-64": {
+        "path": "bootstrap/locks/omamer/osx-64.txt",
+        "sha256": "bdd65a9a5d265de5f7d339743861383fd85c0521ca69e92ae6cd735f1c4c4ca3"
+      },
+      "osx-arm64": {
+        "path": "bootstrap/locks/omamer/osx-arm64.txt",
+        "sha256": "bdd65a9a5d265de5f7d339743861383fd85c0521ca69e92ae6cd735f1c4c4ca3"
+      }
+    }
+  },
+  "commands": {
+    "executableRelativePath": ".venv/bin/omamer",
+    "importCheck": [
+      "omamer",
+      "tables"
+    ]
+  },
+  "policy": {
+    "allowUnpinnedDependencies": false,
+    "requireHashes": true,
+    "allowHashLockedSourceDistributions": true,
+    "allowPythonDownloads": false
+  },
+  "canonicalHash": "7cd02fd25519ed3366eb56e19aa2c18d60527e21134c1c05b1353694c2511a6b"
+}

@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-go-prediction.v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "proteinId", "targetMode", "identityPolicy", "queryAccession", "queryLikeAccessions", "explicitlyExcludedAccessions", "queryTaxonId", "queryLineage", "targetContext", "genomeId", "genomeHash", "methodId", "methodSummary", "calibrationStatus", "dagProjectionStatus", "candidateSources", "phylogenyStatus", "taxonConstraintStatus", "thresholds", "quarantinedGoIds", "predictedGoIds", "terms", "canonicalHash", "limitations"],
+  "properties": {
+    "schemaVersion": {"const": "pi-go-prediction.v3"},
+    "proteinId": {"type": "string", "minLength": 1},
+    "targetMode": {"enum": ["anonymous", "named_uncharacterized"]},
+    "identityPolicy": {"enum": ["strict_blind_v1", "temporal_t0_v1"]},
+    "queryAccession": {"type": ["string", "null"]},
+    "queryLikeAccessions": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "explicitlyExcludedAccessions": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "queryTaxonId": {"type": ["integer", "null"], "minimum": 1},
+    "queryLineage": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "targetContext": {"$ref": "#/$defs/targetContext"},
+    "genomeId": {"type": "string", "minLength": 1},
+    "genomeHash": {"$ref": "#/$defs/sha256"},
+    "methodId": {"type": "string", "minLength": 1},
+    "methodSummary": {"type": "string", "minLength": 1},
+    "selectionPolicyMode": {"const": "evidence_frontier_v1"},
+    "selectionPolicyAspects": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["molecular_function", "biological_process", "cellular_component"]}
+    },
+    "calibrationStatus": {"const": "unavailable"},
+    "dagProjectionStatus": {"enum": ["not_applied", "ancestor_closure_applied"]},
+    "ontologyBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataVersion", "sourceSha256", "policy", "maxDepth", "scoreDecay", "rootsExcluded"],
+      "properties": {
+        "dataVersion": {"type": "string", "minLength": 1},
+        "sourceSha256": {"$ref": "#/$defs/sha256"},
+        "policy": {"const": "safe_is_a_part_of_ancestor_closure_v1"},
+        "maxDepth": {"type": "integer", "minimum": 1, "maximum": 32},
+        "scoreDecay": {"type": "number", "minimum": 0, "maximum": 1},
+        "rootsExcluded": {"const": true}
+      }
+    },
+    "candidateSources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundleHash", "providers", "candidateCount", "appliedCandidateCount"],
+      "properties": {
+        "bundleHash": {"$ref": "#/$defs/sha256"},
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "status", "release", "payloadSha256", "reason"],
+            "properties": {
+              "provider": {"enum": ["BioLM", "InterProScan", "GOA_mapping", "OMA", "mDeepFRI", "DeepGOPlus"]},
+              "status": {"enum": ["completed", "unavailable", "failed", "disabled"]},
+              "release": {"type": ["string", "null"]},
+              "payloadSha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+              "reason": {"type": ["string", "null"]}
+            }
+          }
+        },
+        "candidateCount": {"type": "integer", "minimum": 0},
+        "admittedCandidateCount": {"type": "integer", "minimum": 0},
+        "appliedCandidateCount": {"type": "integer", "minimum": 0},
+        "selectionEligibleCandidateCount": {"type": "integer", "minimum": 0},
+        "selectedCandidateTermCount": {"type": "integer", "minimum": 0},
+        "sourceStats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["sourceType", "normalized", "admitted", "selectionEligible", "novelToDirectPool", "selectedTerms"],
+            "properties": {
+              "sourceType": {"enum": ["biolm_retrieval", "interpro", "pfam", "panther", "ec", "oma_ortholog", "oma_fastmap", "mdeepfri_cnn", "mdeepfri_gcn", "deepgoplus_cnn", "deepgoplus_hybrid"]},
+              "normalized": {"type": "integer", "minimum": 0},
+              "admitted": {"type": "integer", "minimum": 0},
+              "selectionEligible": {"type": "integer", "minimum": 0},
+              "novelToDirectPool": {"type": "integer", "minimum": 0},
+              "selectedTerms": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "phylogenyStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "targetTaxonStatus", "evidenceCount", "appliedCount", "quarantinedCount"],
+      "properties": {
+        "mode": {"enum": ["disabled", "orthology_aware"]},
+        "targetTaxonStatus": {"enum": ["provided", "unavailable"]},
+        "evidenceCount": {"type": "integer", "minimum": 0},
+        "appliedCount": {"type": "integer", "minimum": 0},
+        "quarantinedCount": {"type": "integer", "minimum": 0},
+        "lineageWeightedSupportCount": {"type": "integer", "minimum": 0},
+        "selectedLineageWeightedSupportCount": {"type": "integer", "minimum": 0}
+      }
+    },
+    "goJudgeStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedMode", "modeUsed", "viewHash", "decisionHash", "judgedCandidateCount", "fallbackReason"],
+      "properties": {
+        "requestedMode": {"enum": ["deterministic", "pi"]},
+        "modeUsed": {"enum": ["deterministic", "pi"]},
+        "viewHash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "decisionHash": {"$ref": "#/$defs/sha256"},
+        "judgedCandidateCount": {"type": "integer", "minimum": 0, "maximum": 128},
+        "candidateBudgetMode": {"enum": ["global_ranked_v1", "aspect_stratified_v1"]},
+        "candidateRetentionMode": {"enum": ["fail_closed_v1", "preserve_ranked_evidence_v1"]},
+        "fallbackReason": {"type": ["string", "null"]}
+      }
+    },
+    "semanticGoJudgeStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modeUsed", "viewHash", "decisionHash", "candidateCount", "acceptedCount", "modelProvider", "modelId", "thinkingLevel", "maxCandidates", "maxDonorContexts", "scoringPolicy", "failurePolicy"],
+      "properties": {
+        "modeUsed": {"const": "pi"},
+        "viewHash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "decisionHash": {"$ref": "#/$defs/sha256"},
+        "candidateCount": {"type": "integer", "minimum": 0, "maximum": 128},
+        "acceptedCount": {"type": "integer", "minimum": 0, "maximum": 12},
+        "modelProvider": {"type": "string", "minLength": 1},
+        "modelId": {"type": "string", "minLength": 1},
+        "thinkingLevel": {"type": "string", "minLength": 1},
+        "maxCandidates": {"type": "integer", "minimum": 1, "maximum": 128},
+        "maxDonorContexts": {"type": "integer", "minimum": 1, "maximum": 48},
+        "scoringPolicy": {"enum": ["r08_compact_acceptance_v1", "r08_compact_acceptance_global_calibration_v1"]},
+        "failurePolicy": {"const": "fail_closed"}
+      }
+    },
+    "scoreFusionStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "anchorWeights"],
+      "properties": {
+        "mode": {"const": "deepgoplus_anchor_v1"},
+        "anchorWeights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["molecular_function", "biological_process", "cellular_component"],
+          "properties": {
+            "molecular_function": {"type": "number", "minimum": 0, "maximum": 1.5},
+            "biological_process": {"type": "number", "minimum": 0, "maximum": 1.5},
+            "cellular_component": {"type": "number", "minimum": 0, "maximum": 1.5}
+          }
+        }
+      }
+    },
+    "taxonConstraintStatus": {"enum": ["not_evaluated", "unavailable", "applied"]},
+    "thresholds": {"$ref": "#/$defs/aspectNumbers"},
+    "quarantinedGoIds": {"type": "array", "items": {"$ref": "#/$defs/goId"}, "uniqueItems": true},
+    "ontologyQuarantinedGoIds": {"type": "array", "items": {"$ref": "#/$defs/goId"}, "uniqueItems": true},
+    "predictedGoIds": {"type": "array", "items": {"$ref": "#/$defs/goId"}, "uniqueItems": true},
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["goId", "termName", "aspect", "decision", "selected", "rawScore", "phylogenyAdjustedScore", "calibrationStatus", "confidenceLabel", "evidenceCode", "donorSupports", "evidenceIds", "reasons"],
+        "properties": {
+          "goId": {"$ref": "#/$defs/goId"},
+          "termName": {"type": "string", "minLength": 1},
+          "aspect": {"enum": ["molecular_function", "biological_process", "cellular_component", "unknown"]},
+          "decision": {"enum": ["transfer_hypothesis", "abstained"]},
+          "selected": {"type": "boolean"},
+          "rawScore": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "phylogenyAdjustedScore": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "judgeAdjustedScore": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "semanticAdjustedScore": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "fusionAdjustedScore": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "preBudgetEligible": {"type": "boolean"},
+          "selectionRole": {"enum": ["primary_direct", "entailed_ancestor", "not_selected"]},
+          "selectionRank": {"type": ["integer", "null"], "minimum": 1},
+          "calibrationStatus": {"const": "unavailable"},
+          "confidenceLabel": {"enum": ["low_heuristic", "abstained"]},
+          "evidenceCode": {"type": "string"},
+          "donorSupports": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/donorSupport"}},
+          "evidenceIds": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+          "reasons": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "selectionBlockers": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"enum": ["unknown_aspect", "non_mf_structure_only", "insufficient_structure_groups", "insufficient_provenance_roots", "candidate_provider_floor", "candidate_independent_roots", "candidate_term_threshold", "phylogeny_leaf_forbidden", "below_threshold", "per_aspect_budget", "judge_candidate_budget", "source_hypothesis_not_selected"]}
+          },
+          "candidateOrigin": {"enum": ["direct_annotation", "direct_candidate_source", "ontology_ancestor"]},
+          "sourceGoIds": {"type": "array", "items": {"$ref": "#/$defs/goId"}, "uniqueItems": true},
+          "ontologyDepth": {"type": "integer", "minimum": 0, "maximum": 32},
+          "agentJudgment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["candidateToken", "verdict", "factor", "citedEvidenceIds"],
+            "properties": {
+              "candidateToken": {"type": "string", "pattern": "^cand_[a-f0-9]{16,64}$"},
+              "verdict": {"enum": ["support", "uncertain", "contradict"]},
+              "factor": {"type": "number", "minimum": 0, "maximum": 1.05},
+              "citedEvidenceIds": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+            }
+          },
+          "semanticJudgment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["candidateToken", "status", "confidence", "citedEvidenceIds", "rationale"],
+            "properties": {
+              "candidateToken": {"type": "string", "pattern": "^cand_[a-f0-9]{16,64}$"},
+              "status": {"enum": ["accepted", "rejected", "omitted"]},
+              "confidence": {"type": ["string", "null"], "enum": ["high", "medium", "low", null]},
+              "citedEvidenceIds": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+              "rationale": {"type": ["string", "null"], "maxLength": 360}
+            }
+          }
+        }
+      }
+    },
+    "canonicalHash": {"$ref": "#/$defs/sha256"},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  },
+  "allOf": [{
+    "if": {"required": ["selectionPolicyAspects"]},
+    "then": {"required": ["selectionPolicyMode"]}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "goId": {"type": "string", "pattern": "^GO:[0-9]{7}$"},
+    "targetContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taxon", "phylogeny"],
+      "properties": {
+        "taxon": {
+          "type": "object", "additionalProperties": false, "required": ["taxonId", "provenance"],
+          "properties": {"taxonId": {"type": ["integer", "null"], "minimum": 1}, "provenance": {"enum": ["provided", "unavailable"]}}
+        },
+        "phylogeny": {
+          "type": "object", "additionalProperties": false, "required": ["mode", "status"],
+          "properties": {"mode": {"enum": ["optional", "required"]}, "status": {"enum": ["requested", "unavailable_missing_taxon"]}}
+        }
+      }
+    },
+    "aspectNumbers": {
+      "type": "object", "additionalProperties": false, "required": ["molecular_function", "biological_process", "cellular_component"],
+      "properties": {
+        "molecular_function": {"type": "number", "minimum": 0, "maximum": 1},
+        "biological_process": {"type": "number", "minimum": 0, "maximum": 1},
+        "cellular_component": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "donorSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accession", "donorGroup", "proteinName", "organism", "taxonId", "annotationEvidenceId", "matchEvidenceIds", "matchMode", "similarityScore", "evidenceCode", "provenanceRoots", "evidenceWeight", "structureQualityFactor", "lineageFactor", "lineageStatus", "rawSupport", "adjustedSupport"],
+      "properties": {
+        "accession": {"type": "string", "minLength": 1},
+        "donorGroup": {"type": "string", "minLength": 1},
+        "proteinName": {"type": "string", "minLength": 1},
+        "organism": {"type": "string"},
+        "taxonId": {"type": ["integer", "null"], "minimum": 1},
+        "annotationEvidenceId": {"type": "string", "minLength": 1},
+        "matchEvidenceIds": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "matchMode": {"enum": ["sequence", "full_structure", "local_structure", "domain_structure", "domain_mapping", "sequence_mapping", "ec_mapping", "orthology", "learned_sequence", "learned_structure"]},
+        "hasSequence": {"type": "boolean"},
+        "sequenceSimilarityScore": {"type": "number", "minimum": 0, "maximum": 1},
+        "similarityScore": {"type": "number", "minimum": 0, "maximum": 1},
+        "evidenceCode": {"type": "string"},
+        "provenanceRoots": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "evidenceWeight": {"type": "number", "minimum": 0, "maximum": 1},
+        "structureQualityFactor": {"type": "number", "minimum": 0, "maximum": 1},
+        "lineageFactor": {"type": "number", "minimum": 0, "maximum": 1},
+        "lineageStatus": {"enum": ["applied", "unavailable"]},
+        "candidateSourceType": {"enum": ["biolm_retrieval", "interpro", "pfam", "panther", "ec", "oma_ortholog", "oma_fastmap", "mdeepfri_cnn", "mdeepfri_gcn", "deepgoplus_cnn", "deepgoplus_hybrid"]},
+        "sourceProvider": {"enum": ["BioLM", "InterProScan", "GOA_mapping", "OMA", "mDeepFRI", "DeepGOPlus"]},
+        "candidateBaseScore": {"type": "number", "minimum": 0, "maximum": 1},
+        "candidateQueryCoverage": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "candidateSelectionEligible": {"type": "boolean"},
+        "orthologyRelation": {"enum": ["one_to_one", "one_to_many", "many_to_one", "many_to_many", "coortholog", "unresolved_ortholog", "post_duplication_paralog"]},
+        "cladeKey": {"type": "string", "minLength": 1},
+        "leafTransferAllowed": {"type": "boolean"},
+        "phylogenyComponents": {
+          "type": "object", "additionalProperties": false, "required": ["relationFactor", "distanceFactor", "lineageFactor", "taxonConstraintFactor"],
+          "properties": {
+            "relationFactor": {"type": "number", "minimum": 0, "maximum": 1},
+            "distanceFactor": {"type": "number", "minimum": 0, "maximum": 1},
+            "lineageFactor": {"type": "number", "minimum": 0, "maximum": 1},
+            "taxonConstraintFactor": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "rawSupport": {"type": "number", "minimum": 0, "maximum": 1},
+        "adjustedSupport": {"type": "number", "minimum": 0, "maximum": 1},
+        "ontologyDepth": {"type": "integer", "minimum": 1, "maximum": 32},
+        "sourceGoId": {"$ref": "#/$defs/goId"}
+      }
+    }
+  }
+}

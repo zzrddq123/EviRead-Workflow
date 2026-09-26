@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-tool-acquisition-record.v1",
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "url": { "type": "string", "pattern": "^https://" },
+    "precommit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "campaignId", "updateIndex", "requestId", "toolId", "purpose", "sourceUrl", "artifactKind", "expectedArtifactHash", "maxBytes", "recordedAt", "previousEventHash", "canonicalHash"],
+      "properties": {
+        "schemaVersion": { "const": "pi-rsi-tool-acquisition-precommit.v1" }, "campaignId": { "$ref": "#/$defs/id" }, "updateIndex": { "type": "integer", "minimum": 1 }, "requestId": { "$ref": "#/$defs/id" }, "toolId": { "$ref": "#/$defs/id" }, "purpose": { "type": "string", "minLength": 1 }, "sourceUrl": { "$ref": "#/$defs/url" }, "artifactKind": { "enum": ["executable", "archive", "model", "data"] }, "expectedArtifactHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "maxBytes": { "type": "integer", "minimum": 1 }, "recordedAt": { "type": "string", "format": "date-time" }, "previousEventHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "canonicalHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "campaignId", "requestId", "toolId", "precommitHash", "sourceUrl", "artifactKind", "artifactHash", "byteCount", "installedRelativePath", "reusedHostCasArtifact", "acquiredAt", "previousEventHash", "canonicalHash"],
+      "properties": {
+        "schemaVersion": { "const": "pi-rsi-tool-acquisition-receipt.v1" }, "campaignId": { "$ref": "#/$defs/id" }, "requestId": { "$ref": "#/$defs/id" }, "toolId": { "$ref": "#/$defs/id" }, "precommitHash": { "$ref": "#/$defs/hash" }, "sourceUrl": { "$ref": "#/$defs/url" }, "artifactKind": { "enum": ["executable", "archive", "model", "data"] }, "artifactHash": { "$ref": "#/$defs/hash" }, "byteCount": { "type": "integer", "minimum": 1 }, "installedRelativePath": { "type": "string", "pattern": "^private-tools/" }, "reusedHostCasArtifact": { "type": "boolean" }, "acquiredAt": { "type": "string", "format": "date-time" }, "previousEventHash": { "$ref": "#/$defs/hash" }, "canonicalHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  },
+  "oneOf": [{ "$ref": "#/$defs/precommit" }, { "$ref": "#/$defs/receipt" }]
+}

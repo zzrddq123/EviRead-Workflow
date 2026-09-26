@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-outer-adaptive-index.v1",
+  "title": "Hash-linked adaptive30 RSI index", "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "objectiveHash", "rounds", "headOutcomeHash", "retainedGeneration", "retainedPredictionSetId", "bestDevelopmentFmax", "lineageAttempts", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-index.v1" }, "campaignId": { "$ref": "#/$defs/id" }, "objectiveHash": { "$ref": "#/$defs/hash" },
+    "rounds": { "type": "array", "maxItems": 32, "items": { "type": "object", "additionalProperties": false, "required": ["round", "proposalHash", "feedbackHash", "outcomeHash", "ledgerEntryHash"], "properties": { "round": { "type": "integer", "minimum": 1, "maximum": 32 }, "proposalHash": { "$ref": "#/$defs/hash" }, "feedbackHash": { "$ref": "#/$defs/hash" }, "outcomeHash": { "$ref": "#/$defs/hash" }, "ledgerEntryHash": { "$ref": "#/$defs/hash" } } } },
+    "headOutcomeHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "retainedGeneration": { "type": "integer", "minimum": 0, "maximum": 32 }, "retainedPredictionSetId": { "$ref": "#/$defs/id" }, "bestDevelopmentFmax": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+    "lineageAttempts": { "type": "array", "maxItems": 128, "items": { "type": "object", "additionalProperties": false, "required": ["candidateId", "family", "interventionId", "decision", "mechanismVerdict"], "properties": { "candidateId": { "$ref": "#/$defs/devId" }, "family": { "$ref": "#/$defs/family" }, "interventionId": { "$ref": "#/$defs/devId" }, "decision": { "enum": ["selected_successor", "eligible_ranked_lower", "reject_no_gain", "reject_aspect_guardrail", "reject_falsifier"] }, "mechanismVerdict": { "enum": ["pipeline_invariant_violation", "inactive", "localized_gain_precision_tradeoff", "no_material_effect", "general_gain", "cross_aspect_interference", "localized_gain", "general_regression", "not_evaluable"] } } } },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": { "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" }, "devId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" }, "family": { "enum": ["selection_policy", "modality_fusion", "ontology_reasoning", "candidate_sources", "phylogeny", "external_predictor", "score_calibration", "aspect_router", "pipeline"] } }
+}

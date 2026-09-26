@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "pi-external-resource-profile.v1",
+  "profileId": "strict_t0",
+  "purpose": "Primary fair benchmark track using only biological resources available by T0.",
+  "mode": "strict_t0_evidence_plane",
+  "knowledgeCutoff": "2025-09-04",
+  "networkPolicy": "biological_network_disabled",
+  "allowedFields": [
+    "anonymous_sequence",
+    "anonymous_t0_structure",
+    "donor_accession",
+    "donor_go_id",
+    "donor_go_aspect",
+    "donor_go_evidence_code",
+    "donor_taxon_id",
+    "donor_protein_name",
+    "donor_gene_symbol",
+    "donor_entry_name",
+    "donor_function",
+    "donor_ec_and_catalysis",
+    "donor_cofactor",
+    "donor_subcellular_location",
+    "donor_pathway",
+    "donor_domain_and_similarity",
+    "donor_ptm_and_interaction",
+    "donor_keywords",
+    "donor_evidence_and_references",
+    "donor_database_cross_references",
+    "donor_record_and_sequence_hashes",
+    "frozen_pdb_chain_uniprot_mapping",
+    "sequence_alignment_statistics",
+    "structure_alignment_statistics",
+    "domain_boundaries",
+    "inferred_target_lineage_context",
+    "taxonomy_evidence_provenance",
+    "orthology_hog_placement",
+    "orthology_supporting_species",
+    "orthology_source_go_evidence"
+  ],
+  "resources": [
+    {
+      "role": "sequence_and_annotation_store",
+      "source": "LAFA Sep_2025 terms/GOA plus UniProtKB/Swiss-Prot historical flat-file",
+      "version": "LAFA Sep_2025 + UniProt 2025_03",
+      "availableAt": "2025-09-04",
+      "uniprotReleaseDate": "2025-06-18",
+      "archiveMd5": "9d0f5a801d6b730582c1f6226080abe4",
+      "archiveSha256": "881726aec677fe3d1df629a07dc77f476fc1339aef3c4117f2bcbfeef6416a14",
+      "binding": "inner_resource_contract_and_annotation_store_manifest_sha256"
+    },
+    {
+      "role": "taxonomy_lineage_calibration",
+      "source": "NCBI Taxonomy historical taxdump archive",
+      "version": "2025-09-01",
+      "availableAt": "2025-09-01",
+      "sourceUrl": "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-09-01.zip",
+      "archiveSha256": "4416dfb78a2ceb630907b1f04b18c70521142d43896575db9afb435a0d267ab7",
+      "binding": "taxonomy_store_manifest_and_store_sha256"
+    },
+    {
+      "role": "orthology_phylogeny",
+      "source": "OMA All.Jul2024 plus OMAmer 2.0.3 LUCA database",
+      "version": "All.Jul2024; LUCA",
+      "availableAt": "2024-08-10",
+      "omamerDatabaseSha256": "53adf8307e244c3901e8e432e015f16f895efb777ea1f693e739169e0defb242",
+      "derivedStoreSha256": "a487ee21f9e1109c210fa0870d54c0961d2b9d4866afac19954775545ad7d1d6",
+      "binding": "oma_store_manifest_database_and_store_sha256",
+      "scope": "LUCA/all 2,927 species; multi-species HOG placement, not pairwise one-to-one orthology"
+    },
+    {
+      "role": "structure_donor_search",
+      "source": "Foldseek PDB100",
+      "version": "250101",
+      "availableAt": "2025-01-01",
+      "archiveSha256": "2ec2b8b83c5f9ccadc1d88d680cd3a40c04e2bcb4d67ba366cebbf6e8156b090"
+    }
+  ],
+  "candidateProviders": {
+    "taxonomy_lineage": "local_hash_bound_only",
+    "interpro": "disabled_until_t0_snapshot",
+    "oma": "local_hash_bound_all_species_hog",
+    "deepgoplus_cnn": "local_hash_bound_only",
+    "mdeepfri_cnn": "local_hash_bound_only",
+    "mdeepfri_gcn": "local_hash_bound_only"
+  },
+  "canonicalHash": "385526c876126c228dc2c9e32da2579de3142f9820ff907b702aaad5d43d53bc"
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "pi-external-go-predictor-lock.v1",
+  "predictorId": "mdeepfri-cnn-v1",
+  "supportedPlatforms": ["linux-64", "linux-aarch64", "osx-64", "osx-arm64"],
+  "adapter": {
+    "name": "deepfri-cnn-onnx-adapter",
+    "sourcePath": "python/mdeepfri_predictor.py",
+    "runnerSha256": "d24b45c5e97e98dca80207fdf6770cbf79fd8c1c7fc6f74aced90db3622a982c",
+    "runtimePackage": "onnxruntime",
+    "runtimeVersion": "1.16.3",
+    "implementation": "repository_owned_sequence_cnn_equivalent",
+    "upstreamRepository": "https://github.com/Tomasz-Lab/Metagenomic-DeepFRI",
+    "upstreamCommit": "366acae69245fba7b7bf0673c2c3e618e3e00869",
+    "upstreamReferencePath": "mDeepFRI/predict.pyx",
+    "upstreamLicense": "GPL-3.0-or-later"
+  },
+  "runtime": {
+    "python": "3.11",
+    "requirementsPath": "bootstrap/mdeepfri-requirements.lock.txt",
+    "requirementsSha256": "34e41dab0cc3922411c0eaae3952488ffd3fc373fd881db3848b8fe54f77dd30",
+    "environmentPath": ".runtime/predictors/mdeepfri-cnn-v1",
+    "installManifestPath": ".runtime/mdeepfri-cnn-v1-install-manifest.json"
+  },
+  "model": {
+    "family": "DeepCNN-MERGED",
+    "networkType": "sequence_cnn",
+    "declaredVersion": "1.0",
+    "sourceRevision": "e9b40fb6c1535eabd85ff5a90df00366e3a4e0ea",
+    "sourceBaseUrl": "https://huggingface.co/valentynbez/mDeepFRI/resolve/e9b40fb6c1535eabd85ff5a90df00366e3a4e0ea/",
+    "license": "MIT",
+    "scoreSemantics": "uncalibrated_model_score",
+    "config": {
+      "name": "model_config.json",
+      "sizeBytes": 755,
+      "sha256": "a2b8d78f858bf984c586b0946b98dd6d5202d412f7b5ba654d7dd2ab613948f0"
+    },
+    "files": [
+      {
+        "aspect": "biological_process",
+        "kind": "onnx",
+        "name": "DeepCNN-MERGED_bp.onnx",
+        "sizeBytes": 141837580,
+        "sha256": "98a2e9beb6c861ab957dcfde57aa5368689338d294057b5dd0bc5803570e4311"
+      },
+      {
+        "aspect": "biological_process",
+        "kind": "model_params",
+        "name": "DeepCNN-MERGED_bp_model_params.json",
+        "sizeBytes": 198386,
+        "sha256": "cf7e959de11ad87ad48ca699f99f6a3e7f8dd87513becaf2cc077516e33d5482"
+      },
+      {
+        "aspect": "cellular_component",
+        "kind": "onnx",
+        "name": "DeepCNN-MERGED_cc.onnx",
+        "sizeBytes": 47213320,
+        "sha256": "6cbd7ed35e14c1bb074e2a64dbe5a415217e3db51fa47fd39d6900366fe44933"
+      },
+      {
+        "aspect": "cellular_component",
+        "kind": "model_params",
+        "name": "DeepCNN-MERGED_cc_model_params.json",
+        "sizeBytes": 26128,
+        "sha256": "784727522ac2d8055a9dc6805945c726d8190e25dba22fd36787f21a7736a3eb"
+      },
+      {
+        "aspect": "molecular_function",
+        "kind": "onnx",
+        "name": "DeepCNN-MERGED_mf.onnx",
+        "sizeBytes": 59897539,
+        "sha256": "5f6cc70935ecc79edff7fbcd440c0af3413daeafc8018f86f4fb2cfdb142d30d"
+      },
+      {
+        "aspect": "molecular_function",
+        "kind": "model_params",
+        "name": "DeepCNN-MERGED_mf_model_params.json",
+        "sizeBytes": 55343,
+        "sha256": "7168a99fc328761a151bc13add84f82fc44eb53cf2fbad403e9c417b77e3805c"
+      }
+    ]
+  },
+  "claimBoundary": "The lock fixes executable/model bytes for an optional candidate generator. It does not establish calibration, absence of training overlap, temporal validity, or biological correctness."
+}

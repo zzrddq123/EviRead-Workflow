@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "pi-database-profiles.v1",
+  "profiles": {
+    "local_blast": {
+      "required": ["uniprot_sprot_fasta", "blast_swissprot", "go_basic_obo"],
+      "remoteServices": ["foldseek_remote"],
+      "estimatedDownload": "about 100 MB plus frozen packages; no local structure search database",
+      "annotationSource": "clone-local Swiss-Prot BLAST plus live Foldseek and UniProt/RCSB REST, with hash-bound per-run response caches",
+      "supportLevel": "recommended; local sequence search avoids NCBI queue latency while Foldseek remains a rolling preview dependency"
+    },
+    "remote": {
+      "required": ["go_basic_obo"],
+      "remoteServices": ["ncbi_blast_remote", "foldseek_remote"],
+      "estimatedDownload": "small GO ontology plus frozen packages; no local sequence or structure search database",
+      "annotationSource": "live NCBI BLAST, Foldseek, UniProt/RCSB REST, with hash-bound per-run response caches",
+      "supportLevel": "preview; public services are rolling and have no availability SLA"
+    },
+    "remote_broad": {
+      "required": ["go_basic_obo"],
+      "remoteServices": ["ncbi_blast_remote_broad", "foldseek_remote_broad"],
+      "estimatedDownload": "small GO ontology plus frozen packages; no local sequence or structure search database",
+      "annotationSource": "separate live NCBI Swiss-Prot and ClusteredNR jobs plus Foldseek Swiss-Prot, UniProt50, and PDB100, with hash-bound per-run response caches",
+      "supportLevel": "preview; broad discovery is rolling, slower, and must not be interpreted as stronger annotation by itself"
+    },
+    "sequence": {
+      "required": ["uniprot_sprot_fasta", "blast_swissprot", "go_basic_obo"],
+      "estimatedDownload": "about 100 MB plus packages",
+      "annotationSource": "live UniProt REST with per-run payload cache"
+    },
+    "sequence_structure": {
+      "required": ["uniprot_sprot_fasta", "blast_swissprot", "foldseek_alphafold_swissprot", "go_basic_obo"],
+      "optional": ["foldseek_pdb", "merizo", "chainsaw"],
+      "estimatedDownload": "multiple GB; upstream Foldseek database size can change",
+      "annotationSource": "live UniProt/RCSB REST with per-run payload cache"
+    }
+  },
+  "sources": {
+    "go_basic_obo": {
+      "url": "https://current.geneontology.org/ontology/go-basic.obo",
+      "source": "https://geneontology.org/docs/download-ontology/",
+      "license": "CC-BY-4.0",
+      "mode": "rolling_latest_observed_sha256_and_data_version"
+    },
+    "ncbi_blast_remote": {
+      "url": "https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi",
+      "documentation": "https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html",
+      "database": "swissprot",
+      "mode": "rolling_public_api_hash_cached_per_run",
+      "terms": "NCBI usage policies and database-provider terms apply"
+    },
+    "ncbi_blast_remote_broad": {
+      "url": "https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi",
+      "documentation": "https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html",
+      "databases": ["swissprot", "nr_cluster_seq"],
+      "mode": "two_independent_rolling_public_api_jobs_hash_cached_per_run",
+      "terms": "NCBI usage policies and database-provider terms apply"
+    },
+    "foldseek_remote": {
+      "url": "https://search.foldseek.com/api",
+      "documentation": "https://search.foldseek.com/docs/api",
+      "databases": ["afdb-swissprot", "pdb100"],
+      "alignmentMode": "tmalign",
+      "mode": "rolling_public_api_hash_cached_per_run",
+      "terms": "Foldseek server and underlying database-provider terms apply"
+    },
+    "foldseek_remote_broad": {
+      "url": "https://search.foldseek.com/api",
+      "documentation": "https://github.com/soedinglab/MMseqs2-App/wiki/API-Documentation",
+      "databases": ["afdb-swissprot", "afdb50", "pdb100"],
+      "alignmentMode": "tmalign",
+      "mode": "rolling_public_api_hash_cached_per_run",
+      "terms": "Foldseek server and underlying database-provider terms apply"
+    },
+    "uniprot_sprot_fasta": {
+      "url": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz",
+      "releaseMetadata": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/RELEASE.metalink",
+      "releaseDate": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/reldate.txt",
+      "license": "CC-BY-4.0",
+      "mode": "rolling_latest_verified_against_release_metalink"
+    },
+    "foldseek_alphafold_swissprot": {
+      "command": "foldseek databases Alphafold/Swiss-Prot <prefix> <tmp>",
+      "source": "https://github.com/steineggerlab/foldseek#databases",
+      "license": "AlphaFold DB terms / CC-BY-4.0 data"
+    },
+    "foldseek_pdb": {
+      "command": "foldseek databases PDB <prefix> <tmp>",
+      "source": "https://github.com/steineggerlab/foldseek#databases",
+      "license": "PDB data terms / CC0"
+    }
+  }
+}

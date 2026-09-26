@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi.local/schemas/autonomous_rsi_workspace_record.schema.json",
+  "title": "Autonomous RSI Candidate Workspace Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "candidateId", "iteration", "parentCommit", "sourceCommit", "sourceTree", "workspaceRelativePath", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-workspace-record.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "candidateId": { "$ref": "#/$defs/safeId" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "parentCommit": { "$ref": "#/$defs/gitObject" },
+    "sourceCommit": { "$ref": "#/$defs/gitObject" },
+    "sourceTree": { "$ref": "#/$defs/gitObject" },
+    "workspaceRelativePath": { "type": "string", "minLength": 1, "not": { "pattern": "(^/|(^|/)\\.\\.(/|$))" } },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+  }
+}

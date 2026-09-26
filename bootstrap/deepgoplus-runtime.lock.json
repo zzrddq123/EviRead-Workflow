@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "pi-deepgoplus-runtime-lock.v1",
+  "resourceId": "deepgoplus-data-1.0.25",
+  "runtime": {
+    "python": "3.11",
+    "environmentManager": "uv",
+    "environmentRelativePath": ".venv",
+    "supportedPlatforms": [
+      "linux-64",
+      "linux-aarch64",
+      "osx-64",
+      "osx-arm64"
+    ],
+    "directRequirementsPath": "bootstrap/deepgoplus-requirements.in",
+    "directRequirementsSha256": "1e63f63c87a79150280b910b9f3d8c27b64dd630dbfa3d574aeebc212e4dff6d",
+    "platformLocks": {
+      "linux-64": {
+        "path": "bootstrap/locks/deepgoplus/linux-64.txt",
+        "sha256": "2ff07440061680ac633070a732ff770425fe8f6daa0c55fbe396cfd7dbd56371"
+      },
+      "linux-aarch64": {
+        "path": "bootstrap/locks/deepgoplus/linux-aarch64.txt",
+        "sha256": "eec67f37ad09cb9ab0abf737d3e5b1eb34e1949972ac9d373fe788b655b14d71"
+      },
+      "osx-64": {
+        "path": "bootstrap/locks/deepgoplus/osx-64.txt",
+        "sha256": "2ff07440061680ac633070a732ff770425fe8f6daa0c55fbe396cfd7dbd56371"
+      },
+      "osx-arm64": {
+        "path": "bootstrap/locks/deepgoplus/osx-arm64.txt",
+        "sha256": "2ff07440061680ac633070a732ff770425fe8f6daa0c55fbe396cfd7dbd56371"
+      }
+    }
+  },
+  "package": {
+    "name": "deepgoplus",
+    "version": "1.0.2",
+    "wheelUrl": "https://files.pythonhosted.org/packages/b1/d9/9e51229ef4aef7387cd170700c377e151be923823f11716ceec986a72acf/deepgoplus-1.0.2-py3-none-any.whl",
+    "wheelSha256": "27032d6212d43cf595fdcb259a1fe07f2b19c0e679bfcedfa42d0397a3f795c5",
+    "installWithoutDependencies": true,
+    "ignoreRequiresPython": true,
+    "compatibilityPythonVersion": "3.7",
+    "reason": "Upstream metadata declares Python <3.8, so uv resolves this exact no-deps wheel against a lock-bound Python 3.7 compatibility target while installing into the tested Python 3.11 runtime."
+  },
+  "policy": {
+    "allowUnpinnedDependencies": false,
+    "requireBinaryWheels": true,
+    "cnnOnly": true,
+    "stockDiamondHybridDisabled": true
+  },
+  "canonicalHash": "db904c5830a0975e30f0fa872e884a30de8f9053d2b2acfe336ac7abc6fcde25"
+}

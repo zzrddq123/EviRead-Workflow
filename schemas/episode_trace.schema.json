@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-function-episode.v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "episodeId", "runId", "status", "genomeId", "genomeHash", "narrativeMode", "target", "steps", "outputHashes", "biologicalFeedback", "promotionDecision", "startedAt", "finishedAt"],
+  "properties": {
+    "schemaVersion": { "const": "pi-function-episode.v3" },
+    "episodeId": { "type": "string", "minLength": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["completed", "failed"] },
+    "genomeId": { "type": "string", "minLength": 1 },
+    "genomeHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "narrativeMode": { "enum": ["pi", "deterministic"] },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proteinId", "targetMode", "queryTaxonId", "targetContext", "sequenceSha256", "structureSha256"],
+      "properties": {
+        "proteinId": { "type": "string", "minLength": 1 },
+        "targetMode": { "enum": ["anonymous", "named_uncharacterized"] },
+        "queryTaxonId": { "type": ["integer", "null"], "minimum": 1 },
+        "targetContext": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["taxon", "phylogeny"],
+          "properties": {
+            "taxon": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["taxonId", "provenance"],
+              "properties": {
+                "taxonId": { "type": ["integer", "null"], "minimum": 1 },
+                "provenance": { "enum": ["provided", "unavailable"] }
+              }
+            },
+            "phylogeny": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "status"],
+              "properties": {
+                "mode": { "enum": ["optional", "required"] },
+                "status": { "enum": ["requested", "unavailable_missing_taxon"] }
+              }
+            }
+          }
+        },
+        "sequenceSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "structureSha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status", "startedAt", "finishedAt", "durationMs", "evidenceIds", "outputHashes"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["completed", "failed"] },
+          "startedAt": { "type": "string", "format": "date-time" },
+          "finishedAt": { "type": "string", "format": "date-time" },
+          "durationMs": { "type": "integer", "minimum": 0 },
+          "evidenceIds": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "outputHashes": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" } },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "outputHashes": { "type": "object", "minProperties": 10, "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" } },
+    "biologicalFeedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "eligibleForEvolution", "reason"],
+      "properties": {
+        "status": { "const": "unavailable" },
+        "eligibleForEvolution": { "const": false },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "promotionDecision": { "const": "not_evaluated" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" }
+  }
+}

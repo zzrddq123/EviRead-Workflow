@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "pi-temporal-interproscan-manifest.v1",
+  "release": "5.75-106.0",
+  "availableAt": "2025-06-14",
+  "status": "not_materialized",
+  "source": {
+    "url": "https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.75-106.0/interproscan-5.75-106.0-64-bit.tar.gz",
+    "sizeBytes": 7161540354,
+    "publishedMd5": "5314e3ebabfef8faf0c83b75525ce3fb"
+  },
+  "inferencePolicy": {
+    "querySideOnly": true,
+    "precalculatedMatchLookupDisabled": true,
+    "networkDisabled": true,
+    "requiredFlags": [
+      "-goterms",
+      "-iprlookup",
+      "-dp"
+    ]
+  },
+  "runtimeConstraint": "Official bundled InterProScan binaries support 64-bit Linux; the current host is arm64 macOS.",
+  "currentBlocker": "The 7.16-GB historical package is not installed and the local Docker daemon is not running, so no strict query-side result is claimed.",
+  "activationRule": "Set status=ready and reseal only after archive MD5, extracted runtime/data hashes, Linux execution, and an offline smoke all pass.",
+  "canonicalHash": "5a88639c94dfbeb6ff40f2e43416d976fd26a0864322b88f6eb0f0dfdda0c301"
+}

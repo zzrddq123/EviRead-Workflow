@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-promotion-receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "action",
+    "campaignId",
+    "previewHash",
+    "authorization",
+    "archiveManifestHash",
+    "archiveCommit",
+    "selectedCandidateId",
+    "selectedSourceCommit",
+    "mainBefore",
+    "mainAfter",
+    "remote",
+    "publishedRefs",
+    "capabilityClosure",
+    "status",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-autonomous-rsi-promotion-receipt.v1"
+    },
+    "action": {
+      "enum": [
+        "archive",
+        "promote"
+      ]
+    },
+    "campaignId": {
+      "$ref": "#/$defs/safeId"
+    },
+    "previewHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "authorization": {
+      "type": "object"
+    },
+    "archiveManifestHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "archiveCommit": {
+      "$ref": "#/$defs/gitObject"
+    },
+    "selectedCandidateId": {
+      "$ref": "#/$defs/safeIdLong"
+    },
+    "selectedSourceCommit": {
+      "$ref": "#/$defs/gitObject"
+    },
+    "mainBefore": {
+      "$ref": "#/$defs/gitObject"
+    },
+    "mainAfter": {
+      "$ref": "#/$defs/gitObject"
+    },
+    "remote": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publishedRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "const": "completed"
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "capabilityClosure": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$"
+    },
+    "safeIdLong": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    }
+  }
+}

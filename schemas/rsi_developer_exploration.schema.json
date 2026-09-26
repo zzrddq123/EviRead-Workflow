@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-developer-exploration.v1",
+  "title": "Immutable post-evaluation Developer reflection and pre-code plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "explorationId",
+    "tagRef",
+    "sourceVersion",
+    "baseVersion",
+    "evaluation",
+    "historyPrefix",
+    "evaluationAnalysis",
+    "nextOptimizationPlan",
+    "artifacts",
+    "policies",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-developer-exploration.v1"
+    },
+    "explorationId": { "$ref": "#/$defs/id" },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/exploration/[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "sourceVersion": { "$ref": "#/$defs/versionBinding" },
+    "baseVersion": { "$ref": "#/$defs/versionBinding" },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluationId",
+        "openingHash",
+        "resultHash",
+        "publicationHash",
+        "publicationTagObjectId",
+        "decisionId",
+        "decisionHash",
+        "decisionTagObjectId",
+        "stateRootPublicManifestHash"
+      ],
+      "properties": {
+        "evaluationId": { "$ref": "#/$defs/id" },
+        "openingHash": { "$ref": "#/$defs/hash" },
+        "resultHash": { "$ref": "#/$defs/hash" },
+        "publicationHash": { "$ref": "#/$defs/hash" },
+        "publicationTagObjectId": { "$ref": "#/$defs/oid" },
+        "decisionId": { "$ref": "#/$defs/id" },
+        "decisionHash": { "$ref": "#/$defs/hash" },
+        "decisionTagObjectId": { "$ref": "#/$defs/oid" },
+        "stateRootPublicManifestHash": {
+          "oneOf": [
+            { "$ref": "#/$defs/hash" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "historyPrefix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "contextHash",
+        "eventSequence",
+        "eventManifestHash",
+        "selectedVersionId"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "enum": [
+            "pi-rsi-developer-history-context.v1",
+            "pi-rsi-developer-history-context.v2",
+            "pi-rsi-developer-history-context.v3",
+            "pi-rsi-developer-history-context.v4"
+          ]
+        },
+        "contextHash": { "$ref": "#/$defs/hash" },
+        "eventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999
+        },
+        "eventManifestHash": { "$ref": "#/$defs/hash" },
+        "selectedVersionId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "evaluationAnalysis": {
+      "$ref": "pi-rsi-evaluation-analysis.v1"
+    },
+    "nextOptimizationPlan": {
+      "$ref": "pi-rsi-next-optimization-plan.v1"
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluationAnalysisMarkdown",
+        "nextOptimizationPlanMarkdown"
+      ],
+      "properties": {
+        "evaluationAnalysisMarkdown": {
+          "$ref": "#/$defs/artifact"
+        },
+        "nextOptimizationPlanMarkdown": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority", "planningOrder", "privacy"],
+      "properties": {
+        "authority": {
+          "const": "immutable_structured_tag_and_event_markdown_is_deterministic_view_v1"
+        },
+        "planningOrder": {
+          "const": "terminal_evaluation_then_reflection_then_child_version_registration_v1"
+        },
+        "privacy": {
+          "const": "closed_public_projection_no_protected_material_v1"
+        }
+      }
+    },
+    "claimBoundary": {
+      "const": "Developer-visible aggregate evaluation analysis and pre-implementation plan only; no gold GO labels, target identities, sequences, per-protein errors, evaluator-private paths, or evaluator-private artifacts."
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "versionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "manifestHash",
+        "sourceCommit",
+        "tagObjectId"
+      ],
+      "properties": {
+        "versionId": { "$ref": "#/$defs/id" },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "tagObjectId": { "$ref": "#/$defs/oid" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relativePath", "sha256", "size"],
+      "properties": {
+        "relativePath": {
+          "type": "string",
+          "pattern": "^versions/[a-z0-9][a-z0-9._-]{0,63}/(?:evaluation_analysis|next_optimization_plan)\\.md$"
+        },
+        "sha256": { "$ref": "#/$defs/hash" },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# Large biological data artifacts are hosted on a separate anonymous archive
+# (see ANONYMOUS_DATA_RELEASE.md); never commit them here.
+resources/full-swissprot-references.json
+resources/biolm-evidence-gaf1389-full/
+
+node_modules/
+dist/
+.codex/
+.multica/
+.agent_context/
+description.md
+runs/
+.tmp/
+__pycache__/
+*.py[cod]
+.DS_Store
+config/local.env
+config/temporal.local.env
+config/temporal.sequence.local.env
+config/remote.env
+config/managed.env
+config/*.model_only.env
+.runtime/
+.runtime-smoke/
+.release-resources/
+.resources/
+~/
+.databases/
+*.log
+# Concrete benchmark cohorts, Gold, evaluator materializations, predictions and
+# reports are operator-local development assets. Product main keeps only the
+# generic benchmark/RSI interfaces and synthetic examples.
+benchmarks/
+benchmark_runs/
+evaluator_private/
+private_gold/
+workspaces/
+campaigns/
+releases/
+
+node_modules/

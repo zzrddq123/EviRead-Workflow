@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-rsi-campaign-freeze-manifest.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "manifestHash", "campaignId", "finalCandidate", "selectionRule", "developmentEvaluationHash", "validUpdateCount", "patchAttemptCount", "evaluatorCallCount", "eventHeadHash", "sealedEvaluationState", "frozenAt", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-campaign-freeze-manifest.v1" }, "manifestHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "campaignId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" }, "finalCandidate": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/candidate" }, "selectionRule": { "type": "string", "minLength": 1 }, "developmentEvaluationHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "validUpdateCount": { "type": "integer", "minimum": 0 }, "patchAttemptCount": { "type": "integer", "minimum": 0 }, "evaluatorCallCount": { "type": "integer", "minimum": 1 }, "eventHeadHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "sealedEvaluationState": { "const": "unopened" }, "frozenAt": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/timestamp" }, "canonicalHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+  }
+}

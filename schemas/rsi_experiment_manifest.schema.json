@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-experiment-manifest.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "experimentId", "conditionId", "replicateId", "blockId", "campaignId", "phase", "framework", "feedbackPolicy", "historyPolicy", "initialCandidate", "bindings", "budget", "stopping", "randomization", "claimBoundary", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-experiment-manifest.v1" },
+    "experimentId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" },
+    "conditionId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" },
+    "replicateId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" },
+    "blockId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" },
+    "campaignId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" },
+    "phase": { "enum": ["pilot", "confirmatory"] },
+    "framework": { "enum": ["latest_autonomous", "early_cumulative"] },
+    "feedbackPolicy": { "enum": ["metric_only", "structured_diagnostic"] },
+    "historyPolicy": { "enum": ["reset", "persistent", "shuffled", "native_linear"] },
+    "initialCandidate": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/candidate" },
+    "bindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scientificBaselineHash", "evaluatorContractHash", "developmentDataHash", "sealedDataCommitmentHash", "modelConfigHash", "promptConfigHash", "toolConfigHash", "runtimeConfigHash"],
+      "properties": {
+        "scientificBaselineHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "evaluatorContractHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "developmentDataHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "sealedDataCommitmentHash": { "anyOf": [{ "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, { "type": "null" }] },
+        "modelConfigHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "promptConfigHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "toolConfigHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" },
+        "runtimeConfigHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+      }
+    },
+    "budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["targetValidUpdates", "maxPatchAttempts", "maxEvaluatorCalls", "maxStageAttempts", "maxWallClockSeconds"],
+      "properties": {
+        "targetValidUpdates": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maxPatchAttempts": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "maxEvaluatorCalls": { "type": "integer", "minimum": 2, "maximum": 2000 },
+        "maxStageAttempts": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maxWallClockSeconds": { "type": "integer", "minimum": 1, "maximum": 31536000 }
+      }
+    },
+    "stopping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["allowEvaluatorStop", "allowPlateauStop", "plateauPatience", "invalidCandidatePolicy"],
+      "properties": {
+        "allowEvaluatorStop": { "type": "boolean" },
+        "allowPlateauStop": { "type": "boolean" },
+        "plateauPatience": { "type": ["integer", "null"], "minimum": 1 },
+        "invalidCandidatePolicy": { "const": "record_rollback_continue" }
+      }
+    },
+    "randomization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["campaignSeedHash", "matchedBlock"],
+      "properties": { "campaignSeedHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "matchedBlock": { "type": "boolean" } }
+    },
+    "claimBoundary": { "const": "development-only selection; sealed evaluation cannot influence candidate selection" },
+    "canonicalHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+  }
+}

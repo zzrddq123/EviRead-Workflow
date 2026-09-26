@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://function-pred-agent.local/schemas/phylogeny_evidence.schema.json",
+  "title": "Phylogeny evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "provider", "providerRelease", "providerPayloadSha256", "evidenceId", "provenanceRoot", "targetTaxonId", "targetLineage", "donorTaxonId", "donorLineage", "relation", "evolutionaryDistance", "hogId", "queryLike"],
+  "properties": {
+    "schemaVersion": {"const": "pi-phylogeny-evidence.v1"},
+    "provider": {"enum": ["OMA", "OrthoDB", "GeneTree", "declared"]},
+    "providerRelease": {"type": "string", "minLength": 1},
+    "providerPayloadSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidenceId": {"type": "string", "minLength": 1},
+    "provenanceRoot": {"type": "string", "minLength": 1},
+    "targetTaxonId": {"type": ["integer", "null"], "minimum": 1},
+    "targetLineage": {"type": "array", "items": {"type": "string"}},
+    "donorTaxonId": {"type": ["integer", "null"], "minimum": 1},
+    "donorLineage": {"type": "array", "items": {"type": "string"}},
+    "relation": {"enum": ["one_to_one", "one_to_many", "many_to_one", "many_to_many", "coortholog", "unresolved_ortholog", "post_duplication_paralog"]},
+    "evolutionaryDistance": {"type": ["number", "null"], "minimum": 0},
+    "hogId": {"type": ["string", "null"]},
+    "queryLike": {"type": "boolean"}
+  }
+}

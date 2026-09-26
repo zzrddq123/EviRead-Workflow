@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "pi-iclr-codebase-composition.v3",
+  "codebase": "ICLR-MVP-R09Agent-LatestRSI",
+  "scientificBaseline": {
+    "methodIdentity": {
+      "tag": "human/revision/v0005/r09",
+      "commit": "7ba7710c9c99acb33b184d93307dd7ac79c81e19",
+      "tree": "1b7ff5656ff9b8d14f3b1f8597c22787893a3156"
+    },
+    "runtimeIdentity": {
+      "tag": "v1.4.0",
+      "commit": "3302ba25cc80f2a987668c31ea597eb6ff1dc0a8",
+      "tree": "844fcb516b570bed506aeb21efbc2ca15c72b452"
+    },
+    "genome": {
+      "path": "genomes/human-v0005-mainline-semantic-reasoner-r9.json",
+      "sha256": "2d665b486163e3a6052d36be47a1e7b9d2ebcef2e8392171c8ca651fc9c16f16"
+    },
+    "sourceProvenancePath": "config/r09-v140-source-provenance.json",
+    "sourceProvenanceHash": "82757e49fe4e20940d63d12220240db25550225b29777b54ca61e12d59d4542a",
+    "inventoryFileCount": 201,
+    "strictBlind": true,
+    "retrospectiveHumanEngineered": true
+  },
+  "latestController": {
+    "kind": "latest_autonomous",
+    "sourceRepository": "ICLR-MVP-LatestRSI",
+    "adapter": {
+      "path": "src/outer/autonomous/production_init.ts",
+      "purpose": "bind R09/v1.4 baseline instead of d24a111",
+      "sha256": "e90f897abd68e8d56cd060a9c26a710a4a00a12b789abc99f8d30af5862a71da"
+    },
+    "inventoryFileCount": 13,
+    "inventoryHash": "baaa9120134c5cb5882507e0fa17a6178721e5d447b58bb5ddc75a72e5a6df4c",
+    "inventoryPaths": [
+      "src/outer/adaptive/state_archive.ts",
+      "src/outer/autonomous/campaign_identity.ts",
+      "src/outer/autonomous/campaign_promotion.ts",
+      "src/outer/autonomous/candidate_graph.ts",
+      "src/outer/autonomous/command.ts",
+      "src/outer/autonomous/contracts.ts",
+      "src/outer/autonomous/formal_bridge.ts",
+      "src/outer/autonomous/historical_onboarding.ts",
+      "src/outer/autonomous/history_context.ts",
+      "src/outer/autonomous/orchestrator.ts",
+      "src/outer/autonomous/production_start.ts",
+      "src/outer/autonomous/production_worker.ts",
+      "src/rsi_cli.ts"
+    ],
+    "baseSourceCommit": "9fefbbc1719c86ee619bfbecad4c1a2b395f5b58",
+    "capabilityIntegrationSourceCommit": "5ca2a4c"
+  },
+  "experimentInstrumentation": {
+    "version": "P0_P1_v1_plus_protected_capability_paths",
+    "candidateTrustBoundary": "host_owned_fail_closed",
+    "sealedSelectionPolicy": "development_freeze_before_sealed",
+    "inventoryFileCount": 20,
+    "inventoryHash": "925db380d5e370bc01a923b7471ee3fd66a7c2ba7f69764f9b632b396faa5b73",
+    "inventoryPaths": [
+      "docs/ICLR_EXPERIMENT_PROTOCOL.md",
+      "schemas/rsi_campaign_freeze_manifest.schema.json",
+      "schemas/rsi_developer_feedback_view.schema.json",
+      "schemas/rsi_evaluation_receipt.schema.json",
+      "schemas/rsi_experiment_defs.schema.json",
+      "schemas/rsi_experiment_manifest.schema.json",
+      "schemas/rsi_iteration_precommit.schema.json",
+      "schemas/rsi_private_evaluation.schema.json",
+      "schemas/rsi_resource_usage_receipt.schema.json",
+      "schemas/rsi_sealed_replay_manifest.schema.json",
+      "scripts/seal_rsi_json.py",
+      "src/experiment/batch.ts",
+      "src/experiment/candidate_guard.ts",
+      "src/experiment/command.ts",
+      "src/experiment/contracts.ts",
+      "src/experiment/exporter.ts",
+      "src/experiment/feedback.ts",
+      "src/experiment/loop_adapter.ts",
+      "src/experiment/store.ts",
+      "test/rsi/experiment_instrumentation.test.ts"
+    ],
+    "baseSourceCommit": "9fefbbc1719c86ee619bfbecad4c1a2b395f5b58",
+    "capabilityIntegrationSourceCommit": "5ca2a4c"
+  },
+  "capabilityGovernance": {
+    "version": "P3_capability_closed_baseline_v1",
+    "sharedAcrossThreeCodebases": true,
+    "acquisitionEnabledFromUpdate": 1,
+    "hostCasCandidateVisible": false,
+    "inventoryFileCount": 10,
+    "inventoryHash": "b3370f3988d806ee2a197e0cd25ff2358b034b58976e2bc7d068c391327cd7c4",
+    "inventoryPaths": [
+      "docs/ICLR_RESOURCE_POLICY.md",
+      "schemas/rsi_capability_manifest.schema.json",
+      "schemas/rsi_tool_acquisition_receipt.schema.json",
+      "schemas/rsi_candidate_capability_usage.schema.json",
+      "schemas/rsi_versioned_baseline.schema.json",
+      "src/experiment/baseline_governance.ts",
+      "src/experiment/capability_command.ts",
+      "src/experiment/capability_governance.ts",
+      "src/experiment/tool_acquisition_broker.ts",
+      "test/rsi/capability_governance.test.ts"
+    ],
+    "sourceCommits": {
+      "latest": "5ca2a4c",
+      "early": "2e8abc6"
+    },
+    "promotionCapabilityClosure": "required_acquisitions_require_verified_versioned_baseline",
+    "originalG0ToolboxMutation": "forbidden"
+  },
+  "versionGovernance": {
+    "sourceCommit": "9fefbbc1719c86ee619bfbecad4c1a2b395f5b58",
+    "inheritedRefs": false,
+    "legacyAdaptiveStateRootImport": "disabled_fail_closed",
+    "inventoryFileCount": 8,
+    "inventoryHash": "11d2c899fafcc265f5604e48d90c69253e5e6ef42709d45af2bebfd7bb999031",
+    "inventoryPaths": [
+      "protocols/rsi-code-version-quality-v1.json",
+      "src/outer/version_graph/rsi_controller_bundle.ts",
+      "src/outer/version_graph/rsi_controller_command.ts",
+      "src/outer/version_graph/rsi_controller_entry.ts",
+      "src/outer/version_graph/rsi_exploration_tree.ts",
+      "src/outer/version_graph/rsi_retrospective_archive.ts",
+      "src/outer/version_graph/rsi_version_command.ts",
+      "src/outer/version_graph/rsi_version_graph.ts"
+    ]
+  },
+  "delivery": {
+    "genesisCommit": "e4d0e7a6d2cc0e94ca9a99408561eb36335f06cb",
+    "remote": "(anonymized for double-blind review)",
+    "defaultBranch": "main"
+  },
+  "inheritedGitHistory": false,
+  "inheritedCampaigns": false,
+  "inheritedScientificResults": false,
+  "hostResourcePlane": {
+    "pathOutsideRepository": "../.iclr-host",
+    "provisioningStatus": "operational_ready_for_explicit_development_request",
+    "largeAssetsCopied": true,
+    "copyMode": "apfs_copy_on_write",
+    "commonDataManifestHash": "dba39ac80c5e7387537bbc6fc28b20732307911b7691090b6f0760618197940d",
+    "r09ToolboxManifestHash": "b5767e6317dd810984247ddea5c174e9e350041da2b6b4462d14f9688a21546f",
+    "earlyToolboxManifestHash": "fb8d36b5e2c847b8c765bf2cf608d5f37f9b4fd7b4d94fe3558bad82e6de13d1"
+  },
+  "claimBoundary": "Composition, provenance and governance receipt only; no performance, improvement, selection, promotion, resource-readiness or sealed-evaluation claim.",
+  "baselineGovernance": {
+    "version": "P3_baseline_v1",
+    "binding": "code_commit_tree_plus_common_data_plus_starting_toolbox_plus_required_capability_closure",
+    "codeOnlyPromotion": "allowed_only_when_required_acquisition_set_is_empty",
+    "promotedToolboxPolicy": "new_versioned_directory_never_overwrite_g0",
+    "launchPolicy": "exact_baseline_manifest_and_hash_required"
+  },
+  "canonicalHash": "e03da73a125310bd6da02c80034e194e624f0b054f1412711df2fca59c7bb1d2"
+}

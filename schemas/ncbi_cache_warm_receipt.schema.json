@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi-function-agent.local/schemas/ncbi_cache_warm_receipt.schema.json",
+  "title": "Anonymous NCBI cache-warming receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "suiteId", "publicManifestHash", "configSha256", "profile",
+    "databases", "concurrency", "refresh", "requestPolicy", "startedAt", "finishedAt",
+    "status", "caseCount", "taskCount", "completedCount", "failedCount", "cacheHitCount",
+    "cases", "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-ncbi-cache-warm-receipt.v1" },
+    "suiteId": { "type": "string", "minLength": 1 },
+    "publicManifestHash": { "$ref": "#/$defs/sha256" },
+    "configSha256": { "$ref": "#/$defs/sha256" },
+    "profile": { "enum": ["remote", "remote_broad"] },
+    "databases": {
+      "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true,
+      "items": { "enum": ["swissprot", "refseq_protein", "nr", "nr_cluster_seq"] }
+    },
+    "concurrency": { "enum": [1, 2] },
+    "refresh": { "type": "boolean" },
+    "requestPolicy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["endpoint", "tool", "contactEmailConfigured", "requestIntervalSeconds", "pollIntervalSeconds", "crossProcessPacer"],
+      "properties": {
+        "endpoint": { "type": "string", "format": "uri" },
+        "tool": { "type": "string", "minLength": 1 },
+        "contactEmailConfigured": { "const": true },
+        "requestIntervalSeconds": { "type": "number", "minimum": 10 },
+        "pollIntervalSeconds": { "type": "number", "minimum": 60 },
+        "crossProcessPacer": { "const": true }
+      }
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" },
+    "status": { "enum": ["completed", "completed_with_failures"] },
+    "caseCount": { "type": "integer", "minimum": 1 },
+    "taskCount": { "type": "integer", "minimum": 1 },
+    "completedCount": { "type": "integer", "minimum": 0 },
+    "failedCount": { "type": "integer", "minimum": 0 },
+    "cacheHitCount": { "type": "integer", "minimum": 0 },
+    "cases": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["caseId", "sequenceSha256", "database", "status", "cacheHit"],
+        "properties": {
+          "caseId": { "type": "string", "pattern": "^CASE_[0-9]{3}_[A-F0-9]{8}$" },
+          "sequenceSha256": { "$ref": "#/$defs/sha256" },
+          "database": { "enum": ["swissprot", "refseq_protein", "nr", "nr_cluster_seq"] },
+          "status": { "enum": ["completed", "failed"] },
+          "cacheKey": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "cacheHit": { "type": "boolean" },
+          "responseSha256": { "$ref": "#/$defs/sha256" },
+          "responseSize": { "type": "integer", "minimum": 1 },
+          "selectedHitCount": { "type": "integer", "minimum": 0 },
+          "errorType": { "type": "string" },
+          "error": { "type": "string", "maxLength": 500 }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "status": { "const": "completed" } } },
+            "then": { "required": ["cacheKey", "responseSha256", "responseSize", "selectedHitCount"] },
+            "else": { "required": ["errorType", "error"] }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

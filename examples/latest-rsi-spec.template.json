@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "pi-autonomous-rsi-spec.v1",
+  "campaignId": "latest-rsi-pilot-r1",
+  "mode": "development_only",
+  "objective": {
+    "metricId": "development_macro_groups123_overall_fmax",
+    "direction": "maximize",
+    "minimumImprovement": 0.001,
+    "plateauPatience": 100
+  },
+  "budget": { "maxIterations": 15, "maxStageAttempts": 2 },
+  "initialCandidate": {
+    "candidateId": "r09-method-v140-runtime",
+    "artifactHash": "REPLACE_WITH_64_HEX_BASELINE_ARTIFACT_HASH",
+    "sourceCommit": "REPLACE_WITH_NEW_GENESIS_COMMIT"
+  },
+  "evaluatorContractHash": "REPLACE_WITH_64_HEX_FROZEN_EVALUATOR_HASH",
+  "historicalSeeds": [],
+  "workers": {
+    "evaluate": { "command": "/ABSOLUTE/evaluate-worker", "args": ["{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 21600, "inheritEnv": ["PATH"], "networkAccess": "disabled" },
+    "diagnose": { "command": "/ABSOLUTE/agent-worker", "args": ["diagnose", "{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 3600, "inheritEnv": ["HOME", "PATH"], "networkAccess": "disabled" },
+    "research": { "command": "/ABSOLUTE/research-worker", "args": ["{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 3600, "inheritEnv": ["PATH"], "networkAccess": "enabled" },
+    "plan": { "command": "/ABSOLUTE/agent-worker", "args": ["plan", "{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 3600, "inheritEnv": ["HOME", "PATH"], "networkAccess": "disabled" },
+    "develop": { "command": "/ABSOLUTE/agent-worker", "args": ["develop", "{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 21600, "inheritEnv": ["HOME", "PATH"], "networkAccess": "disabled" },
+    "verify": { "command": "/ABSOLUTE/verify-worker", "args": ["{{input}}", "{{output}}"], "workingDirectory": "project", "timeoutSeconds": 21600, "inheritEnv": ["PATH"], "networkAccess": "disabled" }
+  },
+  "formalGovernance": {
+    "mode": "handoff_only",
+    "terminalStopEventSequence": null,
+    "terminalStopEventHash": null,
+    "resumeContract": "explicit_append_only_new_epoch_required"
+  }
+}

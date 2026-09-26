@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "pi-rsi-experiment-manifest.v1",
+  "experimentId": "iclr-pilot-e0",
+  "conditionId": "latest-structured-persistent",
+  "replicateId": "r01",
+  "blockId": "pilot-block-r01",
+  "campaignId": "iclr-pilot-e0-latest-r01",
+  "phase": "pilot",
+  "framework": "latest_autonomous",
+  "feedbackPolicy": "structured_diagnostic",
+  "historyPolicy": "persistent",
+  "initialCandidate": {
+    "candidateId": "r09-method-v140-runtime",
+    "artifactHash": "REPLACE_WITH_64_HEX_EXPERIMENT_START_ARTIFACT_HASH",
+    "sourceCommit": "REPLACE_WITH_EXPERIMENT_START_COMMIT"
+  },
+  "bindings": {
+    "scientificBaselineHash": "8c834d5fa21304d376a3b01203cc56cfe91474f53c7aa1f728ac07e9326a4568",
+    "evaluatorContractHash": "REPLACE_WITH_64_HEX_EVALUATOR_HASH",
+    "developmentDataHash": "REPLACE_WITH_64_HEX_DEVELOPMENT_DATA_HASH",
+    "sealedDataCommitmentHash": null,
+    "modelConfigHash": "REPLACE_WITH_64_HEX_MODEL_CONFIG_HASH",
+    "promptConfigHash": "REPLACE_WITH_64_HEX_PROMPT_CONFIG_HASH",
+    "toolConfigHash": "REPLACE_WITH_64_HEX_TOOL_CONFIG_HASH",
+    "runtimeConfigHash": "REPLACE_WITH_64_HEX_RUNTIME_CONFIG_HASH"
+  },
+  "budget": {
+    "targetValidUpdates": 10,
+    "maxPatchAttempts": 14,
+    "maxEvaluatorCalls": 15,
+    "maxStageAttempts": 2,
+    "maxWallClockSeconds": 1209600
+  },
+  "stopping": {
+    "allowEvaluatorStop": false,
+    "allowPlateauStop": false,
+    "plateauPatience": null,
+    "invalidCandidatePolicy": "record_rollback_continue"
+  },
+  "randomization": {
+    "campaignSeedHash": "REPLACE_WITH_64_HEX_CAMPAIGN_SEED_HASH",
+    "matchedBlock": true
+  },
+  "claimBoundary": "development-only selection; sealed evaluation cannot influence candidate selection"
+}

@@ -1,0 +1,5 @@
+# Runtime used by the repository-owned CNN-only adapter; the DeepGOPlus wheel
+# itself is installed separately with its upstream hash and without dependencies.
+numpy==1.26.4
+pandas==1.5.3
+tensorflow==2.15.1

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-stage-input.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "iteration", "stage", "currentCandidate", "objective", "knowledgeHeadHash", "sourceArtifacts", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-stage-input.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "stage": { "enum": ["evaluate", "diagnose", "research", "plan", "develop", "verify"] },
+    "currentCandidate": { "$ref": "#/$defs/candidate" },
+    "selectedBaseCandidate": { "anyOf": [{ "$ref": "#/$defs/candidate" }, { "type": "null" }] },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "direction", "minimumImprovement", "plateauPatience"],
+      "properties": {
+        "metricId": { "$ref": "#/$defs/safeId" },
+        "direction": { "enum": ["maximize", "minimize"] },
+        "minimumImprovement": { "type": "number" },
+        "plateauPatience": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "knowledgeHeadHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "historyContext": { "$ref": "#/$defs/artifact" },
+    "sourceArtifacts": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/artifact" }
+    },
+    "experimentContext": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifestHash", "experimentId", "conditionId", "replicateId", "blockId", "phase", "feedbackPolicy", "historyPolicy", "targetValidUpdates", "maxPatchAttempts"],
+      "properties": {
+        "manifestHash": { "$ref": "#/$defs/hash" }, "experimentId": { "$ref": "#/$defs/safeId" }, "conditionId": { "$ref": "#/$defs/safeId" }, "replicateId": { "$ref": "#/$defs/safeId" }, "blockId": { "$ref": "#/$defs/safeId" }, "phase": { "enum": ["pilot", "confirmatory"] }, "feedbackPolicy": { "enum": ["metric_only", "structured_diagnostic"] }, "historyPolicy": { "enum": ["reset", "persistent", "shuffled"] }, "targetValidUpdates": { "type": "integer", "minimum": 1 }, "maxPatchAttempts": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "artifactHash", "sourceCommit"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/safeId" },
+        "artifactHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "type": ["string", "null"], "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relativePath", "canonicalHash"],
+      "properties": {
+        "relativePath": { "type": "string", "minLength": 1 },
+        "canonicalHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

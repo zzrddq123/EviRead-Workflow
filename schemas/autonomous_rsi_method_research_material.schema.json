@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-method-research-material.v1",
+  "title": "Autonomous RSI Method Research Material",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "researchScope", "questions", "sources"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-method-research-material.v1" },
+    "researchScope": { "const": "function_prediction_process_or_method_improvement" },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$" },
+    "boundedStrings": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "sourceType", "qualityTier", "qualityEvidence", "title", "authors", "year", "venue", "persistentId", "url", "relevantFindings", "limitations"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/safeId" },
+        "sourceType": { "enum": ["peer_reviewed_primary", "peer_reviewed_review", "official_tool_or_database_documentation"] },
+        "qualityTier": { "enum": ["q1_journal", "top_venue", "authoritative_official_documentation"] },
+        "qualityEvidence": { "type": "string", "minLength": 1, "maxLength": 1200 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+        },
+        "year": { "type": "integer", "minimum": 1900 },
+        "venue": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "persistentId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "url": { "type": "string", "pattern": "^https://", "maxLength": 1000 },
+        "relevantFindings": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+        },
+        "limitations": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+        }
+      }
+    }
+  }
+}

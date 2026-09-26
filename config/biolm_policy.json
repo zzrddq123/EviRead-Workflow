@@ -1,0 +1,7 @@
+{
+  "models": ["protrek"],
+  "model_weights": {"esm2": 1.0, "esmc": 1.0, "protrek": 1.0},
+  "k": 20,
+  "minimum_cosine": 0.0,
+  "template": "{model}: {count} eligible reference neighbors. Evidence-weighted GO support (experimental > curated inference > electronic inference); scores are not calibrated probabilities. Model selection is validation-gated, not an ensemble requirement."
+}

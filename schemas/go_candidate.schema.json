@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://function-pred-agent.local/schemas/go_candidate.schema.json",
+  "title": "Normalized GO candidate evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "goId", "termName", "aspect", "sourceType", "sourceId", "mappingId", "provider", "providerRelease", "providerPayloadSha256", "evidenceId", "provenanceRoot", "baseScore", "queryCoverage", "domainRange", "queryLike", "annotationEvidenceCode", "donorAccession", "phylogeny"],
+  "properties": {
+    "schemaVersion": {"const": "pi-go-candidate.v1"},
+    "goId": {"type": "string", "pattern": "^GO:[0-9]{7}$"},
+    "termName": {"type": "string", "minLength": 1},
+    "aspect": {"enum": ["molecular_function", "biological_process", "cellular_component", "unknown"]},
+    "sourceType": {"enum": ["biolm_retrieval", "interpro", "pfam", "panther", "ec", "oma_ortholog", "oma_fastmap", "mdeepfri_cnn", "mdeepfri_gcn", "deepgoplus_cnn", "deepgoplus_hybrid"]},
+    "sourceId": {"type": "string", "minLength": 1},
+    "mappingId": {"type": "string", "minLength": 1},
+    "provider": {"enum": ["InterProScan", "GOA_mapping", "OMA", "mDeepFRI", "DeepGOPlus"]},
+    "providerRelease": {"type": "string", "minLength": 1},
+    "providerPayloadSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidenceId": {"type": "string", "minLength": 1},
+    "provenanceRoot": {"type": "string", "minLength": 1},
+    "baseScore": {"type": "number", "minimum": 0, "maximum": 1},
+    "queryCoverage": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "domainRange": {"type": ["string", "null"]},
+    "queryLike": {"type": "boolean"},
+    "annotationEvidenceCode": {"type": "string", "minLength": 1},
+    "donorAccession": {"type": ["string", "null"]},
+    "phylogeny": {"oneOf": [{"type": "null"}, {"$ref": "phylogeny_evidence.schema.json"}]}
+  }
+}

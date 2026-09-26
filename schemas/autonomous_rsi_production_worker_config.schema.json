@@ -1,0 +1,391 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi.local/schemas/autonomous_rsi_production_worker_config.schema.json",
+  "title": "Autonomous RSI Production Worker Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "repositoryRoot",
+    "workspaceRoot",
+    "allowedChangePaths",
+    "protectedChangePaths",
+    "model",
+    "knowledgeBackend",
+    "developmentBackend",
+    "methodResearchPolicy",
+    "verificationCommands",
+    "evaluatorCommandEnv",
+    "evaluatorPrivateEnv",
+    "runtimeAttestations",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-autonomous-rsi-production-worker-config.v1"
+    },
+    "repositoryRoot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspaceRoot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowedChangePaths": {
+      "$ref": "#/$defs/relativePaths"
+    },
+    "protectedChangePaths": {
+      "$ref": "#/$defs/relativePaths"
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "id",
+        "thinkingLevel"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "thinkingLevel": {
+          "enum": [
+            "off",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ]
+        }
+      }
+    },
+    "knowledgeBackend": {
+      "enum": [
+        "pi",
+        "command"
+      ]
+    },
+    "developmentBackend": {
+      "enum": [
+        "pi",
+        "command"
+      ]
+    },
+    "knowledgeCommand": {
+      "$ref": "#/$defs/command"
+    },
+    "developmentCommand": {
+      "$ref": "#/$defs/command"
+    },
+    "researchCommand": {
+      "$ref": "#/$defs/command"
+    },
+    "methodResearchPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "targetSpecificResearch",
+        "scholarlySourceTiers",
+        "minimumIndependentScholarlySources",
+        "officialDocumentationRole",
+        "unadmittedSources"
+      ],
+      "properties": {
+        "scope": {
+          "const": "function_prediction_process_or_method_improvement"
+        },
+        "targetSpecificResearch": {
+          "const": "forbidden"
+        },
+        "scholarlySourceTiers": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "q1_journal"
+            },
+            {
+              "const": "top_venue"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "minimumIndependentScholarlySources": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "officialDocumentationRole": {
+          "const": "implementation_details_only"
+        },
+        "unadmittedSources": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "preprints"
+            },
+            {
+              "const": "blogs"
+            },
+            {
+              "const": "forums"
+            },
+            {
+              "const": "vendor_marketing"
+            }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "verificationCommands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "executable",
+          "args",
+          "timeoutMs",
+          "inheritEnv"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/safeId"
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1000,
+            "maximum": 86400000
+          },
+          "inheritEnv": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z_][A-Z0-9_]*$"
+            }
+          }
+        }
+      }
+    },
+    "evaluatorCommandEnv": {
+      "type": "string",
+      "pattern": "^[A-Z_][A-Z0-9_]*$"
+    },
+    "evaluatorPrivateEnv": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z_][A-Z0-9_]*$"
+      }
+    },
+    "dataSplit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestPath",
+        "manifestHash",
+        "training",
+        "validation",
+        "test"
+      ],
+      "properties": {
+        "manifestPath": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        "manifestHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "training": {
+          "$ref": "#/$defs/trainingBinding"
+        },
+        "validation": {
+          "$ref": "#/$defs/evaluatorSplit"
+        },
+        "test": {
+          "$ref": "#/$defs/evaluatorSplit"
+        }
+      }
+    },
+    "runtimeAttestations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sandboxEnforced",
+        "nonResearchNetworkIsModelControlPlaneOnly",
+        "evaluatorPrivateDataIsolated"
+      ],
+      "properties": {
+        "sandboxEnforced": {
+          "const": true
+        },
+        "nonResearchNetworkIsModelControlPlaneOnly": {
+          "const": true
+        },
+        "evaluatorPrivateDataIsolated": {
+          "const": true
+        }
+      }
+    },
+    "canonicalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "developmentObjective": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    }
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "relativePaths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "pattern": "(^/|(^|/)\\.\\.(/|$))"
+        }
+      }
+    },
+    "trainingBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestPath",
+        "manifestHash",
+        "proteinsFile",
+        "goldRoot"
+      ],
+      "properties": {
+        "manifestPath": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        "manifestHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "proteinsFile": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        "goldRoot": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        }
+      }
+    },
+    "evaluatorSplit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proteinsFile",
+        "goldRoot",
+        "goldAccess",
+        "fileHashes"
+      ],
+      "properties": {
+        "proteinsFile": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        "goldRoot": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        "goldAccess": {
+          "const": "evaluator_only"
+        },
+        "evaluationPhase": {
+          "enum": [
+            "during_rsi",
+            "after_freeze_only"
+          ]
+        },
+        "fileHashes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executable",
+        "args",
+        "timeoutMs",
+        "inheritEnv"
+      ],
+      "properties": {
+        "executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 86400000
+        },
+        "inheritEnv": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z_][A-Z0-9_]*$"
+          }
+        }
+      }
+    }
+  }
+}

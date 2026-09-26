@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "pi-agent-genome.v1",
+  "genomeId": "human-v0005-mainline-semantic-reasoner-r9",
+  "parentGenomeId": "human-v0005-group4-structure-semantic-reasoner-r8",
+  "generation": 12,
+  "evidencePolicy": {
+    "mode": "fixed_full_pipeline",
+    "requiredInputs": [
+      "amino_acid_fasta"
+    ]
+  },
+  "goPolicy": {
+    "methodId": "strict-blind-mainline-r7-surface-semantic-reasoned-go-r9",
+    "evidenceWeights": {
+      "EXP": 1.0,
+      "IDA": 1.0,
+      "IPI": 1.0,
+      "IMP": 1.0,
+      "IGI": 1.0,
+      "IEP": 1.0,
+      "HTP": 1.0,
+      "HDA": 1.0,
+      "HMP": 1.0,
+      "HGI": 1.0,
+      "HEP": 1.0,
+      "TAS": 0.85,
+      "IC": 0.85,
+      "IBA": 0.7,
+      "ISS": 0.55,
+      "ISO": 0.55,
+      "ISA": 0.55,
+      "ISM": 0.55,
+      "IGC": 0.55,
+      "RCA": 0.55,
+      "IEA": 0.3,
+      "ND": 0.0
+    },
+    "unknownEvidenceWeight": 0.0,
+    "lineageFloor": 0.85,
+    "lineageRange": 0.15,
+    "domainStructurePenalty": 0.5,
+    "globalStructureCoverageFloor": 0.7,
+    "minimumDonorGroupSupport": 0.05,
+    "minimumIndependentProvenanceRoots": 2,
+    "thresholds": {
+      "molecular_function": 0.12,
+      "biological_process": 0.18,
+      "cellular_component": 0.18
+    },
+    "maxSelectedTermsPerAspect": 32,
+    "requireTwoStructureDonorGroups": true,
+    "sequenceEligibilityMode": "retained_sequence",
+    "ontologyPolicy": {
+      "mode": "ancestor_closure",
+      "maxDepth": 8,
+      "scoreDecay": 1.0,
+      "excludeRoots": true,
+      "relations": [
+        "is_a",
+        "part_of"
+      ]
+    },
+    "candidateSourcePolicy": {
+      "mode": "storage_light",
+      "minimumBaseScore": 0.25,
+      "minimumQueryCoverage": 0.15,
+      "minimumEvidenceWeight": 0.3,
+      "requireIndependentRoots": 1,
+      "allowedSources": [
+        "pfam",
+        "panther",
+        "ec",
+        "oma_ortholog",
+        "oma_fastmap"
+      ]
+    },
+    "learnedPredictorPolicy": {
+      "mode": "candidate_channel",
+      "allowedSources": [
+        "deepgoplus_cnn"
+      ],
+      "allowedAspects": [
+        "molecular_function",
+        "biological_process",
+        "cellular_component"
+      ],
+      "activationMode": "always",
+      "maxCandidatesPerAspect": 512,
+      "minimumScore": 0.01,
+      "scoreScale": 1.0,
+      "requireIndependentRoots": 1
+    },
+    "phylogenyPolicy": {
+      "mode": "orthology_aware",
+      "relationWeights": {
+        "one_to_one": 1.0,
+        "one_to_many": 0.82,
+        "many_to_one": 0.82,
+        "many_to_many": 0.68,
+        "coortholog": 0.76,
+        "unresolved_ortholog": 0.55,
+        "post_duplication_paralog": 0.25
+      },
+      "aspectDistanceDecay": {
+        "molecular_function": 0.12,
+        "biological_process": 0.28,
+        "cellular_component": 0.22
+      },
+      "lineageFloor": 0.72,
+      "lineageRange": 0.28,
+      "paralogLeafTransferAllowed": false,
+      "cladeCollapseDepth": 6
+    },
+    "goJudgePolicy": {
+      "mode": "semantic_reasoning",
+      "executionMode": "pi",
+      "maxCandidates": 128,
+      "maxDonorContexts": 12,
+      "modelProvider": "openai-codex",
+      "modelId": "gpt-5.6-sol",
+      "thinkingLevel": "high"
+    },
+    "selectionPolicy": {
+      "mode": "evidence_frontier_v1",
+      "aspects": [
+        "molecular_function",
+        "biological_process",
+        "cellular_component"
+      ]
+    },
+    "scoreFusionPolicy": {
+      "mode": "disabled",
+      "anchorWeights": {
+        "molecular_function": 0,
+        "biological_process": 0,
+        "cellular_component": 0
+      }
+    }
+  },
+  "narrativePolicy": {
+    "defaultMode": "pi",
+    "maxRevisionCycles": 2
+  },
+  "improvementPolicy": {
+    "enabled": false,
+    "externalFeedbackRequired": true,
+    "promotionEvaluator": "not_configured_in_mvp"
+  },
+  "claimBoundary": "Human-directed mainline integration of the retrospective r08 semantic GO process adapted to the currently available OpenAI Codex GPT-5.6 Sol high 128/12 decision binding; the same r7 upstream evidence/candidate policy and host score mapping are retained before GO freeze. No post-judge anchor fusion is allowed. This code revision is retrospective engineering and is not prospectively promoted by opened Z-92 results."
+}

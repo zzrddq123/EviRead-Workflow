@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-rsi-developer-feedback-view.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "evaluationId", "policy", "primary", "aggregateMetrics", "decision", "budgetRemaining", "privateEvaluationHash", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-developer-feedback-view.v1" }, "evaluationId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" }, "policy": { "enum": ["metric_only", "structured_diagnostic"] }, "primary": { "type": "object" }, "aggregateMetrics": { "type": "array" }, "decision": { "enum": ["continue", "stop"] }, "budgetRemaining": { "type": "object" }, "structuredDiagnostic": { "type": "object" }, "privateEvaluationHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "canonicalHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+  }
+}

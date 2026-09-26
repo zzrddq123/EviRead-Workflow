@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-history-context.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "specHash", "forIteration", "forStage", "currentCandidate", "selectedBaseCandidate", "candidateGraphHash", "rootCandidateId", "latestEvaluatedCandidateId", "bestCandidateId", "selectedBaseCandidateId", "candidateTree", "explorationRecords", "knowledgeCards", "unresolvedProblems", "readableSummary", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-history-context.v1" },
+    "campaignId": { "type": "string" },
+    "specHash": { "$ref": "#/$defs/hash" },
+    "forIteration": { "type": "integer", "minimum": 1 },
+    "forStage": { "enum": ["evaluate", "diagnose", "research", "plan", "develop", "verify"] },
+    "currentCandidate": { "type": "object" },
+    "selectedBaseCandidate": { "type": ["object", "null"] },
+    "candidateGraphHash": { "$ref": "#/$defs/hash" },
+    "rootCandidateId": { "type": "string" },
+    "latestEvaluatedCandidateId": { "type": ["string", "null"] },
+    "bestCandidateId": { "type": ["string", "null"] },
+    "selectedBaseCandidateId": { "type": ["string", "null"] },
+    "candidateTree": { "type": "array", "items": { "type": "object" } },
+    "explorationRecords": { "type": "array", "items": { "type": "object" } },
+    "knowledgeCards": { "type": "array", "items": { "type": "object" } },
+    "unresolvedProblems": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "readableSummary": { "type": "string", "minLength": 1 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

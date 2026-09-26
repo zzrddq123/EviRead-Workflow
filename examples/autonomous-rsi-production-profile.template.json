@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "pi-autonomous-rsi-production-start-profile.v1",
+  "campaignId": "operator-split-r01",
+  "runRoot": "/ABSOLUTE/OUTSIDE_REPOSITORY/run",
+  "dataSplitManifest": "/ABSOLUTE/OUTSIDE_REPOSITORY/data-split-manifest.json",
+  "evaluatorCommandFile": "/ABSOLUTE/PRIVATE/evaluator-command.json",
+  "evaluatorContractHash": "REPLACE_WITH_64_HEX_FROZEN_EVALUATOR_HASH",
+  "researchCommandFile": "/ABSOLUTE/PRIVATE/research-command.json",
+  "publishedHistory": null,
+  "maxIterations": 6,
+  "maxStageAttempts": 2,
+  "experimentManifest": null,
+  "modelProvider": "openai-codex",
+  "modelId": "gpt-5.6-sol",
+  "thinkingLevel": "high",
+  "metricId": "validation_macro_fmax",
+  "minimumImprovement": 0.001,
+  "plateauPatience": 5,
+  "developmentObjective": "Improve aggregate validation F-max using mechanistically justified changes that generalize beyond training Gold."
+}

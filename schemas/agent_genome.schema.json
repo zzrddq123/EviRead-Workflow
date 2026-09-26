@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-agent-genome.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "genomeId", "parentGenomeId", "generation", "evidencePolicy", "goPolicy", "narrativePolicy", "improvementPolicy", "claimBoundary"],
+  "properties": {
+    "schemaVersion": { "const": "pi-agent-genome.v1" },
+    "genomeId": { "type": "string", "minLength": 1 },
+    "parentGenomeId": { "type": ["string", "null"] },
+    "generation": { "type": "integer", "minimum": 0 },
+    "evidencePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "requiredInputs"],
+      "properties": {
+        "mode": { "const": "fixed_full_pipeline" },
+        "requiredInputs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "goPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["methodId", "evidenceWeights", "unknownEvidenceWeight", "lineageFloor", "lineageRange", "domainStructurePenalty", "globalStructureCoverageFloor", "minimumDonorGroupSupport", "minimumIndependentProvenanceRoots", "thresholds", "maxSelectedTermsPerAspect", "requireTwoStructureDonorGroups"],
+      "properties": {
+        "methodId": { "type": "string", "minLength": 1 },
+        "evidenceWeights": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "unknownEvidenceWeight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lineageFloor": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lineageRange": { "type": "number", "minimum": 0, "maximum": 1 },
+        "domainStructurePenalty": { "type": "number", "minimum": 0, "maximum": 1 },
+        "globalStructureCoverageFloor": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimumDonorGroupSupport": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimumIndependentProvenanceRoots": { "type": "integer", "minimum": 1 },
+        "thresholds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["molecular_function", "biological_process", "cellular_component"],
+          "properties": {
+            "molecular_function": { "type": "number", "minimum": 0, "maximum": 1 },
+            "biological_process": { "type": "number", "minimum": 0, "maximum": 1 },
+            "cellular_component": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "maxSelectedTermsPerAspect": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "selectionPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["disabled", "evidence_frontier_v1"] },
+            "aspects": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["molecular_function", "biological_process", "cellular_component"] }
+            }
+          },
+          "allOf": [{
+            "if": { "required": ["aspects"] },
+            "then": { "properties": { "mode": { "const": "evidence_frontier_v1" } } }
+          }]
+        },
+        "requireTwoStructureDonorGroups": { "const": true },
+        "sequenceEligibilityMode": { "enum": ["primary_only", "retained_sequence"] },
+        "ontologyPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "maxDepth", "scoreDecay", "excludeRoots", "relations"],
+          "properties": {
+            "mode": { "enum": ["disabled", "ancestor_closure"] },
+            "maxDepth": { "type": "integer", "minimum": 1, "maximum": 32 },
+            "scoreDecay": { "type": "number", "minimum": 0, "maximum": 1 },
+            "excludeRoots": { "const": true },
+            "relations": { "const": ["is_a", "part_of"] }
+          }
+        },
+        "candidateSourcePolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "minimumBaseScore", "minimumQueryCoverage", "requireIndependentRoots", "allowedSources"],
+          "properties": {
+            "mode": { "enum": ["disabled", "storage_light"] },
+            "allowedAspects": {
+              "oneOf": [
+                { "const": ["molecular_function"] },
+                { "const": ["biological_process"] },
+                { "const": ["cellular_component"] },
+                { "const": ["molecular_function", "biological_process"] },
+                { "const": ["molecular_function", "cellular_component"] },
+                { "const": ["biological_process", "cellular_component"] },
+                { "const": ["molecular_function", "biological_process", "cellular_component"] }
+              ]
+            },
+            "minimumBaseScore": { "type": "number", "minimum": 0, "maximum": 1 },
+            "minimumQueryCoverage": { "type": "number", "minimum": 0, "maximum": 1 },
+            "minimumEvidenceWeight": { "type": "number", "minimum": 0, "maximum": 1 },
+            "requireIndependentRoots": { "type": "integer", "minimum": 1, "maximum": 3 },
+            "allowedSources": {
+              "oneOf": [
+                { "const": ["biolm_retrieval"] },
+                { "const": ["interpro", "pfam", "panther", "ec", "oma_ortholog"] },
+                { "const": ["interpro", "pfam", "panther", "ec", "oma_ortholog", "oma_fastmap"] },
+                { "const": ["pfam", "panther", "ec", "oma_ortholog", "oma_fastmap"] }
+              ]
+            }
+          },
+          "allOf": [{
+            "if": { "required": ["allowedAspects"] },
+            "then": { "properties": { "mode": { "const": "storage_light" } } }
+          }]
+        },
+        "learnedPredictorPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "allowedSources", "allowedAspects", "minimumScore", "scoreScale", "requireIndependentRoots"],
+          "properties": {
+            "mode": { "enum": ["disabled", "candidate_channel"] },
+            "allowedSources": {
+              "oneOf": [
+                { "const": ["mdeepfri_cnn"] },
+                { "const": ["mdeepfri_gcn"] },
+                { "const": ["deepgoplus_cnn"] },
+                { "const": ["deepgoplus_hybrid"] }
+              ]
+            },
+            "expectedMethodHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "allowedAspects": {
+              "oneOf": [
+                { "const": ["molecular_function"] },
+                { "const": ["biological_process"] },
+                { "const": ["cellular_component"] },
+                { "const": ["molecular_function", "biological_process"] },
+                { "const": ["molecular_function", "cellular_component"] },
+                { "const": ["biological_process", "cellular_component"] },
+                { "const": ["molecular_function", "biological_process", "cellular_component"] }
+              ]
+            },
+            "activationMode": { "enum": ["always", "direct_annotation_gap_only", "prediction_aspect_gap_only", "host_term_agreement_only"] },
+            "maxCandidatesPerAspect": { "type": "integer", "minimum": 1, "maximum": 512 },
+            "minimumScore": { "type": "number", "minimum": 0, "maximum": 1 },
+            "scoreScale": { "type": "number", "minimum": 0, "maximum": 1 },
+            "requireIndependentRoots": { "const": 1 }
+          },
+          "allOf": [{
+            "if": {
+              "required": ["activationMode"],
+              "properties": { "activationMode": { "const": "host_term_agreement_only" } }
+            },
+            "then": {
+              "properties": { "allowedAspects": { "const": ["molecular_function"] } }
+            }
+          }]
+        },
+        "phylogenyPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "relationWeights", "aspectDistanceDecay", "lineageFloor", "lineageRange", "paralogLeafTransferAllowed", "cladeCollapseDepth"],
+          "properties": {
+            "mode": { "enum": ["disabled", "orthology_aware"] },
+            "relationWeights": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["one_to_one", "one_to_many", "many_to_one", "many_to_many", "coortholog", "unresolved_ortholog", "post_duplication_paralog"],
+              "properties": {
+                "one_to_one": { "type": "number", "minimum": 0, "maximum": 1 },
+                "one_to_many": { "type": "number", "minimum": 0, "maximum": 1 },
+                "many_to_one": { "type": "number", "minimum": 0, "maximum": 1 },
+                "many_to_many": { "type": "number", "minimum": 0, "maximum": 1 },
+                "coortholog": { "type": "number", "minimum": 0, "maximum": 1 },
+                "unresolved_ortholog": { "type": "number", "minimum": 0, "maximum": 1 },
+                "post_duplication_paralog": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            "aspectDistanceDecay": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["molecular_function", "biological_process", "cellular_component"],
+              "properties": {
+                "molecular_function": { "type": "number", "minimum": 0, "maximum": 1 },
+                "biological_process": { "type": "number", "minimum": 0, "maximum": 1 },
+                "cellular_component": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            "lineageFloor": { "type": "number", "minimum": 0, "maximum": 1 },
+            "lineageRange": { "type": "number", "minimum": 0, "maximum": 1 },
+            "paralogLeafTransferAllowed": { "const": false },
+            "cladeCollapseDepth": { "type": "integer", "minimum": 1, "maximum": 32 }
+          }
+        },
+        "goJudgePolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "maxCandidates"],
+          "properties": {
+            "mode": {"enum": ["disabled", "evidence_consistency", "semantic_reasoning"]},
+            "executionMode": {"enum": ["deterministic", "pi"]},
+            "candidateBudgetMode": {"enum": ["global_ranked_v1", "aspect_stratified_v1"]},
+            "candidateRetentionMode": {"enum": ["fail_closed_v1", "preserve_ranked_evidence_v1"]},
+            "maxCandidates": {"type": "integer", "minimum": 1, "maximum": 128},
+            "maxDonorContexts": {"type": "integer", "minimum": 1, "maximum": 32},
+            "modelProvider": {"type": "string", "minLength": 1},
+            "modelId": {"type": "string", "minLength": 1},
+            "thinkingLevel": {"enum": ["off", "minimal", "low", "medium", "high", "xhigh"]}
+          }
+        },
+        "scoreFusionPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "anchorWeights"],
+          "properties": {
+            "mode": {"enum": ["disabled", "deepgoplus_anchor_v1"]},
+            "anchorWeights": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["molecular_function", "biological_process", "cellular_component"],
+              "properties": {
+                "molecular_function": {"type": "number", "minimum": 0, "maximum": 1.5},
+                "biological_process": {"type": "number", "minimum": 0, "maximum": 1.5},
+                "cellular_component": {"type": "number", "minimum": 0, "maximum": 1.5}
+              }
+            }
+          }
+        }
+      }
+    },
+    "narrativePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defaultMode", "maxRevisionCycles"],
+      "properties": {
+        "defaultMode": { "enum": ["pi", "deterministic"] },
+        "maxRevisionCycles": { "type": "integer", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "improvementPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "externalFeedbackRequired", "promotionEvaluator"],
+      "properties": {
+        "enabled": { "const": false },
+        "externalFeedbackRequired": { "const": true },
+        "promotionEvaluator": { "const": "not_configured_in_mvp" }
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  }
+}

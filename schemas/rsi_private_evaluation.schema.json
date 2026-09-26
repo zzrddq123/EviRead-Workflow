@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-rsi-private-evaluation.v1",
+  "type": "object",
+  "required": ["schemaVersion", "evaluationId", "primary", "aggregateMetrics", "decision", "budgetRemaining", "structuredDiagnostic", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-private-evaluation.v1" }, "evaluationId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" }, "primary": { "type": "object" }, "aggregateMetrics": { "type": "array" }, "decision": { "enum": ["continue", "stop"] }, "budgetRemaining": { "type": "object" }, "structuredDiagnostic": { "type": "object" }, "canonicalHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+  }
+}

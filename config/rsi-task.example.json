@@ -1,0 +1,14 @@
+{
+  "schema": "eviread-rsi-task-config.v1",
+  "task_name": "gaf1389-codebase1",
+  "dataset_root": "/path/to/FunctionBench-Bio-GAF1389",
+  "fasta": "/path/to/FunctionBench-Bio-GAF1389/cohorts/all/targets.fasta",
+  "seed": 20260918,
+  "objective": "validation_macro_fmax",
+  "resource_manifest": "/path/to/biolm-gaf1389-resource.manifest.json",
+  "baseline_results": "/path/to/FunctionBench-Bio-GAF1389/Baseline_Subset_Results",
+  "baseline_split": "val_60",
+  "baseline_context_splits": ["train_50", "val_60"],
+  "train": {"count": 50},
+  "validation": {"count": 50}
+}

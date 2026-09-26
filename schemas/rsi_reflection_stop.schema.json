@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-reflection-stop.v1",
+  "title": "RSI development reflection stop decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "decision",
+    "claimBoundary",
+    "suiteId",
+    "publicManifestHash",
+    "privateTargetsHash",
+    "privateExclusionsHash",
+    "batchManifestHash",
+    "errorAttributionHash",
+    "promotionEvaluationCount",
+    "reasons",
+    "requiredNextInputs",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-reflection-stop.v1" },
+    "decision": {
+      "enum": [
+        "external_data_or_evidence_required",
+        "eligible_for_precommitted_candidate_search"
+      ]
+    },
+    "claimBoundary": {
+      "const": "Adaptive post-hoc development reflection over already-inspected BioReason-Pro cases; not held-out evaluation, promotion, or evidence of generalization."
+    },
+    "suiteId": { "type": "string", "minLength": 1 },
+    "publicManifestHash": { "$ref": "#/$defs/sha256" },
+    "privateTargetsHash": { "$ref": "#/$defs/sha256" },
+    "privateExclusionsHash": { "$ref": "#/$defs/sha256" },
+    "batchManifestHash": { "$ref": "#/$defs/sha256" },
+    "errorAttributionHash": { "$ref": "#/$defs/sha256" },
+    "promotionEvaluationCount": { "const": 0 },
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Only 10 adaptively inspected proteins are available; this is too small for accuracy optimization or a new promotion claim.",
+          "At least one GO namespace has candidate-recall ceiling below 0.50; threshold mutation cannot recover missing GO terms.",
+          "No candidate donor support has an applied lineage factor; phylogeny-aware reweighting is inactive on this cohort."
+        ]
+      }
+    },
+    "requiredNextInputs": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "const": "A benchmark integrity review that verifies sequence/accession/function/GO consistency before optimization." },
+        { "const": "A larger homology-clustered development set plus fresh, mutually exclusive sealed promotion shards." },
+        { "const": "Pinned GO ontology, annotation release, taxon constraints, and anonymous-query phylogeny inference with uncertainty." },
+        { "const": "Candidate-generation evidence beyond Swiss-Prot similarity transfer (for example InterPro/GO mapping or a frozen protein-language-model predictor)." }
+      ],
+      "items": false
+    },
+    "canonicalHash": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

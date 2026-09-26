@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "pi-external-resource-profile.v1",
+  "profileId": "current_discovery",
+  "purpose": "Non-benchmark functional-discovery mode using current local and network resources.",
+  "mode": "current_discovery",
+  "knowledgeCutoff": null,
+  "networkPolicy": "current_biological_resources_allowed",
+  "allowedFields": [
+    "named_sequence",
+    "current_structure",
+    "current_uniprot_record",
+    "current_uniprot_function_catalysis_location_pathway_domain_keywords",
+    "current_uniprot_evidence_references_and_cross_references",
+    "current_pdb_record",
+    "current_interpro_record",
+    "current_oma_record",
+    "sequence_alignment_statistics",
+    "structure_alignment_statistics",
+    "domain_boundaries"
+  ],
+  "resources": [
+    {
+      "role": "local_structure_search",
+      "source": "local AlphaFold DB Swiss-Prot Foldseek database",
+      "version": "v6 / UniProt 2025_03",
+      "availableAt": "2025-09-15",
+      "binding": "local_evidence_snapshot_sha256"
+    },
+    {
+      "role": "remote_annotations",
+      "source": "UniProt, PDB, InterPro and OMA live endpoints",
+      "version": "request_time",
+      "availableAt": "request_time",
+      "binding": "per_run_provider_receipt_sha256"
+    }
+  ],
+  "candidateProviders": {
+    "interpro": "remote_allowed",
+    "oma": "remote_allowed",
+    "deepgoplus_cnn": "local_hash_bound_only",
+    "mdeepfri_cnn": "local_hash_bound_only",
+    "mdeepfri_gcn": "local_hash_bound_only"
+  },
+  "claimBoundary": "This profile is for discovery only and must never be used to report strict temporal benchmark scores.",
+  "canonicalHash": "29de9ef0e33107abf7e65164d0360623c5df7e5f1661144898d59aa5edbd4088"
+}

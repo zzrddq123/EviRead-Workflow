@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-executor-spec.v1",
+  "title": "Evaluator-side adaptive30 route execution specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "executionPolicy",
+    "matchedControlRouteId",
+    "ordinaryChallengerRouteId",
+    "routes",
+    "groupedOof",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-executor-spec.v1" },
+    "round": { "type": "integer", "minimum": 1, "maximum": 32 },
+    "executionPolicy": {
+      "enum": ["blind_replay_before_any_gold", "grouped_crossfit_from_presealed_routes"]
+    },
+    "matchedControlRouteId": { "$ref": "#/$defs/routeId" },
+    "ordinaryChallengerRouteId": {
+      "oneOf": [{ "$ref": "#/$defs/routeId" }, { "type": "null" }]
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/route" }
+    },
+    "groupedOof": {
+      "oneOf": [{ "$ref": "#/$defs/groupedOof" }, { "type": "null" }]
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "executionPolicy": { "const": "blind_replay_before_any_gold" } } },
+      "then": {
+        "properties": {
+          "routes": { "minItems": 2, "maxItems": 2 },
+          "ordinaryChallengerRouteId": { "$ref": "#/$defs/routeId" },
+          "groupedOof": { "type": "null" }
+        }
+      },
+      "else": {
+        "properties": {
+          "ordinaryChallengerRouteId": { "type": "null" },
+          "groupedOof": { "$ref": "#/$defs/groupedOof" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "routeId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "path": { "type": "string", "minLength": 1 },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routeId",
+        "predictionSetId",
+        "replayGenomePath",
+        "predictorOverlayPath",
+        "sourceCommit",
+        "implementationHash",
+        "testReceiptHash",
+        "capabilityId"
+      ],
+      "properties": {
+        "routeId": { "$ref": "#/$defs/routeId" },
+        "predictionSetId": { "$ref": "#/$defs/safeId" },
+        "replayGenomePath": { "$ref": "#/$defs/path" },
+        "predictorOverlayPath": {
+          "oneOf": [{ "$ref": "#/$defs/path" }, { "type": "null" }]
+        },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": {
+          "enum": [
+            "frozen_replay",
+            "cafa_hierarchical_metrics",
+            "detailed_teacher_attribution",
+            "stage_count_instrumentation",
+            "aspect_isolated_routing",
+            "group_aware_calibration_split",
+            "paired_structure_sequence_predictor",
+            "ontology_aware_candidate_decoder"
+          ]
+        }
+      }
+    },
+    "groupedOof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictionSetId",
+        "seed",
+        "foldCount",
+        "sourceCommit",
+        "implementationHash",
+        "testReceiptHash"
+      ],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/safeId" },
+        "seed": { "type": "string", "minLength": 1 },
+        "foldCount": { "const": 5 },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

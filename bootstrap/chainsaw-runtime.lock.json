@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "pi-chainsaw-runtime-lock.v1",
+  "resourceId": "chainsaw-9ced6e6-runtime",
+  "source": {
+    "url": "https://github.com/JudeWells/chainsaw.git",
+    "commit": "9ced6e6d04043b0f2c50afa4527013997e305d4d",
+    "tree": "b054b71641962494975724dceba71e72099157af",
+    "license": "MIT plus bundled NSC/STRIDE academic-only restricted terms",
+    "manifestPath": "release/manifests/upstream/chainsaw-9ced6e6.manifest.json",
+    "manifestCanonicalHash": "6ad949d0aa31cec0c2d73cd572c6827c6ef453a48e6cd76b80c14987bcc2e629"
+  },
+  "runtime": {
+    "python": "3.11",
+    "environmentManager": "uv",
+    "environmentRelativePath": ".venv",
+    "supportedPlatforms": [
+      "linux-64",
+      "linux-aarch64",
+      "osx-64",
+      "osx-arm64"
+    ],
+    "directRequirementsPath": "bootstrap/chainsaw-requirements.in",
+    "directRequirementsSha256": "a1e5a40bf42db91a48f3493fb03e0ab3b7cb1fc36c08f2ecccf1b7dae0c95102",
+    "platformLocks": {
+      "linux-64": {
+        "path": "bootstrap/locks/chainsaw/linux-64.txt",
+        "sha256": "a1a26f4aa5e837976651957f11e2a5bd0ced78d74f23f72c06ec282cfc73c233"
+      },
+      "linux-aarch64": {
+        "path": "bootstrap/locks/chainsaw/linux-aarch64.txt",
+        "sha256": "95f8ec829db119622e82c6ee8ef9854054741ff5a503b3375bdcbd6026c4e379"
+      },
+      "osx-64": {
+        "path": "bootstrap/locks/chainsaw/osx-64.txt",
+        "sha256": "95f8ec829db119622e82c6ee8ef9854054741ff5a503b3375bdcbd6026c4e379"
+      },
+      "osx-arm64": {
+        "path": "bootstrap/locks/chainsaw/osx-arm64.txt",
+        "sha256": "95f8ec829db119622e82c6ee8ef9854054741ff5a503b3375bdcbd6026c4e379"
+      }
+    }
+  },
+  "model": {
+    "path": "saved_models/model_v3/weights.pt",
+    "sizeBytes": 2396726,
+    "sha256": "f21d5451e285e347582944e4017822379c31866d343593d71bccc8eb31ff9c9e"
+  },
+  "stride": {
+    "archivePath": "stride/stride.tgz",
+    "archiveSizeBytes": 316993,
+    "archiveSha256": "d7481f3c84375af7381f11decd62227fc9dd253e074edabd23f9f6ca77769c54",
+    "buildCommand": [
+      "make"
+    ],
+    "binaryPath": "stride/stride"
+  },
+  "policy": {
+    "cpuFirst": true,
+    "allowUnpinnedDependencies": false,
+    "allowDirtySource": false,
+    "requireBinaryWheels": true,
+    "requiresRestrictedLicenseAcceptance": true,
+    "academicUseOnly": true,
+    "commercialUseRequiresSeparateLicense": true,
+    "noRedistributionOutsideImmediateResearchGroup": true
+  },
+  "canonicalHash": "ec8dc548438c5d73e420a27ffcc5cfdcfe5adaafac10de53da6881dacf798010"
+}

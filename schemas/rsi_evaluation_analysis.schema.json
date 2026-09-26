@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-evaluation-analysis.v1",
+  "title": "Deterministic Developer-visible evaluation analysis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sourceVersion",
+    "evaluation",
+    "publicSummary",
+    "decision",
+    "bindings",
+    "claimBoundary",
+    "suppressionPolicy",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-evaluation-analysis.v1" },
+    "sourceVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "parentVersionId",
+        "sourceCommit",
+        "sourceTree",
+        "manifestHash"
+      ],
+      "properties": {
+        "versionId": { "$ref": "#/$defs/id" },
+        "parentVersionId": {
+          "oneOf": [
+            { "$ref": "#/$defs/id" },
+            { "type": "null" }
+          ]
+        },
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "sourceTree": { "$ref": "#/$defs/oid" },
+        "manifestHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluationId",
+        "resultKind",
+        "publicationMode",
+        "protocolId",
+        "protocolHash",
+        "proteinEvaluation"
+      ],
+      "properties": {
+        "evaluationId": { "$ref": "#/$defs/id" },
+        "resultKind": {
+          "enum": [
+            "adaptive_development",
+            "software_verification",
+            "frozen_replay"
+          ]
+        },
+        "publicationMode": {
+          "enum": ["prospective", "retrospective_legacy"]
+        },
+        "protocolId": { "$ref": "#/$defs/id" },
+        "protocolHash": { "$ref": "#/$defs/hash" },
+        "proteinEvaluation": { "type": "boolean" }
+      }
+    },
+    "publicSummary": {
+      "oneOf": [
+        {
+          "$ref": "pi-rsi-code-evaluation-publication.v1#/$defs/adaptivePublicSummary"
+        },
+        {
+          "$ref": "pi-rsi-code-evaluation-publication.v1#/$defs/genericPublicSummary"
+        }
+      ]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisionId",
+        "action",
+        "selectedVersionId",
+        "rationale"
+      ],
+      "properties": {
+        "decisionId": { "$ref": "#/$defs/id" },
+        "action": {
+          "enum": ["continue", "backtrack", "retain"]
+        },
+        "selectedVersionId": { "$ref": "#/$defs/id" },
+        "rationale": { "$ref": "#/$defs/text" }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "openingHash",
+        "resultHash",
+        "publicationHash",
+        "decisionHash",
+        "stateRootPublicManifestHash"
+      ],
+      "properties": {
+        "openingHash": { "$ref": "#/$defs/hash" },
+        "resultHash": { "$ref": "#/$defs/hash" },
+        "publicationHash": { "$ref": "#/$defs/hash" },
+        "decisionHash": { "$ref": "#/$defs/hash" },
+        "stateRootPublicManifestHash": {
+          "oneOf": [
+            { "$ref": "#/$defs/hash" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "claimBoundary": { "$ref": "#/$defs/text" },
+    "suppressionPolicy": {
+      "const": "aggregate_and_closed_teacher_projection_only_no_private_or_per_protein_material"
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    }
+  }
+}

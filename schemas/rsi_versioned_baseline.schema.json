@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-versioned-baseline-manifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "baselineKind",
+    "baselineId",
+    "parentBaselineId",
+    "armId",
+    "sourceCampaignId",
+    "candidate",
+    "commonDataManifestHash",
+    "parentStartingToolboxManifestHash",
+    "startingToolboxManifestHash",
+    "candidateCapabilityUsageManifestHash",
+    "requiredCapabilityClosureHash",
+    "requiredAcquisitionReceiptHashes",
+    "requiredTools",
+    "verificationReceiptHashes",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-versioned-baseline-manifest.v1"
+    },
+    "baselineId": {
+      "$ref": "#/$defs/safeId"
+    },
+    "parentBaselineId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/safeId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "armId": {
+      "$ref": "#/$defs/safeId"
+    },
+    "sourceCampaignId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/safeId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "candidate": {
+      "$ref": "#/$defs/candidate"
+    },
+    "commonDataManifestHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "parentStartingToolboxManifestHash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "startingToolboxManifestHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "candidateCapabilityUsageManifestHash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requiredCapabilityClosureHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "requiredAcquisitionReceiptHashes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/hash"
+      }
+    },
+    "requiredTools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "toolId",
+          "version",
+          "licenseId",
+          "sourceUrl",
+          "artifactKind",
+          "artifactHash",
+          "acquisitionReceiptHash",
+          "installedRelativePath",
+          "executable"
+        ],
+        "properties": {
+          "toolId": {
+            "$ref": "#/$defs/safeId"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "licenseId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "artifactKind": {
+            "enum": [
+              "executable",
+              "archive",
+              "model",
+              "data"
+            ]
+          },
+          "artifactHash": {
+            "$ref": "#/$defs/hash"
+          },
+          "acquisitionReceiptHash": {
+            "$ref": "#/$defs/hash"
+          },
+          "installedRelativePath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "verificationReceiptHashes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/hash"
+      }
+    },
+    "claimBoundary": {
+      "const": "immutable code/tool/common-data baseline; no private evaluator data or campaign mutable state"
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    },
+    "baselineKind": {
+      "enum": [
+        "frozen_g0",
+        "promoted"
+      ]
+    }
+  },
+  "$defs": {
+    "safeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "sourceCommit",
+        "sourceTree"
+      ],
+      "properties": {
+        "candidateId": {
+          "$ref": "#/$defs/safeId"
+        },
+        "sourceCommit": {
+          "$ref": "#/$defs/gitObject"
+        },
+        "sourceTree": {
+          "$ref": "#/$defs/gitObject"
+        }
+      }
+    }
+  }
+}

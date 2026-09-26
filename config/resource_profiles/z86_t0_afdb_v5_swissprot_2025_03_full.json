@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "pi-external-resource-profile.v1",
+  "profileId": "z86_t0_afdb_v5_swissprot_2025_03_full_r09",
+  "purpose": "Z86 four-arm R09 row: complete reviewed Swiss-Prot 2025_03 BLAST/context and all positive frozen GOA 2025-09-04 associations with explicit evidence roles, benchmark structure companion, and AFDB-v5/PDB100 donors.",
+  "mode": "strict_t0_evidence_plane",
+  "knowledgeCutoff": "2026-08-03",
+  "networkPolicy": "biological_network_disabled",
+  "allowedFields": [
+    "anonymous_sequence",
+    "anonymous_sequence_derived_structure_companion",
+    "donor_accession",
+    "donor_go_id",
+    "donor_go_aspect",
+    "donor_go_evidence_code",
+    "donor_taxon_id",
+    "donor_protein_name",
+    "donor_gene_symbol",
+    "donor_entry_name",
+    "donor_function",
+    "donor_ec_and_catalysis",
+    "donor_cofactor",
+    "donor_subcellular_location",
+    "donor_pathway",
+    "donor_domain_and_similarity",
+    "donor_ptm_and_interaction",
+    "donor_keywords",
+    "donor_evidence_and_references",
+    "donor_database_cross_references",
+    "donor_record_and_sequence_hashes",
+    "frozen_pdb_chain_uniprot_mapping",
+    "sequence_alignment_statistics",
+    "structure_alignment_statistics",
+    "domain_boundaries",
+    "inferred_target_lineage_context",
+    "taxonomy_evidence_provenance",
+    "orthology_hog_placement",
+    "orthology_supporting_species",
+    "orthology_source_go_evidence",
+    "donor_go_evidence_role",
+    "donor_go_direct_transfer_eligibility",
+    "donor_go_visible_to_agent",
+    "donor_negative_go_constraint"
+  ],
+  "resources": [
+    {
+      "role": "sequence_and_annotation_store",
+      "source": "Complete UniProtKB/Swiss-Prot 2025_03 plus frozen Swiss-Prot GOA 2025-09-04 all-evidence snapshot",
+      "version": "573,661 reviewed sequences; 5,103,099 positive protein-GO pairs over 555,709 proteins; Experimental+IC+TAS direct eligibility; computational/phylogenetic evidence role-aware",
+      "availableAt": "2025-09-04",
+      "archiveSha256": "881726aec677fe3d1df629a07dc77f476fc1339aef3c4117f2bcbfeef6416a14",
+      "fullFastaSha256": "6a9a6c21d0d3f5074a0d6487b6f07e0861d915e6783167b3ff4a73f50f6c7ed4",
+      "blastManifestHash": "14677c84114a4153752a48c28190f6bf350abdf5a99941b340b0c3d5033e698c",
+      "annotationManifestHash": "34b0af5d3493cc2704604ea2a50f7e61a7876571db35a1fb60fc03878822ad05",
+      "binding": "all positive frozen GOA associations are visible and scored using genome evidence weights; direct eligibility remains explicit; NOT is negative-only",
+      "goaSha256": "608871d5f579633d2b27700a5c569c1f9c0f2b72585d8ca3ac6233976441a444"
+    },
+    {
+      "role": "taxonomy_lineage_calibration",
+      "source": "NCBI Taxonomy historical taxdump archive",
+      "version": "2025-09-01",
+      "availableAt": "2025-09-01",
+      "archiveSha256": "4416dfb78a2ceb630907b1f04b18c70521142d43896575db9afb435a0d267ab7",
+      "binding": "taxonomy_store_manifest_and_store_sha256"
+    },
+    {
+      "role": "orthology_phylogeny",
+      "source": "OMA All.Jul2024 plus OMAmer 2.0.3 LUCA database",
+      "version": "All.Jul2024; LUCA",
+      "availableAt": "2024-08-10",
+      "omamerDatabaseSha256": "53adf8307e244c3901e8e432e015f16f895efb777ea1f693e739169e0defb242",
+      "derivedStoreSha256": "a487ee21f9e1109c210fa0870d54c0961d2b9d4866afac19954775545ad7d1d6",
+      "binding": "oma_store_manifest_database_and_store_sha256"
+    },
+    {
+      "role": "target_structure_companion",
+      "source": "SimpleFold 3B local model inference from the anonymous benchmark sequence",
+      "version": "runner 1.1.0; 500 steps; seed 42",
+      "availableAt": "2026-08-03",
+      "binding": "exact_sequence_anonymous_backbone_manifest_sha256"
+    },
+    {
+      "role": "structure_donor_search",
+      "source": "Foldseek PDB100",
+      "version": "250101",
+      "availableAt": "2025-01-01",
+      "archiveSha256": "2ec2b8b83c5f9ccadc1d88d680cd3a40c04e2bcb4d67ba366cebbf6e8156b090"
+    },
+    {
+      "role": "structure_donor_search_afdb_swissprot",
+      "source": "AlphaFold DB Swiss-Prot PDB bulk archive",
+      "version": "v5",
+      "availableAt": "2025-08-24",
+      "archiveSha256": "c0a68562e123d097197feeb73d790490fc7bfa7ad950f652c46d55d1447d8ec3",
+      "foldseekManifestHash": "bc0f6dc17086793d0663893013b5df42ca85f45ac9aeb7b9052f3fdd91818d7c",
+      "binding": "full_archive_and_foldseek_database_manifest_sha256"
+    }
+  ],
+  "activationRequirements": [
+    "exact target FASTA/coordinate sequence equality",
+    "anonymized coordinate manifest bound to this profile hash",
+    "development-only structural companion disclosure",
+    "all positive GOA 2025-09-04 associations expose evidence role and direct eligibility; NOT remains negative-only"
+  ],
+  "candidateProviders": {
+    "taxonomy_lineage": "local_hash_bound_only",
+    "interpro": "disabled_by_project_policy",
+    "oma": "local_hash_bound_all_species_hog",
+    "deepgoplus_cnn": "local_hash_bound_only",
+    "mdeepfri_cnn": "disabled",
+    "mdeepfri_gcn": "disabled"
+  },
+  "claimBoundary": "Sequence search/context uses complete Swiss-Prot 2025_03. Every positive Swiss-Prot GOA association available on 2025-09-04 is visible to the agent and enters evidence-weighted donor scoring; Experimental+IC+TAS eligibility remains explicit, computational evidence remains downweighted, NOT is negative-only, network is disabled, and GO 2025-07-22 governs scoring.",
+  "canonicalHash": "640b4cc5725a24a35ee86f03bd4a641abf762f8e1aec18afbefe79b81a84c96b"
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi.local/schemas/autonomous_rsi_formal_authorization.schema.json",
+  "title": "Autonomous RSI Formal Lifecycle Authorization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "authorizationId", "campaignDir", "repositoryRoot", "remote", "expectedHandoffHash", "expectedCandidate", "approvalTokenSha256", "safetyAcceptance", "operations", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-formal-authorization.v1" },
+    "authorizationId": { "$ref": "#/$defs/safeId" },
+    "campaignDir": { "type": "string", "minLength": 1 },
+    "repositoryRoot": { "type": "string", "minLength": 1 },
+    "remote": { "$ref": "#/$defs/safeId" },
+    "expectedHandoffHash": { "$ref": "#/$defs/hash" },
+    "expectedCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "artifactHash", "sourceCommit"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/safeId" },
+        "artifactHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+      }
+    },
+    "approvalTokenSha256": { "$ref": "#/$defs/hash" },
+    "safetyAcceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["developmentCampaignVerified", "handoffReviewed", "evaluatorIsolationVerified", "unopenedCohortPrecommitted", "remotePublicationRequired", "controllerOwnedMutationsOnly"],
+      "properties": {
+        "developmentCampaignVerified": { "const": true },
+        "handoffReviewed": { "const": true },
+        "evaluatorIsolationVerified": { "const": true },
+        "unopenedCohortPrecommitted": { "const": true },
+        "remotePublicationRequired": { "const": true },
+        "controllerOwnedMutationsOnly": { "const": true }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["operationId", "command", "args"],
+        "properties": {
+          "operationId": { "$ref": "#/$defs/safeId" },
+          "command": { "enum": ["rsi-version-register", "rsi-version-evaluation-open", "rsi-version-evaluation-complete", "rsi-version-evaluation-publish", "rsi-version-decide", "rsi-version-exploration-record"] },
+          "args": { "type": "array", "maxItems": 64, "items": { "type": "string", "minLength": 1, "maxLength": 4096 } }
+        }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

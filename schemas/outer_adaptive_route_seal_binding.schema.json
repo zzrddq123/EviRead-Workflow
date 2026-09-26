@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-route-seal-binding.v1",
+  "title": "Leak-scanned label-free adaptive30 route binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "routeId",
+    "cohortBinding",
+    "generationBinding",
+    "evidenceBinding",
+    "privateArtifacts",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-route-seal-binding.v1" },
+    "routeId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "cohortBinding": { "$ref": "#/$defs/cohort" },
+    "generationBinding": { "$ref": "#/$defs/generation" },
+    "evidenceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceBatchManifestHash",
+        "sourceGenomeHash",
+        "baseFrozenEvidenceSetHash",
+        "acquisitionPlanHash",
+        "acquisitionReceiptHash"
+      ],
+      "properties": {
+        "sourceBatchManifestHash": { "$ref": "#/$defs/hash" },
+        "sourceGenomeHash": { "$ref": "#/$defs/hash" },
+        "baseFrozenEvidenceSetHash": { "$ref": "#/$defs/hash" },
+        "acquisitionPlanHash": { "$ref": "#/$defs/hash" },
+        "acquisitionReceiptHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "privateArtifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replayReceiptHash", "sealedRouteHash"],
+      "properties": {
+        "replayReceiptHash": { "$ref": "#/$defs/hash" },
+        "sealedRouteHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteProfile",
+        "role",
+        "proteinCount",
+        "shardCount",
+        "heldOutClaim",
+        "reusePolicy",
+        "publicManifestHash",
+        "adaptiveProtocolHash",
+        "privateExclusionsHash",
+        "developmentShardHash",
+        "frozenEvidenceSetHash",
+        "ontologySha256"
+      ],
+      "properties": {
+        "suiteProfile": { "const": "adaptive30" },
+        "role": { "const": "development" },
+        "proteinCount": { "const": 30 },
+        "shardCount": { "const": 1 },
+        "heldOutClaim": { "const": "none" },
+        "reusePolicy": { "const": "repeated_adaptive_development" },
+        "publicManifestHash": { "$ref": "#/$defs/hash" },
+        "adaptiveProtocolHash": { "$ref": "#/$defs/hash" },
+        "privateExclusionsHash": { "$ref": "#/$defs/hash" },
+        "developmentShardHash": { "$ref": "#/$defs/hash" },
+        "frozenEvidenceSetHash": { "$ref": "#/$defs/hash" },
+        "ontologySha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictionSetId",
+        "blindPredictionHash",
+        "replayReceiptHash",
+        "sourceCommit",
+        "implementationHash",
+        "testReceiptHash",
+        "capabilityId",
+        "executionPolicy",
+        "presealedRouteSetHash",
+        "foldAssignmentHash",
+        "crossfitReceiptHash"
+      ],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" },
+        "blindPredictionHash": { "$ref": "#/$defs/hash" },
+        "replayReceiptHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "type": "string", "minLength": 1 },
+        "executionPolicy": { "const": "blind_replay_before_any_gold" },
+        "presealedRouteSetHash": { "type": "null" },
+        "foldAssignmentHash": { "type": "null" },
+        "crossfitReceiptHash": { "type": "null" }
+      }
+    }
+  }
+}

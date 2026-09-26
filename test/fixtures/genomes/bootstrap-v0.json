@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "pi-agent-genome.v1",
+  "genomeId": "bootstrap-v0",
+  "parentGenomeId": null,
+  "generation": 0,
+  "evidencePolicy": {
+    "mode": "fixed_full_pipeline",
+    "requiredInputs": ["amino_acid_fasta"]
+  },
+  "goPolicy": {
+    "methodId": "strict-blind-evidence-transfer-v1",
+    "evidenceWeights": {
+      "EXP": 1.0,
+      "IDA": 1.0,
+      "IPI": 1.0,
+      "IMP": 1.0,
+      "IGI": 1.0,
+      "IEP": 1.0,
+      "HTP": 1.0,
+      "HDA": 1.0,
+      "HMP": 1.0,
+      "HGI": 1.0,
+      "HEP": 1.0,
+      "TAS": 0.85,
+      "IC": 0.85,
+      "IBA": 0.7,
+      "ISS": 0.55,
+      "ISO": 0.55,
+      "ISA": 0.55,
+      "ISM": 0.55,
+      "IGC": 0.55,
+      "RCA": 0.55,
+      "IEA": 0.3,
+      "ND": 0.0
+    },
+    "unknownEvidenceWeight": 0.0,
+    "lineageFloor": 0.85,
+    "lineageRange": 0.15,
+    "domainStructurePenalty": 0.5,
+    "globalStructureCoverageFloor": 0.7,
+    "minimumDonorGroupSupport": 0.05,
+    "minimumIndependentProvenanceRoots": 2,
+    "thresholds": {
+      "molecular_function": 0.15,
+      "biological_process": 0.25,
+      "cellular_component": 0.25
+    },
+    "maxSelectedTermsPerAspect": 10,
+    "requireTwoStructureDonorGroups": true
+  },
+  "narrativePolicy": {
+    "defaultMode": "pi",
+    "maxRevisionCycles": 2
+  },
+  "improvementPolicy": {
+    "enabled": false,
+    "externalFeedbackRequired": true,
+    "promotionEvaluator": "not_configured_in_mvp"
+  },
+  "claimBoundary": "RSI-inspired, evolution-ready generation-0 runner; no recursive improvement or promotion is demonstrated by this MVP."
+}

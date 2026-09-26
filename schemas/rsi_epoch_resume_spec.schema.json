@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-epoch-resume-spec.v1",
+  "title": "Caller-authored intent for reopening a terminal RSI history as a new epoch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "epochId",
+    "baseVersionId",
+    "plannedVersionId",
+    "reason",
+    "hypothesis",
+    "plannedChangeSummary",
+    "codeChangeTargets",
+    "controls",
+    "verificationRequirements",
+    "evaluationPolicy",
+    "retrospectiveEvidencePolicy",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-epoch-resume-spec.v1" },
+    "epochId": { "$ref": "#/$defs/id" },
+    "baseVersionId": { "$ref": "#/$defs/id" },
+    "plannedVersionId": { "$ref": "#/$defs/id" },
+    "reason": { "$ref": "#/$defs/text" },
+    "hypothesis": { "$ref": "#/$defs/text" },
+    "plannedChangeSummary": { "$ref": "#/$defs/text" },
+    "codeChangeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "verificationRequirements": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "evaluationPolicy": {
+      "const": "fresh_prospective_opening_required_before_private_evaluation_v1"
+    },
+    "retrospectiveEvidencePolicy": {
+      "const": "knowledge_only_never_promotion_eligible_v1"
+    },
+    "claimBoundary": {
+      "const": "Epoch resumption authorizes a planned code candidate only; it does not change formal selection, promote a version, or make retrospective evidence prospective."
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "shortText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    }
+  }
+}

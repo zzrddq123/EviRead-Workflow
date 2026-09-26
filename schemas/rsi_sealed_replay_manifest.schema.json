@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-rsi-sealed-replay-manifest.v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "experimentId", "sealedDataCommitmentHash", "allCampaignsFrozenHash", "finalCandidateEvaluationHashes", "archivedCheckpointEvaluationHashes", "selectionAfterSealedEvaluation", "openedAt", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-sealed-replay-manifest.v1" }, "experimentId": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/id" }, "sealedDataCommitmentHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "allCampaignsFrozenHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }, "finalCandidateEvaluationHashes": { "type": "array", "minItems": 1, "items": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" } }, "archivedCheckpointEvaluationHashes": { "type": "array", "items": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" } }, "selectionAfterSealedEvaluation": { "const": "forbidden" }, "openedAt": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/timestamp" }, "canonicalHash": { "$ref": "pi-rsi-experiment-defs.v1#/$defs/hash" }
+  }
+}

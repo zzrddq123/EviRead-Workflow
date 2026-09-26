@@ -1,0 +1,12 @@
+{
+  "schema": "eviread-gaf1389-full-evidence.v1",
+  "query_count": 1389,
+  "models": ["esm2", "esmc", "protrek"],
+  "neighbors_per_model": 20,
+  "resolved_donor_neighbors": 83340,
+  "unresolved_donor_neighbors": 0,
+  "sqlite_sha256": "fced96ee828cfca4807357626c38eb80f2bfdc2ab76db71ca82f0891d119d0cb",
+  "query_embedding_manifest": "query-embeddings-1389.manifest.json",
+  "donor_index_manifest": "full-swissprot-index-manifest.json",
+  "evidence_directory": "biolm-evidence-gaf1389-full"
+}

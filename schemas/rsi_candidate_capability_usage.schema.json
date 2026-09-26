@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-candidate-capability-usage.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "candidate", "commonDataManifestHash", "startingToolboxManifestHash", "acquiredCapabilityHeadHash", "acquisitions", "requiredAcquisitionReceiptHashes", "requiredCapabilityClosureHash", "verificationReceiptHash", "evaluationReceiptHash", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-candidate-capability-usage.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "candidate": { "$ref": "#/$defs/candidate" },
+    "commonDataManifestHash": { "$ref": "#/$defs/hash" },
+    "startingToolboxManifestHash": { "$ref": "#/$defs/hash" },
+    "acquiredCapabilityHeadHash": { "$ref": "#/$defs/hash" },
+    "acquisitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["receiptHash", "disposition", "evidenceHash", "rationale"],
+        "properties": {
+          "receiptHash": { "$ref": "#/$defs/hash" },
+          "disposition": { "enum": ["required", "unused"] },
+          "evidenceHash": { "$ref": "#/$defs/hash" },
+          "rationale": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      }
+    },
+    "requiredAcquisitionReceiptHashes": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/hash" } },
+    "requiredCapabilityClosureHash": { "$ref": "#/$defs/hash" },
+    "verificationReceiptHash": { "$ref": "#/$defs/hash" },
+    "evaluationReceiptHash": { "$ref": "#/$defs/hash" },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "sourceCommit", "sourceTree"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/safeId" },
+        "sourceCommit": { "$ref": "#/$defs/gitObject" },
+        "sourceTree": { "$ref": "#/$defs/gitObject" }
+      }
+    }
+  }
+}

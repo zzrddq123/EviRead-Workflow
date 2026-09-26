@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-capability-manifest.v1",
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "url": { "type": "string", "pattern": "^https://" },
+    "commonData": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "snapshotId", "resources", "readOnly", "canonicalHash"],
+      "properties": {
+        "schemaVersion": { "const": "pi-rsi-common-data-manifest.v1" },
+        "snapshotId": { "$ref": "#/$defs/id" },
+        "resources": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["resourceId", "release", "artifactHash", "licenseId", "sourceUrl"], "properties": { "resourceId": { "$ref": "#/$defs/id" }, "release": { "type": "string", "minLength": 1 }, "artifactHash": { "$ref": "#/$defs/hash" }, "licenseId": { "type": "string", "minLength": 1 }, "sourceUrl": { "$ref": "#/$defs/url" } } } },
+        "readOnly": { "const": true },
+        "canonicalHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "startingToolbox": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "baselineId", "commonDataManifestHash", "visibleTools", "acquisitionPolicy", "canonicalHash"],
+      "properties": {
+        "schemaVersion": { "const": "pi-rsi-starting-toolbox-manifest.v1" },
+        "baselineId": { "$ref": "#/$defs/id" },
+        "commonDataManifestHash": { "$ref": "#/$defs/hash" },
+        "visibleTools": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["toolId", "version", "artifactHash", "entrypoint", "licenseId", "sourceUrl"], "properties": { "toolId": { "$ref": "#/$defs/id" }, "version": { "type": "string", "minLength": 1 }, "artifactHash": { "$ref": "#/$defs/hash" }, "entrypoint": { "type": "string", "minLength": 1 }, "licenseId": { "type": "string", "minLength": 1 }, "sourceUrl": { "$ref": "#/$defs/url" } } } },
+        "acquisitionPolicy": { "type": "object", "additionalProperties": false, "required": ["enabledFromUpdate", "allowedSourceSchemes", "maxAttempts", "maxSuccessfulTools", "maxBytes", "requireIndependentPrecommit", "candidateMayBrowseHostCas"], "properties": { "enabledFromUpdate": { "type": "integer", "minimum": 1 }, "allowedSourceSchemes": { "const": ["https"] }, "maxAttempts": { "type": "integer", "minimum": 1 }, "maxSuccessfulTools": { "type": "integer", "minimum": 1 }, "maxBytes": { "type": "integer", "minimum": 1 }, "requireIndependentPrecommit": { "const": true }, "candidateMayBrowseHostCas": { "const": false } } },
+        "canonicalHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  },
+  "oneOf": [{ "$ref": "#/$defs/commonData" }, { "$ref": "#/$defs/startingToolbox" }]
+}

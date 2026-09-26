@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-experiment-defs.v1",
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "oid": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateId", "artifactHash", "sourceCommit"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" },
+        "artifactHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/oid" }
+      }
+    }
+  }
+}

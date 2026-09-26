@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "pi-external-go-predictor-lock.v1",
+  "predictorId": "mdeepfri-gcn-v1",
+  "supportedPlatforms": ["linux-64", "linux-aarch64", "osx-64", "osx-arm64"],
+  "adapter": {
+    "name": "deepfri-gcn-onnx-adapter",
+    "sourcePath": "python/mdeepfri_gcn_predictor.py",
+    "runnerSha256": "425ed751dc7c4e1237b37c307aed455f467d5751090d66a52a4dff15f10c21b7",
+    "runtimePackage": "onnxruntime",
+    "runtimeVersion": "1.16.3",
+    "implementation": "repository_owned_structure_gcn_equivalent",
+    "upstreamRepository": "https://github.com/Tomasz-Lab/Metagenomic-DeepFRI",
+    "upstreamCommit": "366acae69245fba7b7bf0673c2c3e618e3e00869",
+    "upstreamReferencePath": "mDeepFRI/predict.pyx",
+    "upstreamLicense": "GPL-3.0-or-later"
+  },
+  "runtime": {
+    "python": "3.11",
+    "requirementsPath": "bootstrap/mdeepfri-requirements.lock.txt",
+    "requirementsSha256": "34e41dab0cc3922411c0eaae3952488ffd3fc373fd881db3848b8fe54f77dd30",
+    "environmentPath": ".runtime/predictors/mdeepfri-gcn-v1",
+    "installManifestPath": ".runtime/mdeepfri-gcn-v1-install-manifest.json"
+  },
+  "model": {
+    "family": "DeepFRI-MERGED-GraphConv",
+    "networkType": "structure_gcn",
+    "declaredVersion": "1.0",
+    "sourceRevision": "e9b40fb6c1535eabd85ff5a90df00366e3a4e0ea",
+    "sourceBaseUrl": "https://huggingface.co/valentynbez/mDeepFRI/resolve/e9b40fb6c1535eabd85ff5a90df00366e3a4e0ea/",
+    "license": "MIT",
+    "scoreSemantics": "uncalibrated_model_score",
+    "structureInput": {
+      "policy": "single_chain_exact_ca_v1",
+      "contactDistanceAngstrom": 10.0,
+      "sequenceStructureIdentity": "exact",
+      "atomSelection": "CA"
+    },
+    "config": {
+      "name": "model_config.json",
+      "sizeBytes": 755,
+      "sha256": "a2b8d78f858bf984c586b0946b98dd6d5202d412f7b5ba654d7dd2ab613948f0"
+    },
+    "files": [
+      {
+        "aspect": "biological_process",
+        "kind": "onnx",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_bp.onnx",
+        "sizeBytes": 55959787,
+        "sha256": "ff8eb0a73fee75933e9e59e4f2a760be6190079a45edb0e930d29db59b729e92"
+      },
+      {
+        "aspect": "biological_process",
+        "kind": "model_params",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_bp_model_params.json",
+        "sizeBytes": 198318,
+        "sha256": "43c1995e87ba57a6fc510772dac57b0437d6a4bd5fe7ef4f349f03580966917a"
+      },
+      {
+        "aspect": "cellular_component",
+        "kind": "onnx",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_cc.onnx",
+        "sizeBytes": 32286513,
+        "sha256": "9f9031819cd5d65c1e5a92c13e963b6e22d3723a66f5db212b72b9ea9b73522c"
+      },
+      {
+        "aspect": "cellular_component",
+        "kind": "model_params",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_cc_model_params.json",
+        "sizeBytes": 26060,
+        "sha256": "cf9becbbfbb7aa3b2dde1749ea598303fb0d17fb8209dadfee4fb437430c43df"
+      },
+      {
+        "aspect": "molecular_function",
+        "kind": "onnx",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_mf.onnx",
+        "sizeBytes": 35454214,
+        "sha256": "4cc7183c2ca82e1746a74586d14fa135be84bb66f35dd92b20a266b0de527a35"
+      },
+      {
+        "aspect": "molecular_function",
+        "kind": "model_params",
+        "name": "DeepFRI-MERGED_GraphConv_gcd_512-512-512_fcd_1024_ca_10.0_mf_model_params.json",
+        "sizeBytes": 55275,
+        "sha256": "e025dc3574697aba915cdb3964932c465a79b86715beb2ac3a0f0a3d4b55948f"
+      }
+    ]
+  },
+  "claimBoundary": "The lock fixes executable/model bytes and an exact single-chain C-alpha structure-input policy for an optional candidate generator. It does not establish calibration, absence of training overlap, temporal validity, structure quality, or biological correctness."
+}

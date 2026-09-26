@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-grouped-precommit-binding.v1",
+  "title": "Leak-scanned label-free grouped OOF precommit binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "executionSpecHash",
+    "cohortBinding",
+    "controlBinding",
+    "challengerPlan",
+    "sealedRoutes",
+    "groupedPrecommitHash",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-grouped-precommit-binding.v1" },
+    "round": { "type": "integer", "minimum": 1, "maximum": 32 },
+    "executionSpecHash": { "$ref": "#/$defs/hash" },
+    "cohortBinding": { "$ref": "#/$defs/cohort" },
+    "controlBinding": { "$ref": "#/$defs/generation" },
+    "challengerPlan": { "$ref": "#/$defs/groupedPlan" },
+    "sealedRoutes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["routeId", "predictionSetId", "blindPredictionHash", "replayReceiptHash"],
+        "properties": {
+          "routeId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+          "predictionSetId": { "$ref": "#/$defs/id" },
+          "blindPredictionHash": { "$ref": "#/$defs/hash" },
+          "replayReceiptHash": { "$ref": "#/$defs/hash" }
+        }
+      }
+    },
+    "groupedPrecommitHash": { "$ref": "#/$defs/hash" },
+    "claimBoundary": { "type": "string", "minLength": 1 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteProfile", "role", "proteinCount", "shardCount", "heldOutClaim", "reusePolicy",
+        "publicManifestHash", "adaptiveProtocolHash", "privateExclusionsHash",
+        "developmentShardHash", "frozenEvidenceSetHash", "ontologySha256"
+      ],
+      "properties": {
+        "suiteProfile": { "const": "adaptive30" },
+        "role": { "const": "development" },
+        "proteinCount": { "const": 30 },
+        "shardCount": { "const": 1 },
+        "heldOutClaim": { "const": "none" },
+        "reusePolicy": { "const": "repeated_adaptive_development" },
+        "publicManifestHash": { "$ref": "#/$defs/hash" },
+        "adaptiveProtocolHash": { "$ref": "#/$defs/hash" },
+        "privateExclusionsHash": { "$ref": "#/$defs/hash" },
+        "developmentShardHash": { "$ref": "#/$defs/hash" },
+        "frozenEvidenceSetHash": { "$ref": "#/$defs/hash" },
+        "ontologySha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit",
+        "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy",
+        "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"
+      ],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" },
+        "blindPredictionHash": { "$ref": "#/$defs/hash" },
+        "replayReceiptHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "type": "string", "minLength": 1 },
+        "executionPolicy": { "const": "blind_replay_before_any_gold" },
+        "presealedRouteSetHash": { "type": "null" },
+        "foldAssignmentHash": { "type": "null" },
+        "crossfitReceiptHash": { "type": "null" }
+      }
+    },
+    "groupedPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit",
+        "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy",
+        "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"
+      ],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" },
+        "blindPredictionHash": { "type": "null" },
+        "replayReceiptHash": { "type": "null" },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "const": "group_aware_calibration_split" },
+        "executionPolicy": { "const": "grouped_crossfit_from_presealed_routes" },
+        "presealedRouteSetHash": { "$ref": "#/$defs/hash" },
+        "foldAssignmentHash": { "$ref": "#/$defs/hash" },
+        "crossfitReceiptHash": { "type": "null" }
+      }
+    }
+  }
+}

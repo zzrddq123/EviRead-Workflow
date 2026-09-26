@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-bundle-binding.v1",
+  "title": "Leak-scanned adaptive30 evaluator bundle binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "executionPolicy",
+    "cohortBinding",
+    "systems",
+    "evaluatorArtifacts",
+    "rsiEvaluation",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-bundle-binding.v1" },
+    "round": { "type": "integer", "minimum": 1, "maximum": 32 },
+    "executionPolicy": {
+      "enum": ["blind_replay_before_any_gold", "grouped_crossfit_from_presealed_routes"]
+    },
+    "cohortBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteProfile",
+        "role",
+        "proteinCount",
+        "shardCount",
+        "heldOutClaim",
+        "reusePolicy",
+        "publicManifestHash",
+        "adaptiveProtocolHash",
+        "privateExclusionsHash",
+        "developmentShardHash",
+        "frozenEvidenceSetHash",
+        "ontologySha256"
+      ],
+      "properties": {
+        "suiteProfile": { "const": "adaptive30" },
+        "role": { "const": "development" },
+        "proteinCount": { "const": 30 },
+        "shardCount": { "const": 1 },
+        "heldOutClaim": { "const": "none" },
+        "reusePolicy": { "const": "repeated_adaptive_development" },
+        "publicManifestHash": { "$ref": "#/$defs/hash" },
+        "adaptiveProtocolHash": { "$ref": "#/$defs/hash" },
+        "privateExclusionsHash": { "$ref": "#/$defs/hash" },
+        "developmentShardHash": { "$ref": "#/$defs/hash" },
+        "frozenEvidenceSetHash": { "$ref": "#/$defs/hash" },
+        "ontologySha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "binding"],
+          "properties": {
+            "role": { "const": "matched_control" },
+            "binding": { "$ref": "#/$defs/generation" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "binding"],
+          "properties": {
+            "role": { "const": "challenger" },
+            "binding": { "$ref": "#/$defs/generation" }
+          }
+        }
+      ],
+      "items": false
+    },
+    "evaluatorArtifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "freezeBundleHash",
+        "goldBundleHash",
+        "goldOpeningHash",
+        "trainingOpeningHash",
+        "groupedOofSummaryHash",
+        "methodPrecommitKind",
+        "methodPrecommitHash"
+      ],
+      "properties": {
+        "freezeBundleHash": { "$ref": "#/$defs/hash" },
+        "goldBundleHash": { "$ref": "#/$defs/hash" },
+        "goldOpeningHash": { "$ref": "#/$defs/hash" },
+        "trainingOpeningHash": { "$ref": "#/$defs/hash" },
+        "groupedOofSummaryHash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "methodPrecommitKind": {
+          "enum": ["canonical_proposal_before_first_gold", "canonical_proposal_with_unrealized_grouped_plan"]
+        },
+        "methodPrecommitHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "rsiEvaluation": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "versionId",
+            "sourceCommit",
+            "versionTagObjectId",
+            "evaluationId",
+            "openingHash",
+            "openingTagObjectId",
+            "protocolId",
+            "protocolHash"
+          ],
+          "properties": {
+            "versionId": { "$ref": "#/$defs/id" },
+            "sourceCommit": { "$ref": "#/$defs/commit" },
+            "versionTagObjectId": { "$ref": "#/$defs/commit" },
+            "evaluationId": { "$ref": "#/$defs/id" },
+            "openingHash": { "$ref": "#/$defs/hash" },
+            "openingTagObjectId": { "$ref": "#/$defs/commit" },
+            "protocolId": { "const": "outer_adaptive_versioned_v1" },
+            "protocolHash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictionSetId",
+        "blindPredictionHash",
+        "replayReceiptHash",
+        "sourceCommit",
+        "implementationHash",
+        "testReceiptHash",
+        "capabilityId",
+        "executionPolicy",
+        "presealedRouteSetHash",
+        "foldAssignmentHash",
+        "crossfitReceiptHash"
+      ],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" },
+        "blindPredictionHash": { "$ref": "#/$defs/hash" },
+        "replayReceiptHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": {
+          "enum": [
+            "frozen_replay",
+            "cafa_hierarchical_metrics",
+            "detailed_teacher_attribution",
+            "stage_count_instrumentation",
+            "aspect_isolated_routing",
+            "group_aware_calibration_split",
+            "paired_structure_sequence_predictor",
+            "ontology_aware_candidate_decoder"
+          ]
+        },
+        "executionPolicy": {
+          "enum": ["blind_replay_before_any_gold", "grouped_crossfit_from_presealed_routes"]
+        },
+        "presealedRouteSetHash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "foldAssignmentHash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "crossfitReceiptHash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        }
+      }
+    }
+  }
+}

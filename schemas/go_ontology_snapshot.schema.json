@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-go-ontology-snapshot.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dataVersion", "sourceSha256", "terms", "altIdToId", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-go-ontology-snapshot.v1" },
+    "dataVersion": { "type": "string", "minLength": 1 },
+    "sourceSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "namespace", "altIds", "parents"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^GO:[0-9]{7}$" },
+          "name": { "type": "string", "minLength": 1 },
+          "namespace": { "enum": ["molecular_function", "biological_process", "cellular_component"] },
+          "altIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^GO:[0-9]{7}$" } },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["parentId", "relation"],
+              "properties": {
+                "parentId": { "type": "string", "pattern": "^GO:[0-9]{7}$" },
+                "relation": { "enum": ["is_a", "part_of"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "altIdToId": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^GO:[0-9]{7}$" } },
+    "canonicalHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-spec.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "mode", "objective", "budget", "initialCandidate", "workers", "formalGovernance"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-spec.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "mode": { "const": "development_only" },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "direction", "minimumImprovement", "plateauPatience"],
+      "properties": {
+        "metricId": { "$ref": "#/$defs/safeId" },
+        "direction": { "enum": ["maximize", "minimize"] },
+        "minimumImprovement": { "type": "number" },
+        "plateauPatience": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxIterations", "maxStageAttempts"],
+      "properties": {
+        "maxIterations": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "maxStageAttempts": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "initialCandidate": { "$ref": "#/$defs/candidate" },
+    "evaluatorContractHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "dataSplitManifestHash": { "$ref": "#/$defs/hash" },
+    "experiment": { "$ref": "pi-rsi-experiment-manifest.v1" },
+    "historicalSeeds": {
+      "type": "array",
+      "maxItems": 2048,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["seedId", "originCampaignId", "originalCandidateId", "archiveManifestHash", "evaluatorContractHash", "candidate", "parentSourceCommit", "evaluation", "hypothesis", "lesson", "verificationPassed"],
+        "properties": {
+          "seedId": { "$ref": "#/$defs/safeIdLong" },
+          "originCampaignId": { "$ref": "#/$defs/safeId" },
+          "originalCandidateId": { "$ref": "#/$defs/safeIdLong" },
+          "archiveManifestHash": { "$ref": "#/$defs/hash" },
+          "evaluatorContractHash": { "$ref": "#/$defs/hash" },
+          "candidate": { "$ref": "#/$defs/candidate" },
+          "parentSourceCommit": { "anyOf": [{ "$ref": "#/$defs/gitObject" }, { "type": "null" }] },
+          "evaluation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["metricId", "value", "iteration", "outputHash"],
+            "properties": {
+              "metricId": { "$ref": "#/$defs/safeId" },
+              "value": { "type": "number" },
+              "iteration": { "type": "integer", "minimum": 0 },
+              "outputHash": { "$ref": "#/$defs/hash" }
+            }
+          },
+          "hypothesis": { "type": ["string", "null"] },
+          "lesson": { "type": ["string", "null"] },
+          "verificationPassed": { "const": true }
+        }
+      }
+    },
+    "workers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluate", "diagnose", "research", "plan", "develop", "verify"],
+      "properties": {
+        "evaluate": { "$ref": "#/$defs/worker" },
+        "diagnose": { "$ref": "#/$defs/worker" },
+        "research": { "$ref": "#/$defs/worker" },
+        "plan": { "$ref": "#/$defs/worker" },
+        "develop": { "$ref": "#/$defs/worker" },
+        "verify": { "$ref": "#/$defs/worker" }
+      }
+    },
+    "formalGovernance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "terminalStopEventSequence", "terminalStopEventHash", "resumeContract"],
+      "properties": {
+        "mode": { "const": "handoff_only" },
+        "terminalStopEventSequence": { "type": ["integer", "null"], "minimum": 1 },
+        "terminalStopEventHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+        "resumeContract": { "const": "explicit_append_only_new_epoch_required" }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,95}$" },
+    "safeIdLong": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "artifactHash", "sourceCommit"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/safeId" },
+        "artifactHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "type": ["string", "null"], "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+      }
+    },
+    "worker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "args", "workingDirectory", "timeoutSeconds", "inheritEnv", "networkAccess"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "args": { "type": "array", "maxItems": 64, "items": { "type": "string", "maxLength": 2048 } },
+        "workingDirectory": { "enum": ["project", "campaign"] },
+        "timeoutSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "inheritEnv": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z_][A-Z0-9_]{0,95}$" } },
+        "networkAccess": { "enum": ["disabled", "enabled"] }
+      }
+    }
+  }
+}

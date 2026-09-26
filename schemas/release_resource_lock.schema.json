@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anonymous.invalid/schemas/release_resource_lock.schema.json",
+  "title": "Function Prediction Agent direct-upstream product resource lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "releaseId", "distribution", "profiles", "resources", "policy", "canonicalHash"],
+  "properties": {
+    "schemaVersion": {"const": "pi-function-resource-lock.v2"},
+    "releaseId": {"type": "string", "minLength": 1},
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "projectStorageRequired", "hfRequired", "ghcrRequired", "dockerRequired"],
+      "properties": {
+        "mode": {"const": "direct-official-upstream"},
+        "projectStorageRequired": {"const": false},
+        "hfRequired": {"const": false},
+        "ghcrRequired": {"const": false},
+        "dockerRequired": {"const": false},
+        "note": {"type": "string"}
+      }
+    },
+    "profiles": {
+      "type": "object",
+      "required": ["demo", "live", "live-no-oma", "paper-repro-2025-09-04"],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "reproducibility", "bootstrapProfile", "resources"],
+        "properties": {
+          "description": {"type": "string"},
+          "reproducibility": {"type": "string"},
+          "bootstrapProfile": {"type": "string"},
+          "resources": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "installPath", "status", "license", "source", "content"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$"},
+          "description": {"type": "string"},
+          "installPath": {"type": "string", "not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}},
+          "status": {"enum": ["ready-upstream", "ready-upstream-restricted-license", "ready-derived-local"]},
+          "license": {"type": "object"},
+          "source": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {"enum": ["https-file", "https-archive", "git", "python-runtime", "derived"]},
+              "url": {"type": "string", "pattern": "^https://"},
+              "versionUrl": {"type": "string", "pattern": "^https://"},
+              "archiveSizeBytes": {"type": "integer", "minimum": 1},
+              "archiveSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "archiveMd5": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+              "release": {"type": "string"},
+              "foldseekBuildCommit": {"type": "string"},
+              "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "runtimeLockPath": {"type": "string"},
+              "runtimeLockSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "builderPath": {"type": "string"},
+              "scope": {"type": "string"},
+              "runtimeResourceId": {"type": "string"},
+              "inputs": {"type": "object", "additionalProperties": {"type": "string"}}
+            }
+          },
+          "content": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {"enum": ["file", "directory", "runtime"]},
+              "sizeBytes": {"type": "integer", "minimum": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "md5": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+              "manifestPath": {"type": "string"},
+              "manifestSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "manifestCanonicalHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "dataSubdirectory": {"type": "string"},
+              "executableRelativePath": {"type": "string"},
+              "generatedManifestRelativePath": {"type": "string"},
+              "expectedManifestCanonicalHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        }
+      }
+    },
+    "policy": {"type": "object"},
+    "canonicalHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

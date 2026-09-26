@@ -1,0 +1,9 @@
+# Exact direct requirements exercised by Merizo commit 41d12fb on Python 3.11 CPU.
+einops==0.8.2
+matplotlib==3.11.0
+natsort==8.4.0
+networkx==3.6.1
+numpy==1.26.4
+rotary-embedding-torch==0.8.9
+scipy==1.17.1
+torch==2.0.1

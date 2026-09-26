@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "pi-merizo-runtime-lock.v1",
+  "resourceId": "merizo-41d12fb-runtime",
+  "source": {
+    "url": "https://github.com/psipred/Merizo.git",
+    "commit": "41d12fb84e6e8fdb586c2c859d12161dc7bb5bfd",
+    "tree": "5fc6fd051f0d7e5e48296b968522341408d9960d",
+    "license": "GPL-3.0-only",
+    "manifestPath": "release/manifests/upstream/merizo-41d12fb.manifest.json",
+    "manifestCanonicalHash": "e85cf301b85e864ed5c9c4070d8ec983468efaf09c6faee1edd8db89181f22d7"
+  },
+  "runtime": {
+    "python": "3.11",
+    "environmentManager": "uv",
+    "environmentRelativePath": ".venv",
+    "supportedPlatforms": [
+      "linux-64",
+      "linux-aarch64",
+      "osx-64",
+      "osx-arm64"
+    ],
+    "directRequirementsPath": "bootstrap/merizo-requirements.in",
+    "directRequirementsSha256": "9437e0c4c814b9165c70d23c317a31988738d1a177562ced2a45d9cb2e7f4fc3",
+    "platformLocks": {
+      "linux-64": {
+        "path": "bootstrap/locks/merizo/linux-64.txt",
+        "sha256": "b56039b1afd67e742fcf29c0439aa6d55555853e871e97f42b3e176bddb830e4"
+      },
+      "linux-aarch64": {
+        "path": "bootstrap/locks/merizo/linux-aarch64.txt",
+        "sha256": "7323d127ea5e584aa86839027fa4603e0d8a7549797e33802d977b5d3457f75d"
+      },
+      "osx-64": {
+        "path": "bootstrap/locks/merizo/osx-64.txt",
+        "sha256": "7323d127ea5e584aa86839027fa4603e0d8a7549797e33802d977b5d3457f75d"
+      },
+      "osx-arm64": {
+        "path": "bootstrap/locks/merizo/osx-arm64.txt",
+        "sha256": "7323d127ea5e584aa86839027fa4603e0d8a7549797e33802d977b5d3457f75d"
+      }
+    }
+  },
+  "weights": [
+    {
+      "path": "weights/weights_part_0.pt",
+      "sizeBytes": 96244707,
+      "sha256": "8b90ad1967c3e445aca7ed3d53135190ceaf8e100d68afd1543e5e8d28547151"
+    },
+    {
+      "path": "weights/weights_part_1.pt",
+      "sizeBytes": 41047267,
+      "sha256": "644f711b9573b44fc25a0bc0631ee9ab43f7fbd796db0a382298755057a2fa38"
+    },
+    {
+      "path": "weights/weights_part_2.pt",
+      "sizeBytes": 69889831,
+      "sha256": "ddafe5fa5dfa729eb8715757004d2d3e4e9798f96ea43c689e799ef91af8c2b8"
+    }
+  ],
+  "policy": {
+    "cpuFirst": true,
+    "allowUnpinnedDependencies": false,
+    "allowDirtySource": false,
+    "requireBinaryWheels": true
+  },
+  "canonicalHash": "28f21aa7a4a5a9aadc724811bae8edf0a99e77ee565ca2177b5e5edf0cb7c74f"
+}

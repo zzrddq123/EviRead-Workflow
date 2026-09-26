@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "pi-toolchain-lock.v1",
+  "reproducibilityScope": "Direct versions and per-platform transitive package URLs/checksums are pinned exactly; bootstrap/tool_install_manifest.json records the lock used by each installation.",
+  "supportedPlatforms": ["linux-64", "linux-aarch64", "osx-64", "osx-arm64"],
+  "platformLocks": {
+    "linux-64": {
+      "path": "bootstrap/locks/linux-64.explicit.txt",
+      "sha256": "0a7f70c72ef754dd3d6bfc51259c6f11169af112ef1dd78e1b0b64e15418b174",
+      "format": "conda-explicit-sha256-v1",
+      "packageCount": 79,
+      "environmentSha256": "afe0046cbc8bb1556fd6d89a68b4fa650d8cb76facddd817c844a7e0fae1f588",
+      "solverVersion": "micromamba 2.6.2-1",
+      "solveVirtualPackages": {"__glibc": "2.28"}
+    },
+    "linux-aarch64": {
+      "path": "bootstrap/locks/linux-aarch64.explicit.txt",
+      "sha256": "c648412b77694994c0b581d7d132cac97e7e369bb397e5a15b8f484411caaef9",
+      "format": "conda-explicit-sha256-v1",
+      "packageCount": 79,
+      "environmentSha256": "afe0046cbc8bb1556fd6d89a68b4fa650d8cb76facddd817c844a7e0fae1f588",
+      "solverVersion": "micromamba 2.6.2-1",
+      "solveVirtualPackages": {"__glibc": "2.28"}
+    },
+    "osx-64": {
+      "path": "bootstrap/locks/osx-64.explicit.txt",
+      "sha256": "af8ec6b54d5cfa699e3647c47f201eadbe86cf59cbc60f9b4a39e9eebc73ca94",
+      "format": "conda-explicit-sha256-v1",
+      "packageCount": 71,
+      "environmentSha256": "afe0046cbc8bb1556fd6d89a68b4fa650d8cb76facddd817c844a7e0fae1f588",
+      "solverVersion": "micromamba 2.6.2-1"
+    },
+    "osx-arm64": {
+      "path": "bootstrap/locks/osx-arm64.explicit.txt",
+      "sha256": "7490273eeec9dc90cd5bb5eebc680cef4f51a538944c8bd87d72fac01fef455d",
+      "format": "conda-explicit-sha256-v1",
+      "packageCount": 71,
+      "environmentSha256": "afe0046cbc8bb1556fd6d89a68b4fa650d8cb76facddd817c844a7e0fae1f588",
+      "solverVersion": "micromamba 2.6.2-1"
+    }
+  },
+  "bootstrap": {
+    "name": "micromamba",
+    "version": "2.6.2-1",
+    "source": "https://github.com/mamba-org/micromamba-releases/releases/tag/2.6.2-1",
+    "assetPattern": "https://github.com/mamba-org/micromamba-releases/releases/download/2.6.2-1/micromamba-{platform}",
+    "checksumPattern": "https://github.com/mamba-org/micromamba-releases/releases/download/2.6.2-1/micromamba-{platform}.sha256",
+    "sha256ByPlatform": {
+      "linux-64": "e9683b483df06dbd3fdd8a37f1b6826d7e5caf4e85bf15a0af4fbad3d4ad1a58",
+      "linux-aarch64": "8e3301c5084f673399f5c52395cfba67b9dbe64dea39c7288e102646ef7c3769",
+      "osx-64": "be99b700ed72a8c71f091e76eb23acd5eaf25f0298171b60bdbb585130b9c3cc",
+      "osx-arm64": "01644871e4f8fb563da7b29b6fb0017fb4d6b67351a512f9c5ab112d6e99fc99"
+    },
+    "license": "BSD-3-Clause"
+  },
+  "managedPackages": [
+    {
+      "name": "Node.js",
+      "condaSpec": "nodejs=22.19.0",
+      "source": "https://github.com/nodejs/node",
+      "distribution": "https://anaconda.org/conda-forge/nodejs",
+      "license": "MIT",
+      "requiredFor": ["orchestration", "pi_narrative"]
+    },
+    {
+      "name": "Python",
+      "condaSpec": "python=3.11.13",
+      "source": "https://github.com/python/cpython",
+      "distribution": "https://anaconda.org/conda-forge/python",
+      "license": "PSF-2.0",
+      "requiredFor": ["evidence", "bootstrap_tests"]
+    },
+    {
+      "name": "NCBI BLAST+",
+      "condaSpec": "blast=2.16.0",
+      "source": "https://blast.ncbi.nlm.nih.gov/doc/blast-help/",
+      "distribution": "https://bioconda.github.io/recipes/blast/README.html",
+      "license": "NCBI-PD",
+      "requiredFor": ["local_blast", "sequence", "sequence_structure"]
+    },
+    {
+      "name": "Foldseek",
+      "condaSpec": "foldseek=10.941cd33",
+      "source": "https://github.com/steineggerlab/foldseek/tree/941cd33",
+      "distribution": "https://bioconda.github.io/recipes/foldseek/README.html",
+      "license": "GPL-3.0",
+      "requiredFor": ["sequence_structure"]
+    },
+    {
+      "name": "pi coding agent harness",
+      "npmSpec": "@earendil-works/pi-coding-agent=0.80.10",
+      "source": "https://github.com/earendil-works/pi",
+      "license": "MIT",
+      "requiredFor": ["pi_narrative"]
+    }
+  ],
+  "optionalEnhancers": [
+    {
+      "name": "Merizo",
+      "source": "https://github.com/psipred/Merizo",
+      "testedLegacyLayout": "predict.py + weights/weights_part_{0,1,2}.pt",
+      "license": "GPL-3.0",
+      "status": "optional_not_auto_installed"
+    },
+    {
+      "name": "Chainsaw/TED tools",
+      "source": "https://github.com/psipred/ted-tools",
+      "license": "MIT plus separately governed bundled STRIDE",
+      "status": "optional_not_auto_installed_due_to_model_layout_change"
+    }
+  ]
+}

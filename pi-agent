@@ -1,0 +1,164 @@
+#!/bin/sh
+set -eu
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+RUNTIME_DIR=${PI_FUNCTION_RUNTIME_DIR:-"$ROOT/.runtime"}
+MANAGED_BIN="$RUNTIME_DIR/env/bin"
+
+print_usage() {
+  printf '%s\n' \
+    "Usage:" \
+    "  ./pi-agent bootstrap <plan|tools|databases|config|verify|all> [options]" \
+    "  ./pi-agent evidence-resources <plan|install|verify|render-config> [options]" \
+    "  ./pi-agent test" \
+    "  ./pi-agent doctor [--config config/managed.env]" \
+    "  ./pi-agent smoke [config/managed.env]" \
+    "  ./pi-agent predict --sequence query.fasta [--structure model.pdb] [options]" \
+    "  ./pi-agent validate --run-dir runs/<run-id>" \
+    "  ./pi-agent z86-bridge <prepare-inputs|export|evaluate> [options]"
+}
+
+command_name=${1:-help}
+# Stage workers are launched by the sealed campaign command contract.  Route
+# them to the campaign-owned framework snapshot so later main-branch changes
+# cannot silently alter an existing campaign.  The tiny launcher remains in
+# the original checkout only because the sealed contract stores this path.
+if [ "${PI_AUTONOMOUS_RSI_RUNTIME_ACTIVE:-0}" != "1" ] \
+  && [ "${1:-}" = "rsi" ] && [ "${2:-}" = "autonomous-rsi-production-worker" ] \
+  && [ -n "${PI_AUTONOMOUS_RSI_CAMPAIGN:-}" ]; then
+  CAMPAIGN_PARENT=$(CDPATH= cd -- "$(dirname -- "${PI_AUTONOMOUS_RSI_CAMPAIGN}")/.." && pwd)
+  CAMPAIGN_ID=$(basename -- "$CAMPAIGN_PARENT")
+  CAMPAIGN_RUNTIME="$CAMPAIGN_PARENT/workspaces/$CAMPAIGN_ID/framework-runtime"
+  if [ -x "$CAMPAIGN_RUNTIME/pi-agent" ]; then
+    export PI_AUTONOMOUS_RSI_RUNTIME_ACTIVE=1
+    exec "$CAMPAIGN_RUNTIME/pi-agent" "$@"
+  fi
+fi
+if [ "$command_name" = "bootstrap" ]; then
+  shift
+  exec "${PYTHON_BOOTSTRAP:-python3}" "$ROOT/bootstrap/bootstrap.py" "$@"
+fi
+if [ "$command_name" = "evidence-resources" ]; then
+  shift
+  exec "${PYTHON_BOOTSTRAP:-python3}" "$ROOT/scripts/evidence_profiles.py" "$@"
+fi
+if [ "$command_name" = "help" ] || [ "$command_name" = "--help" ] || [ "$command_name" = "-h" ]; then
+  print_usage
+  exit 0
+fi
+if [ "$command_name" = "rsi" ]; then
+  shift
+  cd "$ROOT"
+  if [ ! -x "$ROOT/node_modules/.bin/tsx" ]; then
+    echo "Node dependencies are missing. Run: npm ci" >&2
+    exit 1
+  fi
+  exec "$ROOT/node_modules/.bin/tsx" "$ROOT/src/rsi_cli.ts" "$@"
+fi
+if [ "$command_name" = "z86-bridge" ]; then
+  shift
+  cd "$ROOT"
+  if [ ! -x "$ROOT/node_modules/.bin/tsx" ]; then
+    echo "Node dependencies are missing. Run: npm ci" >&2
+    exit 1
+  fi
+  exec "$ROOT/node_modules/.bin/tsx" "$ROOT/src/index.ts" z86-bridge "$@"
+fi
+
+# Select a whole evidence plane atomically.  Explicit --config and profile
+# selection cannot be mixed, which prevents accidental T0/current hybrids.
+evidence_profile=
+has_config=false
+expect_profile=false
+for argument in "$@"; do
+  if [ "$expect_profile" = true ]; then evidence_profile=$argument; expect_profile=false; continue; fi
+  case "$argument" in
+    --evidence-profile) expect_profile=true ;;
+    --config) has_config=true ;;
+  esac
+done
+if [ "$expect_profile" = true ]; then echo "--evidence-profile requires t0, t0-swissprot-full, or discovery" >&2; exit 2; fi
+if [ -n "$evidence_profile" ]; then
+  if [ "$has_config" = true ]; then echo "Do not combine --evidence-profile with --config" >&2; exit 2; fi
+  case "$evidence_profile" in
+    t0) selected_config=${PI_EVIDENCE_PROFILE_ROOT:-"$ROOT/.resources"}/profiles/t0/runtime.env ;;
+    t0-swissprot-full) selected_config=${PI_EVIDENCE_PROFILE_ROOT:-"$ROOT/.resources"}/profiles/t0-swissprot-full/runtime.env ;;
+    discovery) selected_config=${PI_EVIDENCE_PROFILE_ROOT:-"$ROOT/.resources"}/profiles/discovery/runtime.env ;;
+    *) echo "--evidence-profile must be t0, t0-swissprot-full, or discovery" >&2; exit 2 ;;
+  esac
+  if [ ! -f "$selected_config" ]; then
+    echo "Evidence profile is not configured: $selected_config" >&2
+    echo "Run ./pi-agent evidence-resources install/render-config first." >&2
+    exit 1
+  fi
+  set -- "$@" --config "$selected_config"
+fi
+
+if [ ! -x "$MANAGED_BIN/node" ] || [ ! -x "$MANAGED_BIN/npm" ]; then
+  echo "Managed runtime not found at $MANAGED_BIN." >&2
+  echo "Run: ./pi-agent bootstrap all --profile sequence_structure --accept-licenses" >&2
+  exit 1
+fi
+# Prevent host package/language injection from changing managed execution.
+unset CONDA_DEFAULT_ENV CONDA_PREFIX CONDA_PROMPT_MODIFIER CONDA_PKGS_DIRS CONDARC
+unset MAMBA_ROOT_PREFIX MAMBARC
+unset DYLD_FALLBACK_LIBRARY_PATH DYLD_LIBRARY_PATH LD_LIBRARY_PATH
+unset NODE_ENV NODE_OPTIONS NODE_PATH PYTHONHOME PYTHONPATH VIRTUAL_ENV _CE_CONDA _CE_M
+unset NPM_CONFIG_OMIT NPM_CONFIG_ONLY NPM_CONFIG_PRODUCTION
+unset NPM_CONFIG_SCRIPT_SHELL NPM_CONFIG_PREFIX NPM_CONFIG_IGNORE_SCRIPTS NPM_CONFIG_NODE_OPTIONS
+unset npm_config_omit npm_config_only npm_config_production
+unset npm_config_script_shell npm_config_prefix npm_config_ignore_scripts npm_config_node_options
+PYTHONNOUSERSITE=1
+NPM_CONFIG_DIR=${PI_FUNCTION_NPM_CONFIG_DIR:-$RUNTIME_DIR}
+[ -d "$NPM_CONFIG_DIR" ] || mkdir -p "$NPM_CONFIG_DIR"
+NPM_CONFIG_USERCONFIG="$NPM_CONFIG_DIR/npm-userconfig.empty"
+NPM_CONFIG_GLOBALCONFIG="$NPM_CONFIG_DIR/npm-globalconfig.empty"
+: > "$NPM_CONFIG_USERCONFIG"
+: > "$NPM_CONFIG_GLOBALCONFIG"
+chmod 600 "$NPM_CONFIG_USERCONFIG" "$NPM_CONFIG_GLOBALCONFIG"
+export PYTHONNOUSERSITE NPM_CONFIG_USERCONFIG NPM_CONFIG_GLOBALCONFIG
+PATH="$MANAGED_BIN:$PATH"
+# Conda/OpenSSL records an absolute CA path. Re-resolve it from the selected
+# managed runtime so copied/mounted runtimes do not retain a dead source prefix.
+if [ -z "${SSL_CERT_FILE:-}" ] || [ ! -f "$SSL_CERT_FILE" ]; then
+  for candidate in "$RUNTIME_DIR/env/ssl/cert.pem" "$RUNTIME_DIR/env/ssl/cacert.pem"; do
+    if [ -f "$candidate" ]; then
+      SSL_CERT_FILE=$candidate
+      REQUESTS_CA_BUNDLE=$candidate
+      export SSL_CERT_FILE REQUESTS_CA_BUNDLE
+      break
+    fi
+  done
+fi
+export PATH
+cd "$ROOT"
+
+case "$command_name" in
+  predict|doctor|validate)
+    shift
+    exec npm run "$command_name" -- "$@"
+    ;;
+  smoke)
+    shift
+    exec npm run smoke:pi -- "${1:-config/managed.env}"
+    ;;
+  test|build)
+    shift
+    exec npm run "$command_name" -- "$@"
+    ;;
+  server)
+    shift
+    exec npm run server:evidence -- "$@"
+    ;;
+  npm)
+    shift
+    exec npm "$@"
+    ;;
+  help|--help|-h)
+    print_usage
+    ;;
+  *)
+    echo "Unknown command: $command_name (run ./pi-agent help)" >&2
+    exit 2
+    ;;
+esac

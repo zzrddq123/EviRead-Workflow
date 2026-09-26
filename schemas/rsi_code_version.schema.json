@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-code-version.v1",
+  "title": "Immutable whole-codebase RSI version node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "versionId",
+    "tagRef",
+    "sourceCommit",
+    "sourceTree",
+    "parent",
+    "change",
+    "verification",
+    "policies",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-code-version.v1" },
+    "versionId": { "$ref": "#/$defs/id" },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/version/[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "sourceCommit": { "$ref": "#/$defs/oid" },
+    "sourceTree": { "$ref": "#/$defs/oid" },
+    "parent": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "versionId",
+            "manifestHash",
+            "sourceCommit",
+            "tagObjectId"
+          ],
+          "properties": {
+            "versionId": { "$ref": "#/$defs/id" },
+            "manifestHash": { "$ref": "#/$defs/hash" },
+            "sourceCommit": { "$ref": "#/$defs/oid" },
+            "tagObjectId": { "$ref": "#/$defs/oid" }
+          }
+        }
+      ]
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "hypothesis"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/text" },
+        "hypothesis": { "$ref": "#/$defs/text" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receiptSha256", "receiptSize"],
+      "properties": {
+        "receiptSha256": { "$ref": "#/$defs/hash" },
+        "receiptSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        }
+      }
+    },
+    "developmentContext": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "contextHash",
+            "eventSequence",
+            "eventManifestHash",
+            "selectedVersionId"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "enum": [
+                "pi-rsi-developer-history-context.v1",
+                "pi-rsi-developer-history-context.v2",
+                "pi-rsi-developer-history-context.v3",
+                "pi-rsi-developer-history-context.v4"
+              ]
+            },
+            "contextHash": {
+              "$ref": "#/$defs/hash"
+            },
+            "eventSequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99999999
+            },
+            "eventManifestHash": {
+              "$ref": "#/$defs/hash"
+            },
+            "selectedVersionId": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      ]
+    },
+    "developmentPlan": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "explorationId",
+            "manifestHash",
+            "tagObjectId",
+            "sourceVersionId",
+            "baseVersionId",
+            "plannedVersionId",
+            "evaluationAnalysisHash",
+            "planHash"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "const": "pi-rsi-developer-exploration.v1"
+            },
+            "explorationId": { "$ref": "#/$defs/id" },
+            "manifestHash": { "$ref": "#/$defs/hash" },
+            "tagObjectId": { "$ref": "#/$defs/oid" },
+            "sourceVersionId": { "$ref": "#/$defs/id" },
+            "baseVersionId": { "$ref": "#/$defs/id" },
+            "plannedVersionId": { "$ref": "#/$defs/id" },
+            "evaluationAnalysisHash": { "$ref": "#/$defs/hash" },
+            "planHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "resumeId",
+            "manifestHash",
+            "tagObjectId",
+            "terminalExplorationId",
+            "baseVersionId",
+            "plannedVersionId",
+            "planHash"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "const": "pi-rsi-epoch-resume.v1"
+            },
+            "resumeId": { "$ref": "#/$defs/id" },
+            "manifestHash": { "$ref": "#/$defs/hash" },
+            "tagObjectId": { "$ref": "#/$defs/oid" },
+            "terminalExplorationId": { "$ref": "#/$defs/id" },
+            "baseVersionId": { "$ref": "#/$defs/id" },
+            "plannedVersionId": { "$ref": "#/$defs/id" },
+            "planHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "adoptionId",
+            "manifestHash",
+            "tagObjectId",
+            "baseVersionId",
+            "plannedVersionId",
+            "planHash"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "const": "pi-rsi-retrospective-incumbent.v1"
+            },
+            "adoptionId": { "$ref": "#/$defs/id" },
+            "manifestHash": { "$ref": "#/$defs/hash" },
+            "tagObjectId": { "$ref": "#/$defs/oid" },
+            "baseVersionId": { "$ref": "#/$defs/id" },
+            "plannedVersionId": { "$ref": "#/$defs/id" },
+            "planHash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "topology", "evaluation"],
+      "properties": {
+        "identity": { "const": "annotated_git_tag_exact_commit_v1" },
+        "topology": { "const": "single_parent_no_merge_between_versions_v1" },
+        "evaluation": { "const": "remote_version_tag_before_evaluation_v1" }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "parent": { "type": "object" }
+        },
+        "required": ["parent"]
+      },
+      "then": {
+        "required": ["developmentContext", "developmentPlan"],
+        "properties": {
+          "developmentContext": { "type": "object" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    }
+  }
+}

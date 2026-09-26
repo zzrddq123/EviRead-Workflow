@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-production-start-profile.v1",
+  "title": "Autonomous RSI One-Command Production Start Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "campaignId",
+    "runRoot",
+    "dataSplitManifest",
+    "researchCommandFile",
+    "evaluatorCommandFile",
+    "evaluatorContractHash",
+    "publishedHistory",
+    "maxIterations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-autonomous-rsi-production-start-profile.v1"
+    },
+    "campaignId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$"
+    },
+    "runRoot": {
+      "type": "string",
+      "pattern": "^/",
+      "minLength": 2
+    },
+    "researchCommandFile": {
+      "type": "string",
+      "pattern": "^/",
+      "minLength": 2
+    },
+    "evaluatorCommandFile": {
+      "type": "string",
+      "pattern": "^/",
+      "minLength": 2
+    },
+    "dataSplitManifest": {
+      "type": "string",
+      "pattern": "^/",
+      "minLength": 2
+    },
+    "evaluatorContractHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "publishedHistory": {
+      "anyOf": [
+        {
+          "const": "auto"
+        },
+        {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 2
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "maxIterations": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "maxStageAttempts": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "metricId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$"
+    },
+    "minimumImprovement": {
+      "type": "number",
+      "minimum": 0
+    },
+    "plateauPatience": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "experimentManifest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^/",
+      "minLength": 2
+    },
+    "modelProvider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "modelId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "thinkingLevel": {
+      "enum": [
+        "off",
+        "minimal",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ]
+    },
+    "developmentObjective": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    }
+  }
+}

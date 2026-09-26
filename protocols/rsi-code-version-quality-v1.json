@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "pi-rsi-code-version-quality-protocol.v1",
+  "protocolId": "rsi-code-version-quality-v1",
+  "visibility": "public",
+  "purpose": "Verify software correctness, archive integrity, and RSI code-version lineage without reading private labels or making a protein-function performance claim.",
+  "hashBinding": {
+    "method": "sha256_of_tracked_file_bytes",
+    "canonicalHashFieldRequired": false,
+    "note": "The evaluation opening binds the raw tracked protocol file hash; this document intentionally has no self-referential canonicalHash field."
+  },
+  "parameters": [
+    {
+      "name": "REPOSITORY_ROOT",
+      "description": "Canonical top-level Git worktree for the candidate version."
+    },
+    {
+      "name": "CANDIDATE_HEAD",
+      "description": "Full Git object ID of the candidate code version."
+    },
+    {
+      "name": "VERSION_DIFF_BASE",
+      "description": "Full Git object ID used as the public code-diff baseline."
+    },
+    {
+      "name": "STATE_ROOT",
+      "description": "Durable adaptive StateRoot path when an adaptive-development result is produced."
+    },
+    {
+      "name": "VERSION_REMOTE",
+      "description": "Remote containing the immutable RSI tag namespace, normally origin."
+    }
+  ],
+  "preconditions": [
+    "Run from REPOSITORY_ROOT with the candidate commit checked out.",
+    "Do not read evaluator-private bundles, gold labels, target identifiers, or protected outcomes during the preregistration checks.",
+    "Record command, exit code, stdout/stderr digest, toolchain version, candidate commit, and execution time in a durable public receipt.",
+    "Any not_applicable check must include an explicit reason in the receipt; a failed required or applicable check cannot be converted to not_applicable."
+  ],
+  "checks": [
+    {
+      "id": "typescript_typecheck",
+      "stage": "pre_registration",
+      "command": "npm run typecheck",
+      "applicability": "required",
+      "passCondition": "Exit code is zero."
+    },
+    {
+      "id": "typescript_tests",
+      "stage": "pre_registration",
+      "command": "npm run test:ts",
+      "applicability": "required",
+      "passCondition": "Exit code is zero and the test runner reports no failed, cancelled, or skipped-by-failure test."
+    },
+    {
+      "id": "python_tests",
+      "stage": "pre_registration",
+      "command": "npm run test:python",
+      "applicability": "required",
+      "passCondition": "Exit code is zero and unittest reports no failure or error."
+    },
+    {
+      "id": "production_build",
+      "stage": "pre_registration",
+      "command": "npm run build",
+      "applicability": "required",
+      "passCondition": "Exit code is zero."
+    },
+    {
+      "id": "committed_diff_check",
+      "stage": "pre_registration",
+      "command": "git -C <REPOSITORY_ROOT> diff --check <VERSION_DIFF_BASE>..<CANDIDATE_HEAD>",
+      "applicability": "required",
+      "passCondition": "Exit code is zero and output is empty.",
+      "note": "For the first prospective root, the receipt must declare a reviewed public baseline instead of silently omitting this check."
+    },
+    {
+      "id": "adaptive_state_root_verify",
+      "stage": "post_evaluation",
+      "command": "./pi-agent benchmark outer-adaptive-archive-verify --archive-dir <STATE_ROOT>",
+      "applicability": "required when an adaptive-development result is produced or references a StateRoot; otherwise explicit not_applicable",
+      "passCondition": "Exit code is zero, archive verification reports ok, and the receipt records the returned archiveSealHash and publicManifestHash."
+    },
+    {
+      "id": "rsi_version_graph_verify",
+      "stage": "post_registration_and_post_evaluation",
+      "command": "./pi-agent benchmark rsi-version-verify --repo <REPOSITORY_ROOT> --remote <VERSION_REMOTE> --format json",
+      "applicability": "required after version registration and again after evaluation result and decision publication",
+      "passCondition": "Exit code is zero, output reports ok true, all local/remote RSI tag objects match, and no unexpected incomplete evaluation remains."
+    }
+  ],
+  "receiptRequirements": {
+    "format": "public JSON artifact",
+    "requiredBindings": [
+      "protocolId",
+      "protocolFileSha256",
+      "candidateCommit",
+      "candidateTree",
+      "versionDiffBase",
+      "toolchainVersions",
+      "checkId",
+      "command",
+      "exitCode",
+      "outputSha256",
+      "status",
+      "startedAt",
+      "completedAt"
+    ],
+    "allowedStatuses": [
+      "passed",
+      "failed",
+      "not_applicable"
+    ],
+    "privacy": "The public receipt must not contain private paths, target identifiers, GO labels, evaluator-private hashes, secrets, or raw protected outputs."
+  },
+  "claimBoundary": {
+    "allowed": [
+      "The exact candidate code passed the listed software checks.",
+      "An applicable adaptive StateRoot passed archive-only integrity verification.",
+      "The local and remote RSI version/event graph passed the implemented structural verifier."
+    ],
+    "forbidden": [
+      "Any claim that protein-function prediction accuracy improved.",
+      "Any Fmax, AUPR, Smin, calibration, generalization, leaderboard, or population-level claim.",
+      "Any claim that an unsigned annotated tag or same-disk StateRoot is tamper-proof."
+    ],
+    "performanceClaim": "none"
+  }
+}

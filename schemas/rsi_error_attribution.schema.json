@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-error-attribution.v2",
+  "title": "RSI development error attribution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateDefinition",
+    "tracePolicy",
+    "caseCount",
+    "predictionAvailableCaseCount",
+    "missingPredictionCaseIds",
+    "aspects",
+    "cases",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-error-attribution.v2" },
+    "candidateDefinition": { "const": "positive_finite_judge_phylogeny_or_raw_score" },
+    "tracePolicy": { "const": "earliest_observable_machine_checkpoint_v1" },
+    "caseCount": { "$ref": "#/$defs/count" },
+    "predictionAvailableCaseCount": { "$ref": "#/$defs/count" },
+    "missingPredictionCaseIds": { "$ref": "#/$defs/caseIdList" },
+    "aspects": { "$ref": "#/$defs/aspectSummaryRecord" },
+    "cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/caseAttribution" }
+    },
+    "canonicalHash": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^CASE_[0-9]{3}_[A-F0-9]{8}$"
+    },
+    "caseIdList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/caseId" }
+    },
+    "goId": {
+      "type": "string",
+      "pattern": "^GO:[0-9]{7}$"
+    },
+    "goIdList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/goId" }
+    },
+    "aspect": {
+      "enum": ["molecular_function", "biological_process", "cellular_component"]
+    },
+    "split": {
+      "enum": ["search", "selection", "promotion"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unitNumber": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "selectedSupportModes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequenceSupportedTermCount", "structureOnlyTermCount"],
+      "properties": {
+        "sequenceSupportedTermCount": { "$ref": "#/$defs/count" },
+        "structureOnlyTermCount": { "$ref": "#/$defs/count" }
+      }
+    },
+    "lineageSupports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateAppliedCount",
+        "candidateUnavailableCount",
+        "selectedAppliedCount",
+        "selectedUnavailableCount"
+      ],
+      "properties": {
+        "candidateAppliedCount": { "$ref": "#/$defs/count" },
+        "candidateUnavailableCount": { "$ref": "#/$defs/count" },
+        "selectedAppliedCount": { "$ref": "#/$defs/count" },
+        "selectedUnavailableCount": { "$ref": "#/$defs/count" }
+      }
+    },
+    "missingGoldAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goId", "earliestFailureStage", "checkpoints"],
+      "properties": {
+        "goId": { "$ref": "#/$defs/goId" },
+        "earliestFailureStage": { "$ref": "#/$defs/failureStage" },
+        "checkpoints": { "$ref": "#/$defs/checkpoints" }
+      }
+    },
+    "failureStage": {
+      "enum": ["identity_quarantined", "label_coverage", "evidence_gate", "score_gate", "judge_gate", "selector_gate", "unattributed"]
+    },
+    "checkpointStatus": {
+      "enum": ["passed", "failed", "not_reached", "not_applicable"]
+    },
+    "checkpoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_policy", "label_coverage", "evidence_gate", "score_gate", "judge_gate", "selector_gate"],
+      "properties": {
+        "identity_policy": { "$ref": "#/$defs/checkpointStatus" },
+        "label_coverage": { "$ref": "#/$defs/checkpointStatus" },
+        "evidence_gate": { "$ref": "#/$defs/checkpointStatus" },
+        "score_gate": { "$ref": "#/$defs/checkpointStatus" },
+        "judge_gate": { "$ref": "#/$defs/checkpointStatus" },
+        "selector_gate": { "$ref": "#/$defs/checkpointStatus" }
+      }
+    },
+    "caseAspectAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aspect",
+        "scored",
+        "goldCount",
+        "selectedCount",
+        "truePositiveCount",
+        "falsePositiveCount",
+        "falseNegativeCount",
+        "candidateTruePositiveCount",
+        "candidateRecallCeiling",
+        "selectedSupportModes",
+        "lineageSupports",
+        "missingGold",
+        "selectedFalsePositiveGoIds"
+      ],
+      "properties": {
+        "aspect": { "$ref": "#/$defs/aspect" },
+        "scored": { "type": "boolean" },
+        "goldCount": { "$ref": "#/$defs/count" },
+        "selectedCount": { "$ref": "#/$defs/count" },
+        "truePositiveCount": { "$ref": "#/$defs/count" },
+        "falsePositiveCount": { "$ref": "#/$defs/count" },
+        "falseNegativeCount": { "$ref": "#/$defs/count" },
+        "candidateTruePositiveCount": { "$ref": "#/$defs/count" },
+        "candidateRecallCeiling": { "$ref": "#/$defs/unitNumber" },
+        "selectedSupportModes": { "$ref": "#/$defs/selectedSupportModes" },
+        "lineageSupports": { "$ref": "#/$defs/lineageSupports" },
+        "missingGold": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/missingGoldAttribution" }
+        },
+        "selectedFalsePositiveGoIds": { "$ref": "#/$defs/goIdList" }
+      }
+    },
+    "caseAspectRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["molecular_function", "biological_process", "cellular_component"],
+      "properties": {
+        "molecular_function": {
+          "allOf": [
+            { "$ref": "#/$defs/caseAspectAttribution" },
+            { "properties": { "aspect": { "const": "molecular_function" } } }
+          ]
+        },
+        "biological_process": {
+          "allOf": [
+            { "$ref": "#/$defs/caseAspectAttribution" },
+            { "properties": { "aspect": { "const": "biological_process" } } }
+          ]
+        },
+        "cellular_component": {
+          "allOf": [
+            { "$ref": "#/$defs/caseAspectAttribution" },
+            { "properties": { "aspect": { "const": "cellular_component" } } }
+          ]
+        }
+      }
+    },
+    "caseAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caseId", "split", "predictionAvailable", "aspects"],
+      "properties": {
+        "caseId": { "$ref": "#/$defs/caseId" },
+        "split": { "$ref": "#/$defs/split" },
+        "predictionAvailable": { "type": "boolean" },
+        "aspects": { "$ref": "#/$defs/caseAspectRecord" }
+      }
+    },
+    "selectedFalsePositiveAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caseId", "goId"],
+      "properties": {
+        "caseId": { "$ref": "#/$defs/caseId" },
+        "goId": { "$ref": "#/$defs/goId" }
+      }
+    },
+    "failureStageCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_quarantined", "label_coverage", "evidence_gate", "score_gate", "judge_gate", "selector_gate", "unattributed"],
+      "properties": {
+        "identity_quarantined": { "$ref": "#/$defs/count" },
+        "label_coverage": { "$ref": "#/$defs/count" },
+        "evidence_gate": { "$ref": "#/$defs/count" },
+        "score_gate": { "$ref": "#/$defs/count" },
+        "judge_gate": { "$ref": "#/$defs/count" },
+        "selector_gate": { "$ref": "#/$defs/count" },
+        "unattributed": { "$ref": "#/$defs/count" }
+      }
+    },
+    "aspectSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aspect",
+        "scoredCaseCount",
+        "goldCount",
+        "selectedCount",
+        "truePositiveCount",
+        "falsePositiveCount",
+        "falseNegativeCount",
+        "candidateTruePositiveCount",
+        "candidateRecallCeiling",
+        "selectedSupportModes",
+        "lineageSupports",
+        "failureStageCounts",
+        "failureStageDistinctCaseCounts",
+        "selectedFalsePositives"
+      ],
+      "properties": {
+        "aspect": { "$ref": "#/$defs/aspect" },
+        "scoredCaseCount": { "$ref": "#/$defs/count" },
+        "goldCount": { "$ref": "#/$defs/count" },
+        "selectedCount": { "$ref": "#/$defs/count" },
+        "truePositiveCount": { "$ref": "#/$defs/count" },
+        "falsePositiveCount": { "$ref": "#/$defs/count" },
+        "falseNegativeCount": { "$ref": "#/$defs/count" },
+        "candidateTruePositiveCount": { "$ref": "#/$defs/count" },
+        "candidateRecallCeiling": { "$ref": "#/$defs/unitNumber" },
+        "selectedSupportModes": { "$ref": "#/$defs/selectedSupportModes" },
+        "lineageSupports": { "$ref": "#/$defs/lineageSupports" },
+        "failureStageCounts": { "$ref": "#/$defs/failureStageCounts" },
+        "failureStageDistinctCaseCounts": { "$ref": "#/$defs/failureStageCounts" },
+        "selectedFalsePositives": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/selectedFalsePositiveAttribution" }
+        }
+      }
+    },
+    "aspectSummaryRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["molecular_function", "biological_process", "cellular_component"],
+      "properties": {
+        "molecular_function": {
+          "allOf": [
+            { "$ref": "#/$defs/aspectSummary" },
+            { "properties": { "aspect": { "const": "molecular_function" } } }
+          ]
+        },
+        "biological_process": {
+          "allOf": [
+            { "$ref": "#/$defs/aspectSummary" },
+            { "properties": { "aspect": { "const": "biological_process" } } }
+          ]
+        },
+        "cellular_component": {
+          "allOf": [
+            { "$ref": "#/$defs/aspectSummary" },
+            { "properties": { "aspect": { "const": "cellular_component" } } }
+          ]
+        }
+      }
+    }
+  }
+}

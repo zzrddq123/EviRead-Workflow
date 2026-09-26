@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-candidate-graph.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "specHash", "rootCandidateId", "nodes", "baseDecisions", "knowledgeCards", "latestEvaluatedCandidateId", "bestCandidateId", "selectedBaseCandidateId", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-candidate-graph.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "specHash": { "$ref": "#/$defs/hash" },
+    "rootCandidateId": { "$ref": "#/$defs/safeId" },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate", "parentCandidateId", "createdIteration", "status", "plan", "verification", "evaluation", "reflection"],
+        "properties": {
+          "candidate": { "$ref": "#/$defs/candidate" },
+          "parentCandidateId": { "anyOf": [{ "$ref": "#/$defs/safeId" }, { "type": "null" }] },
+          "createdIteration": { "type": "integer", "minimum": 0 },
+          "status": { "enum": ["pending_evaluation", "evaluated"] },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "originCampaignId", "originalCandidateId", "archiveManifestHash", "evaluatorContractHash"],
+            "properties": {
+              "kind": { "const": "historical_seed" },
+              "originCampaignId": { "$ref": "#/$defs/safeId" },
+              "originalCandidateId": { "$ref": "#/$defs/safeId" },
+              "archiveManifestHash": { "$ref": "#/$defs/hash" },
+              "evaluatorContractHash": { "$ref": "#/$defs/hash" }
+            }
+          },
+          "plan": { "type": ["object", "null"] },
+          "verification": { "type": ["object", "null"] },
+          "evaluation": { "type": ["object", "null"] },
+          "reflection": { "type": ["object", "null"] }
+        }
+      }
+    },
+    "baseDecisions": { "type": "array", "items": { "type": "object" } },
+    "knowledgeCards": { "type": "array", "items": { "type": "object" } },
+    "latestEvaluatedCandidateId": { "anyOf": [{ "$ref": "#/$defs/safeId" }, { "type": "null" }] },
+    "bestCandidateId": { "anyOf": [{ "$ref": "#/$defs/safeId" }, { "type": "null" }] },
+    "selectedBaseCandidateId": { "anyOf": [{ "$ref": "#/$defs/safeId" }, { "type": "null" }] },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "artifactHash", "sourceCommit"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/safeId" },
+        "artifactHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "type": ["string", "null"], "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+      }
+    }
+  }
+}

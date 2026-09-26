@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "pi-rsi-data-split-manifest.v1",
+  "splitId": "replace-with-campaign-split-id",
+  "benchmarkId": "FunctionBench-Bio-GAF220",
+  "training": {
+    "proteinsFile": "/absolute/path/training/proteins.json",
+    "goldRoot": "/absolute/path/training/gold",
+    "goldAccess": "developer_allowed"
+  },
+  "validation": {
+    "proteinsFile": "/absolute/path/validation/proteins.json",
+    "goldRoot": "/absolute/path/validation/gold",
+    "goldAccess": "evaluator_only",
+    "evaluationPhase": "after_freeze_only"
+  },
+  "test": {
+    "proteinsFile": "/absolute/path/test/proteins.json",
+    "goldRoot": "/absolute/path/test/gold",
+    "goldAccess": "evaluator_only",
+    "evaluationPhase": "after_freeze_only"
+  },
+  "partitionPolicy": {
+    "requireDisjointProteinIds": true,
+    "requireDisjointSequenceHashes": true,
+    "requireDisjointStructureHashes": false
+  }
+}

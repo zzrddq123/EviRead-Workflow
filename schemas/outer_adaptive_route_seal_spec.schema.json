@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-route-seal-spec.v1",
+  "title": "One label-free adaptive30 route seal specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "route", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-route-seal-spec.v1" },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routeId",
+        "predictionSetId",
+        "replayGenomePath",
+        "predictorOverlayPath",
+        "sourceCommit",
+        "implementationHash",
+        "testReceiptHash",
+        "capabilityId"
+      ],
+      "properties": {
+        "routeId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "predictionSetId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+        "replayGenomePath": { "type": "string", "minLength": 1 },
+        "predictorOverlayPath": {
+          "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+        },
+        "sourceCommit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+        "implementationHash": { "$ref": "#/$defs/hash" },
+        "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": {
+          "enum": [
+            "frozen_replay",
+            "cafa_hierarchical_metrics",
+            "detailed_teacher_attribution",
+            "stage_count_instrumentation",
+            "aspect_isolated_routing",
+            "group_aware_calibration_split",
+            "paired_structure_sequence_predictor",
+            "ontology_aware_candidate_decoder"
+          ]
+        }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "pi-agent-genome.v1",
+  "genomeId": "storage-light-v07",
+  "parentGenomeId": "rsi-v07-baseline",
+  "generation": 4,
+  "evidencePolicy": {
+    "mode": "fixed_full_pipeline",
+    "requiredInputs": ["amino_acid_fasta"]
+  },
+  "goPolicy": {
+    "methodId": "strict-blind-multisource-go-v2",
+    "evidenceWeights": {
+      "EXP": 1.0,
+      "IDA": 1.0,
+      "IPI": 1.0,
+      "IMP": 1.0,
+      "IGI": 1.0,
+      "IEP": 1.0,
+      "HTP": 1.0,
+      "HDA": 1.0,
+      "HMP": 1.0,
+      "HGI": 1.0,
+      "HEP": 1.0,
+      "TAS": 0.85,
+      "IC": 0.85,
+      "IBA": 0.7,
+      "ISS": 0.55,
+      "ISO": 0.55,
+      "ISA": 0.55,
+      "ISM": 0.55,
+      "IGC": 0.55,
+      "RCA": 0.55,
+      "IEA": 0.3,
+      "ND": 0.0
+    },
+    "unknownEvidenceWeight": 0.0,
+    "lineageFloor": 0.85,
+    "lineageRange": 0.15,
+    "domainStructurePenalty": 0.5,
+    "globalStructureCoverageFloor": 0.7,
+    "minimumDonorGroupSupport": 0.05,
+    "minimumIndependentProvenanceRoots": 2,
+    "thresholds": {
+      "molecular_function": 0.15,
+      "biological_process": 0.20,
+      "cellular_component": 0.20
+    },
+    "maxSelectedTermsPerAspect": 30,
+    "requireTwoStructureDonorGroups": true,
+    "sequenceEligibilityMode": "retained_sequence",
+    "ontologyPolicy": {
+      "mode": "ancestor_closure",
+      "maxDepth": 8,
+      "scoreDecay": 1.0,
+      "excludeRoots": true,
+      "relations": ["is_a", "part_of"]
+    },
+    "candidateSourcePolicy": {
+      "mode": "storage_light",
+      "minimumBaseScore": 0.45,
+      "minimumQueryCoverage": 0.25,
+      "minimumEvidenceWeight": 0.45,
+      "requireIndependentRoots": 1,
+      "allowedSources": ["interpro", "pfam", "panther", "ec", "oma_ortholog"]
+    },
+    "phylogenyPolicy": {
+      "mode": "orthology_aware",
+      "relationWeights": {
+        "one_to_one": 1.0,
+        "one_to_many": 0.82,
+        "many_to_one": 0.82,
+        "many_to_many": 0.68,
+        "coortholog": 0.76,
+        "unresolved_ortholog": 0.55,
+        "post_duplication_paralog": 0.25
+      },
+      "aspectDistanceDecay": {
+        "molecular_function": 0.12,
+        "biological_process": 0.28,
+        "cellular_component": 0.22
+      },
+      "lineageFloor": 0.72,
+      "lineageRange": 0.28,
+      "paralogLeafTransferAllowed": false,
+      "cladeCollapseDepth": 6
+    }
+  },
+  "narrativePolicy": {
+    "defaultMode": "pi",
+    "maxRevisionCycles": 2
+  },
+  "improvementPolicy": {
+    "enabled": false,
+    "externalFeedbackRequired": true,
+    "promotionEvaluator": "not_configured_in_mvp"
+  },
+  "claimBoundary": "Storage-light v0.7 candidate genome: remote domain and independent orthology evidence may add GO candidates, while declared TaxID, query-like quarantine, duplication-aware weighting, provenance collapse, and abstention remain mandatory."
+}

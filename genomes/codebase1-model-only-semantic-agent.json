@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "pi-agent-genome.v1",
+  "genomeId": "eviread-codebase1-biolm-only-v1",
+  "parentGenomeId": null,
+  "generation": 0,
+  "evidencePolicy": {
+    "mode": "fixed_full_pipeline",
+    "requiredInputs": [
+      "amino_acid_fasta"
+    ]
+  },
+  "goPolicy": {
+    "methodId": "eviread-codebase1-biolm-read-v1",
+    "evidenceWeights": {
+      "EXP": 1.0,
+      "IDA": 1.0,
+      "IPI": 1.0,
+      "IMP": 1.0,
+      "IGI": 1.0,
+      "IEP": 1.0,
+      "HTP": 1.0,
+      "HDA": 1.0,
+      "HMP": 1.0,
+      "HGI": 1.0,
+      "HEP": 1.0,
+      "TAS": 0.85,
+      "IC": 0.85,
+      "IBA": 0.7,
+      "ISS": 0.55,
+      "ISO": 0.55,
+      "ISA": 0.55,
+      "ISM": 0.55,
+      "IGC": 0.55,
+      "RCA": 0.55,
+      "IEA": 0.3,
+      "ND": 0.0
+    },
+    "unknownEvidenceWeight": 1.0,
+    "lineageFloor": 0.85,
+    "lineageRange": 0.15,
+    "domainStructurePenalty": 0.5,
+    "globalStructureCoverageFloor": 0.7,
+    "minimumDonorGroupSupport": 0.0,
+    "minimumIndependentProvenanceRoots": 1,
+    "thresholds": {
+      "molecular_function": 0.05,
+      "biological_process": 0.25,
+      "cellular_component": 0.25
+    },
+    "maxSelectedTermsPerAspect": 10,
+    "requireTwoStructureDonorGroups": true,
+    "candidateSourcePolicy": {
+      "mode": "storage_light",
+      "allowedAspects": [
+        "molecular_function",
+        "biological_process",
+        "cellular_component"
+      ],
+      "minimumBaseScore": 0.0,
+      "minimumQueryCoverage": 0.0,
+      "minimumEvidenceWeight": 0.0,
+      "requireIndependentRoots": 1,
+      "allowedSources": [
+        "biolm_retrieval"
+      ]
+    },
+    "selectionPolicy": {
+      "mode": "evidence_frontier_v1",
+      "aspects": [
+        "molecular_function",
+        "biological_process",
+        "cellular_component"
+      ]
+    },
+    "goJudgePolicy": {
+      "mode": "semantic_reasoning",
+      "executionMode": "pi",
+      "maxCandidates": 128,
+      "maxDonorContexts": 12,
+      "modelProvider": "openai-codex",
+      "modelId": "gpt-5.6-sol",
+      "thinkingLevel": "high"
+    },
+    "scoreFusionPolicy": {
+      "mode": "disabled",
+      "anchorWeights": {
+        "molecular_function": 0,
+        "biological_process": 0,
+        "cellular_component": 0
+      }
+    },
+    "ontologyPolicy": {
+      "mode": "ancestor_closure",
+      "maxDepth": 8,
+      "scoreDecay": 1.0,
+      "excludeRoots": true,
+      "relations": [
+        "is_a",
+        "part_of"
+      ]
+    }
+  },
+  "narrativePolicy": {
+    "defaultMode": "pi",
+    "maxRevisionCycles": 2
+  },
+  "improvementPolicy": {
+    "enabled": false,
+    "externalFeedbackRequired": true,
+    "promotionEvaluator": "not_configured_in_mvp"
+  },
+  "claimBoundary": "CodeBase1 BioLM-only EviRead reader with semantic Agent GO judgment; frozen ESM2/ESMC/ProTrek observations, no conventional search tools, and no learned external predictor."
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "pi-lightweight-baseline-tool-lock.v1",
+  "toolId": "hmmer-phmmer-baseline-v1",
+  "platform": "osx-arm64",
+  "package": {
+    "name": "hmmer",
+    "version": "3.4",
+    "build": "h455b5b4_5",
+    "channel": "bioconda"
+  },
+  "environmentPath": ".runtime/predictors/hmmer-baseline-v1",
+  "binary": {
+    "relativePath": ".runtime/predictors/hmmer-baseline-v1/bin/phmmer",
+    "sha256": "31b718ee5aaa69b3fc9894fda399c7bd24431ea7eb2a8998764f6f43cdbd3c4d"
+  },
+  "createCommand": [
+    ".runtime/bin/micromamba",
+    "create",
+    "-y",
+    "-p",
+    ".runtime/predictors/hmmer-baseline-v1",
+    "-c",
+    "conda-forge",
+    "-c",
+    "bioconda",
+    "hmmer=3.4"
+  ],
+  "claimBoundary": "This lock records the local osx-arm64 executable used by the lightweight baseline. Platform-specific package bytes may differ on Linux."
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi.local/schemas/autonomous_rsi_evaluator_result.schema.json",
+  "title": "Autonomous RSI Evaluator Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "metric", "decision", "feedback"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-evaluator-result.v1" },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metricId", "value"],
+      "properties": {
+        "metricId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+        "value": { "type": "number" }
+      }
+    },
+    "decision": { "enum": ["continue", "stop"] },
+    "feedback": {
+      "type": "object",
+      "description": "Identifier-free aggregate evaluator feedback. Runtime DLP applies recursively."
+    }
+  }
+}

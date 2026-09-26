@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "pi-function-evidence-profiles-lock.v1",
+  "profiles": {
+    "t0": {
+      "profileId": "t0-afdb-v5-v1",
+      "claimBoundary": "Frozen T0 biological evidence and T0 scoring ontology; benchmark-provided target structures are separate inputs.",
+      "knowledgeCutoff": "2025-09-04",
+      "benchmarkComparable": true,
+      "biologicalNetwork": "disabled",
+      "commonDataManifestHash": "a2ea96c0f148ec4bbf01112fd4fe755f76a2bb2f00c660c64ba1dd7ebf2dff15",
+      "blastManifestHash": "caf386d40f7017ca4fce99493b0e4dd95c83a10515244149ec5e9719fc083a18",
+      "annotationManifestHash": "b1662bf684f7a4f4e259d444c6a1440b1fbb1bec66d1c61665001237e9ab957e",
+      "taxonomyManifestHash": "a4459b548a8e71a68371e1cad6622d2fbccf1c18a9e6960e17d8bbd68ffcdca1",
+      "afdbV5ManifestHash": "bc0f6dc17086793d0663893013b5df42ca85f45ac9aeb7b9052f3fdd91818d7c",
+      "pdb100Manifest": {
+        "sizeBytes": 6024,
+        "sha256": "a13ec53fe5e60695ae7d18cfd5c33f521725e446359139e4854b1470fc87923b"
+      },
+      "criticalArtifacts": [
+        {
+          "path": "sources/train_sequences.fasta",
+          "sizeBytes": 56710941,
+          "sha256": "49fa963cc9c789c5fc8196f1414f19f218f6874dfd977678a5e30f1b147f04d8"
+        },
+        {
+          "path": "sources/train_terms.tsv",
+          "sizeBytes": 10968264,
+          "sha256": "123cfc5ee225a104ca3fe3c311bd7539c910128d91c1fdc6cadfce1262a47710"
+        },
+        {
+          "path": "contracts/inner_resource_contract.json",
+          "sizeBytes": 1822,
+          "sha256": "a606792438b39450fd06bbe771e473b3037acc101467dcb587f27efbfc9615b0"
+        },
+        {
+          "path": "annotations/t0_annotations_v3.sqlite3",
+          "sizeBytes": 1268948992,
+          "sha256": "9f71af0409c08a96e18e77692b153ba9a033808d4c5cbda8fcf02ebcd428559e"
+        },
+        {
+          "path": "annotations/t0_annotations_v3.manifest.json",
+          "sizeBytes": 2535,
+          "sha256": "7a540a84573b82ff07763da681ab1b3a4a2a6f10482f2913b40a39c237ee5abb"
+        },
+        {
+          "path": "ontology/go-basic.obo",
+          "sizeBytes": 8092382,
+          "sha256": "ddf161efaabb5e849cf3bcb4b08470205feb2ee37835f8659b47485552219f67"
+        },
+        {
+          "path": "ontology/IA.tsv",
+          "sizeBytes": 991280,
+          "sha256": "e41489aec0a8e51147b10f3d2d938b84a02b7251b2ba1a90768d9e90dba0572b"
+        },
+        {
+          "path": "taxonomy/t0_taxonomy_2025-09-01.sqlite3",
+          "sizeBytes": 140681216,
+          "sha256": "58966233dad0fc03e8188c26a86a12cf07700c4d83bb3acb3f7f7d1459c8eeb2"
+        },
+        {
+          "path": "taxonomy/t0_taxonomy_2025-09-01.manifest.json",
+          "sizeBytes": 766,
+          "sha256": "ba773e54746804fedf1e1e03667f10a48b21b51ab2273270e49cdaa1a064fc0f"
+        }
+      ],
+      "upstream": {
+        "afdbSwissProtV5": {
+          "url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/v5/swissprot_pdb_v5.tar",
+          "archiveSizeBytes": 28511600640,
+          "archiveSha256": "c0a68562e123d097197feeb73d790490fc7bfa7ad950f652c46d55d1447d8ec3"
+        },
+        "pdb100": {
+          "url": "https://foldseek.steineggerlab.workers.dev/pdb100.tar.gz",
+          "archiveSizeBytes": 2326827389,
+          "archiveSha256": "2ec2b8b83c5f9ccadc1d88d680cd3a40c04e2bcb4d67ba366cebbf6e8156b090"
+        },
+        "goOntology": {
+          "release": "2025-07-22",
+          "sha256": "ddf161efaabb5e849cf3bcb4b08470205feb2ee37835f8659b47485552219f67"
+        },
+        "uniprotSwissProt": {
+          "release": "2025_03",
+          "releaseDate": "2025-06-18",
+          "archiveSha256": "881726aec677fe3d1df629a07dc77f476fc1339aef3c4117f2bcbfeef6416a14"
+        },
+        "taxonomy": {
+          "release": "2025-09-01",
+          "archiveSha256": "4416dfb78a2ceb630907b1f04b18c70521142d43896575db9afb435a0d267ab7"
+        }
+      },
+      "installPolicy": {
+        "independentRootRequired": true,
+        "crossRepositorySymlinksForbidden": true,
+        "bundleOrVerifiedSourcePlaneRequired": true,
+        "noCurrentFallback": true
+      }
+    },
+    "discovery": {
+      "profileId": "discovery-current",
+      "benchmarkComparable": false,
+      "biologicalNetwork": "profile-controlled",
+      "updatePolicy": "explicit install or refresh only; every run records observed release and artifact hashes",
+      "claimBoundary": "Current-resource functional discovery only; never a temporal benchmark scoring profile."
+    },
+    "t0-swissprot-full": {
+      "profileId": "t0-swissprot-2025_03-full-all-t0-go-v1",
+      "claimBoundary": "Complete reviewed Swiss-Prot 2025_03 BLAST/context universe plus every positive Swiss-Prot GOA association frozen on 2025-09-04. Evidence roles remain explicit, computational GO is genome-weighted, NOT is negative-only, GO 2025-07-22 is the scoring ontology, and biological network fallback is disabled.",
+      "knowledgeCutoff": "2025-09-04",
+      "benchmarkComparable": true,
+      "biologicalNetwork": "disabled",
+      "commonDataManifestHash": "d84bd529e4a6b14c85383a71d6c94303f9270af5bc770ccfd4bea5788b37d350",
+      "blastManifestHash": "14677c84114a4153752a48c28190f6bf350abdf5a99941b340b0c3d5033e698c",
+      "annotationManifestHash": "34b0af5d3493cc2704604ea2a50f7e61a7876571db35a1fb60fc03878822ad05",
+      "taxonomyManifestHash": "a4459b548a8e71a68371e1cad6622d2fbccf1c18a9e6960e17d8bbd68ffcdca1",
+      "afdbV5ManifestHash": "bc0f6dc17086793d0663893013b5df42ca85f45ac9aeb7b9052f3fdd91818d7c",
+      "pdb100Manifest": {
+        "sizeBytes": 6024,
+        "sha256": "a13ec53fe5e60695ae7d18cfd5c33f521725e446359139e4854b1470fc87923b"
+      },
+      "criticalArtifacts": [
+        {
+          "path": "sources/swissprot_2025_03.fasta",
+          "sizeBytes": 286776098,
+          "sha256": "6a9a6c21d0d3f5074a0d6487b6f07e0861d915e6783167b3ff4a73f50f6c7ed4"
+        },
+        {
+          "path": "sources/train_terms.tsv",
+          "sizeBytes": 10968264,
+          "sha256": "123cfc5ee225a104ca3fe3c311bd7539c910128d91c1fdc6cadfce1262a47710"
+        },
+        {
+          "path": "sources/goa_uniprot_sprot_2025-09-04.gaf.gz",
+          "sizeBytes": 135872021,
+          "sha256": "608871d5f579633d2b27700a5c569c1f9c0f2b72585d8ca3ac6233976441a444"
+        },
+        {
+          "path": "contracts/inner_resource_contract.json",
+          "sizeBytes": 2403,
+          "sha256": "f7a3acce05fbe47a3a05b728be2f818314d65f9868ff11db99e796d5bf05fe0a"
+        },
+        {
+          "path": "annotations/t0_annotations_v4_swissprot_full_go.sqlite3",
+          "sizeBytes": 5953576960,
+          "sha256": "fced96ee828cfca4807357626c38eb80f2bfdc2ab76db71ca82f0891d119d0cb"
+        },
+        {
+          "path": "annotations/t0_annotations_v4_swissprot_full_go.manifest.json",
+          "sizeBytes": 4259,
+          "sha256": "e8e0bd8adc09926f51820a61ce1b361c20493162216f09878428a3150c55c22a"
+        },
+        {
+          "path": "ontology/go-basic.obo",
+          "sizeBytes": 8092382,
+          "sha256": "ddf161efaabb5e849cf3bcb4b08470205feb2ee37835f8659b47485552219f67"
+        },
+        {
+          "path": "ontology/IA.tsv",
+          "sizeBytes": 991280,
+          "sha256": "e41489aec0a8e51147b10f3d2d938b84a02b7251b2ba1a90768d9e90dba0572b"
+        },
+        {
+          "path": "taxonomy/t0_taxonomy_2025-09-01.sqlite3",
+          "sizeBytes": 140681216,
+          "sha256": "58966233dad0fc03e8188c26a86a12cf07700c4d83bb3acb3f7f7d1459c8eeb2"
+        },
+        {
+          "path": "taxonomy/t0_taxonomy_2025-09-01.manifest.json",
+          "sizeBytes": 766,
+          "sha256": "ba773e54746804fedf1e1e03667f10a48b21b51ab2273270e49cdaa1a064fc0f"
+        }
+      ],
+      "runtimePaths": {
+        "sequenceFasta": "sources/swissprot_2025_03.fasta",
+        "terms": "sources/train_terms.tsv",
+        "resourceContract": "contracts/inner_resource_contract.json",
+        "annotationStore": "annotations/t0_annotations_v4_swissprot_full_go.sqlite3",
+        "annotationManifest": "annotations/t0_annotations_v4_swissprot_full_go.manifest.json",
+        "blastManifest": "blast/t0_swissprot_full_blast.manifest.json",
+        "blastPrefix": "blast/swissprot_2025_03_full"
+      },
+      "upstream": {
+        "afdbSwissProtV5": {
+          "url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/v5/swissprot_pdb_v5.tar",
+          "archiveSizeBytes": 28511600640,
+          "archiveSha256": "c0a68562e123d097197feeb73d790490fc7bfa7ad950f652c46d55d1447d8ec3"
+        },
+        "pdb100": {
+          "url": "https://foldseek.steineggerlab.workers.dev/pdb100.tar.gz",
+          "archiveSizeBytes": 2326827389,
+          "archiveSha256": "2ec2b8b83c5f9ccadc1d88d680cd3a40c04e2bcb4d67ba366cebbf6e8156b090"
+        },
+        "goOntology": {
+          "release": "2025-07-22",
+          "sha256": "ddf161efaabb5e849cf3bcb4b08470205feb2ee37835f8659b47485552219f67"
+        },
+        "uniprotSwissProt": {
+          "release": "2025_03",
+          "releaseDate": "2025-06-18",
+          "archiveSha256": "881726aec677fe3d1df629a07dc77f476fc1339aef3c4117f2bcbfeef6416a14"
+        },
+        "taxonomy": {
+          "release": "2025-09-01",
+          "archiveSha256": "4416dfb78a2ceb630907b1f04b18c70521142d43896575db9afb435a0d267ab7"
+        },
+        "goaSwissProt": {
+          "dateGenerated": "2025-09-04",
+          "sizeBytes": 135872021,
+          "sha256": "608871d5f579633d2b27700a5c569c1f9c0f2b72585d8ca3ac6233976441a444"
+        }
+      },
+      "installPolicy": {
+        "independentRootRequired": true,
+        "crossRepositorySymlinksForbidden": true,
+        "bundleOrVerifiedSourcePlaneRequired": true,
+        "noCurrentFallback": true
+      },
+      "comparisonPeer": "t0-afdb-v5-v1",
+      "controlledDifference": "Full Swiss-Prot sequence/context universe plus all positive frozen pre-T0 GOA evidence. This is the requested full-resource comparison, not a sequence-only ablation."
+    }
+  },
+  "scoring": {
+    "ontologyRelease": "2025-07-22",
+    "ontologySha256": "ddf161efaabb5e849cf3bcb4b08470205feb2ee37835f8659b47485552219f67",
+    "iaSha256": "e41489aec0a8e51147b10f3d2d938b84a02b7251b2ba1a90768d9e90dba0572b",
+    "t1OntologyIsScoringResource": false
+  },
+  "largeResourcesTrackedByGit": false,
+  "methodResources": {
+    "early": {
+      "additionalResources": [],
+      "claimBoundary": "Early starting agent remains BLAST plus full-length Foldseek."
+    },
+    "r09": {
+      "deepgoplus": {
+        "package": "1.0.2",
+        "data": "1.0.25",
+        "uniprot": "2025_03",
+        "go": "2025-06-01"
+      },
+      "omaOmamer": {
+        "omamer": "2.0.3",
+        "oma": "All.Jul2024",
+        "availableAt": "2024-08-10"
+      },
+      "merizoCommit": "41d12fb84e6e8fdb586c2c859d12161dc7bb5bfd",
+      "chainsawCommit": "9ced6e6d04043b0f2c50afa4527013997e305d4d"
+    }
+  },
+  "canonicalHash": "940e052a237e302e349c04bcd42ea421f98e619b6fdcb09a394b3dc60a3abdae"
+}

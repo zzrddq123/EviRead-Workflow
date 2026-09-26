@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-data-split-manifest.v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "splitId",
+    "training",
+    "validation",
+    "partitionPolicy",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-data-split-manifest.v1"
+    },
+    "splitId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$"
+    },
+    "benchmarkId": {
+      "type": "string"
+    },
+    "training": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/split"
+        },
+        {
+          "properties": {
+            "goldAccess": {
+              "const": "developer_allowed"
+            }
+          },
+          "not": {
+            "required": [
+              "evaluationPhase"
+            ]
+          }
+        }
+      ]
+    },
+    "validation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/split"
+        },
+        {
+          "properties": {
+            "goldAccess": {
+              "const": "evaluator_only"
+            },
+            "evaluationPhase": {
+              "enum": [
+                "during_rsi",
+                "after_freeze_only"
+              ]
+            }
+          },
+          "required": [
+            "evaluationPhase"
+          ]
+        }
+      ]
+    },
+    "partitionPolicy": {
+      "type": "object",
+      "required": [
+        "requireDisjointProteinIds",
+        "requireDisjointSequenceHashes"
+      ],
+      "properties": {
+        "requireDisjointProteinIds": {
+          "const": true
+        },
+        "requireDisjointSequenceHashes": {
+          "const": true
+        },
+        "requireDisjointStructureHashes": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "canonicalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "test": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/split"
+        },
+        {
+          "properties": {
+            "goldAccess": {
+              "const": "evaluator_only"
+            },
+            "evaluationPhase": {
+              "const": "after_freeze_only"
+            }
+          },
+          "required": [
+            "evaluationPhase"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "split": {
+      "type": "object",
+      "required": [
+        "proteinsFile",
+        "goldRoot",
+        "goldAccess",
+        "fileHashes"
+      ],
+      "properties": {
+        "proteinsFile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goldRoot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goldAccess": {
+          "enum": [
+            "developer_allowed",
+            "evaluator_only"
+          ]
+        },
+        "evaluationPhase": {
+          "enum": [
+            "during_rsi",
+            "after_freeze_only"
+          ]
+        },
+        "fileHashes": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^/"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

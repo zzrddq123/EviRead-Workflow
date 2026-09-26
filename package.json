@@ -1,0 +1,42 @@
+{
+  "name": "iclr-function-prediction-r09-agent-latest-rsi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Protein function prediction agent with an autonomous RSI improvement loop",
+  "scripts": {
+    "build": "tsc",
+    "predict": "tsx src/index.ts predict",
+    "doctor": "tsx src/index.ts doctor",
+    "validate": "tsx src/index.ts validate",
+    "server:evidence": "python3 python/evidence_server.py --config config/local.env",
+    "smoke:pi": "tsx src/pi-smoke.ts",
+    "smoke:codex": "tsx src/pi-smoke.ts",
+    "bootstrap:plan": "python3 bootstrap/bootstrap.py plan",
+    "bootstrap": "python3 bootstrap/bootstrap.py all",
+    "bootstrap:tools": "python3 bootstrap/bootstrap.py tools",
+    "bootstrap:databases": "python3 bootstrap/bootstrap.py databases",
+    "bootstrap:verify": "python3 bootstrap/bootstrap.py verify",
+    "typecheck": "tsc --noEmit",
+    "test:ts": "tsx --test src/*.test.ts",
+    "test:python": "python3 -m unittest discover -s python -p 'test_*.py' -v",
+    "test": "npm run typecheck && npm run test:ts && npm run test:python",
+    "rsi": "tsx src/rsi_cli.ts",
+    "rsi:prepare": "python3 python/rsi_prepare.py", 
+    "test:rsi": "tsx --test test/rsi/*.test.ts"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.80.10",
+    "typebox": "^1.0.62",
+    "undici": "8.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "esbuild": "0.28.1"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

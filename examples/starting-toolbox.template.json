@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "pi-rsi-starting-toolbox-manifest.v1",
+  "baselineId": "r09-v140",
+  "commonDataManifestHash": "REPLACE_WITH_COMMON_DATA_MANIFEST_SHA256",
+  "visibleTools": [
+    { "toolId": "blast", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "blast/bin/blastp", "licenseId": "BLAST-public-domain", "sourceUrl": "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/" },
+    { "toolId": "foldseek", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "foldseek/bin/foldseek", "licenseId": "GPL-3.0", "sourceUrl": "https://github.com/steineggerlab/foldseek/releases" },
+    { "toolId": "deepgoplus", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "deepgoplus/bin/predict", "licenseId": "REPLACE_WITH_VERIFIED_LICENSE", "sourceUrl": "https://github.com/bio-ontology-research-group/deepgoplus" },
+    { "toolId": "omamer", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "omamer/bin/omamer", "licenseId": "MPL-2.0", "sourceUrl": "https://github.com/DessimozLab/omamer" },
+    { "toolId": "merizo", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "merizo/bin/merizo", "licenseId": "REPLACE_WITH_VERIFIED_LICENSE", "sourceUrl": "https://github.com/psipred/Merizo" },
+    { "toolId": "chainsaw", "version": "REPLACE_WITH_FROZEN_VERSION", "artifactHash": "REPLACE_WITH_SHA256", "entrypoint": "chainsaw/bin/chainsaw", "licenseId": "RESTRICTED_EXPLICIT_ACCEPTANCE_REQUIRED", "sourceUrl": "https://github.com/JudeWells/Chainsaw" }
+  ],
+  "acquisitionPolicy": { "enabledFromUpdate": 1, "allowedSourceSchemes": ["https"], "maxAttempts": 20, "maxSuccessfulTools": 10, "maxBytes": 21474836480, "requireIndependentPrecommit": true, "candidateMayBrowseHostCas": false }
+}

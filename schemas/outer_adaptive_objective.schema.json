@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-objective.v1",
+  "title": "Adaptive30 RSI objective with an executable capability inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "objective", "objectiveStatus", "cohort", "evaluation", "capabilities", "initialGeneration", "initialResearchCatalogHash", "maximumRounds", "methodDeveloperMode", "finalGeneralizationAllowed", "freshHoldoutRequired", "claimBoundary", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-objective.v1" },
+    "campaignId": { "$ref": "#/$defs/id" },
+    "objective": { "const": "maximize_hierarchical_go_quality" },
+    "objectiveStatus": { "const": "adaptive_development_only" },
+    "cohort": {
+      "type": "object", "additionalProperties": false,
+      "required": ["suiteProfile", "role", "proteinCount", "shardCount", "heldOutClaim", "reusePolicy", "publicManifestHash", "adaptiveProtocolHash", "privateExclusionsHash", "developmentShardHash", "frozenEvidenceSetHash", "ontologySha256"],
+      "properties": {
+        "suiteProfile": { "const": "adaptive30" }, "role": { "const": "development" },
+        "proteinCount": { "const": 30 }, "shardCount": { "const": 1 },
+        "heldOutClaim": { "const": "none" }, "reusePolicy": { "const": "repeated_adaptive_development" },
+        "publicManifestHash": { "$ref": "#/$defs/hash" }, "adaptiveProtocolHash": { "$ref": "#/$defs/hash" },
+        "privateExclusionsHash": { "$ref": "#/$defs/hash" }, "developmentShardHash": { "$ref": "#/$defs/hash" },
+        "frozenEvidenceSetHash": { "$ref": "#/$defs/hash" }, "ontologySha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "evaluation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metricId", "informationContentPolicy", "bootstrap", "retainGate"],
+      "properties": {
+        "metricId": { "const": "cafa_hierarchical_protein_centric_v1" },
+        "informationContentPolicy": { "const": "adaptive30_marginal_frequency_v1" },
+        "bootstrap": {
+          "type": "object", "additionalProperties": false,
+          "required": ["samples", "confidenceLevel", "eceBins", "seedNamespace"],
+          "properties": { "samples": { "type": "integer", "minimum": 100, "maximum": 100000 }, "confidenceLevel": { "const": 0.95 }, "eceBins": { "const": 10 }, "seedNamespace": { "$ref": "#/$defs/id" } }
+        },
+        "retainGate": {
+          "type": "object", "additionalProperties": false,
+          "required": ["minimumOverallFmaxGain", "maximumPopulatedAspectFmaxDrop"],
+          "properties": { "minimumOverallFmaxGain": { "type": "number", "minimum": 0, "maximum": 1 }, "maximumPopulatedAspectFmaxDrop": { "type": "number", "minimum": 0, "maximum": 1 } }
+        }
+      }
+    },
+    "capabilities": { "type": "array", "minItems": 8, "maxItems": 8, "items": { "$ref": "#/$defs/capability" } },
+    "initialGeneration": { "$ref": "#/$defs/generation" },
+    "initialResearchCatalogHash": { "$ref": "#/$defs/hash" },
+    "maximumRounds": { "type": "integer", "minimum": 2, "maximum": 32 },
+    "methodDeveloperMode": { "enum": ["deterministic", "pi"] },
+    "finalGeneralizationAllowed": { "const": false }, "freshHoldoutRequired": { "const": true },
+    "claimBoundary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "capabilityId": { "enum": ["frozen_replay", "cafa_hierarchical_metrics", "detailed_teacher_attribution", "stage_count_instrumentation", "aspect_isolated_routing", "group_aware_calibration_split", "paired_structure_sequence_predictor", "ontology_aware_candidate_decoder"] },
+    "capability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capabilityId", "status", "executorId", "implementationHash", "testReceiptHash"],
+      "properties": { "capabilityId": { "$ref": "#/$defs/capabilityId" }, "status": { "enum": ["implemented", "implementation_required"] }, "executorId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }, "implementationHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "testReceiptHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] } }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit", "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy", "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" }, "blindPredictionHash": { "$ref": "#/$defs/hash" }, "replayReceiptHash": { "$ref": "#/$defs/hash" }, "sourceCommit": { "$ref": "#/$defs/commit" }, "implementationHash": { "$ref": "#/$defs/hash" }, "testReceiptHash": { "$ref": "#/$defs/hash" }, "capabilityId": { "$ref": "#/$defs/capabilityId" },
+        "executionPolicy": { "enum": ["blind_replay_before_any_gold", "grouped_crossfit_from_presealed_routes"] },
+        "presealedRouteSetHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "foldAssignmentHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "crossfitReceiptHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }
+      }
+    },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+  }
+}

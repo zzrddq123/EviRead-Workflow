@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-outer-adaptive-developer-plan.v1",
+  "title": "Authoritative between-round adaptive Developer plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "campaignId", "objectiveHash", "sourceRound",
+    "sourceFeedbackHash", "targetRound", "researchCardBundleHash",
+    "researchCards", "methodPlan", "authorizedProposalSpec", "claimBoundary", "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-developer-plan.v1" },
+    "campaignId": { "$ref": "#/$defs/id" },
+    "objectiveHash": { "$ref": "#/$defs/hash" },
+    "sourceRound": { "type": "integer", "minimum": 1, "maximum": 31 },
+    "sourceFeedbackHash": { "$ref": "#/$defs/hash" },
+    "targetRound": { "type": "integer", "minimum": 2, "maximum": 32 },
+    "researchCardBundleHash": { "$ref": "#/$defs/hash" },
+    "codeVersionHistoryHash": {
+      "oneOf": [
+        { "$ref": "#/$defs/hash" },
+        { "type": "null" }
+      ]
+    },
+    "codeVersionExploration": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["explorationId", "planHash"],
+          "properties": {
+            "explorationId": { "$ref": "#/$defs/id" },
+            "planHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "researchCards": {
+      "type": "array", "minItems": 1, "maxItems": 32,
+      "items": { "$ref": "#/$defs/researchCard" }
+    },
+    "methodPlan": { "$ref": "#/$defs/methodPlan" },
+    "authorizedProposalSpec": { "$ref": "#/$defs/proposalSpec" },
+    "claimBoundary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "prefixedHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
+    "devId": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "templateId": {
+      "enum": [
+        "repair_learned_channel_pipeline", "route_learned_signal_by_aspect",
+        "calibrate_sources_grouped_oof_by_aspect", "compare_mdeepfri_gcn_vs_cnn",
+        "add_ontology_decoder_source"
+      ]
+    },
+    "researchCard": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidenceId", "finding", "limitations", "supportedTemplateIds"],
+      "properties": {
+        "evidenceId": { "type": "string", "pattern": "^EXT-[0-9]{4}$" },
+        "finding": { "type": "string", "minLength": 1, "maxLength": 1600 },
+        "limitations": {
+          "type": "array", "minItems": 1, "maxItems": 8,
+          "items": { "type": "string", "minLength": 1, "maxLength": 800 }
+        },
+        "supportedTemplateIds": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/templateId" }
+        }
+      }
+    },
+    "experiment": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "templateId", "family", "novelty", "hypothesis", "control",
+        "falsifier", "requiredCapability", "evidenceIds", "rationaleCodes"
+      ],
+      "properties": {
+        "templateId": { "$ref": "#/$defs/templateId" },
+        "family": { "enum": ["pipeline", "aspect_router", "score_calibration", "external_predictor", "ontology_reasoning"] },
+        "novelty": { "enum": ["pipeline_fix", "new_router", "new_calibrator", "new_predictor", "new_information_source"] },
+        "hypothesis": { "type": "string", "minLength": 1 },
+        "control": { "type": "string", "minLength": 1 },
+        "falsifier": { "type": "string", "minLength": 1 },
+        "requiredCapability": { "enum": ["stage_count_instrumentation", "aspect_isolated_routing", "group_aware_calibration_split", "paired_structure_sequence_predictor", "ontology_aware_candidate_decoder"] },
+        "evidenceIds": {
+          "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^EXT-[0-9]{4}$" }
+        },
+        "rationaleCodes": {
+          "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true,
+          "items": { "enum": ["repair_before_scoring", "isolate_cross_aspect_effect", "calibrate_precision_recall_tradeoff", "test_orthogonal_structure_signal", "expand_ontology_candidate_information", "switch_saturated_mechanism", "public_method_support"] }
+        }
+      }
+    },
+    "methodPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "objective", "positionRound", "experiments", "planHash"],
+      "properties": {
+        "schemaVersion": { "const": "pi-method-experiment-plan.v1" },
+        "objective": { "const": "maximize_hierarchical_go_quality" },
+        "positionRound": { "type": "integer", "minimum": 2, "maximum": 32 },
+        "experiments": {
+          "type": "array", "maxItems": 2, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/experiment" }
+        },
+        "planHash": { "$ref": "#/$defs/prefixedHash" }
+      }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit", "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy", "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" }, "blindPredictionHash": { "$ref": "#/$defs/hash" },
+        "replayReceiptHash": { "$ref": "#/$defs/hash" }, "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" }, "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "$ref": "#/$defs/capabilityId" },
+        "executionPolicy": { "enum": ["blind_replay_before_any_gold", "grouped_crossfit_from_presealed_routes"] },
+        "presealedRouteSetHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+        "foldAssignmentHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+        "crossfitReceiptHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }
+      }
+    },
+    "ordinaryGenerationPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit", "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy", "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" }, "blindPredictionHash": { "$ref": "#/$defs/hash" },
+        "replayReceiptHash": { "$ref": "#/$defs/hash" }, "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" }, "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "$ref": "#/$defs/capabilityId" }, "executionPolicy": { "const": "blind_replay_before_any_gold" },
+        "presealedRouteSetHash": { "type": "null" }, "foldAssignmentHash": { "type": "null" }, "crossfitReceiptHash": { "type": "null" }
+      }
+    },
+    "groupedGenerationPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["predictionSetId", "blindPredictionHash", "replayReceiptHash", "sourceCommit", "implementationHash", "testReceiptHash", "capabilityId", "executionPolicy", "presealedRouteSetHash", "foldAssignmentHash", "crossfitReceiptHash"],
+      "properties": {
+        "predictionSetId": { "$ref": "#/$defs/id" }, "blindPredictionHash": { "type": "null" },
+        "replayReceiptHash": { "type": "null" }, "sourceCommit": { "$ref": "#/$defs/commit" },
+        "implementationHash": { "$ref": "#/$defs/hash" }, "testReceiptHash": { "$ref": "#/$defs/hash" },
+        "capabilityId": { "const": "group_aware_calibration_split" },
+        "executionPolicy": { "const": "grouped_crossfit_from_presealed_routes" },
+        "presealedRouteSetHash": { "$ref": "#/$defs/hash" }, "foldAssignmentHash": { "$ref": "#/$defs/hash" },
+        "crossfitReceiptHash": { "type": "null" }
+      }
+    },
+    "capabilityId": {
+      "enum": ["frozen_replay", "cafa_hierarchical_metrics", "detailed_teacher_attribution", "stage_count_instrumentation", "aspect_isolated_routing", "group_aware_calibration_split", "paired_structure_sequence_predictor", "ontology_aware_candidate_decoder"]
+    },
+    "proposalExperiment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["templateId", "methodSemantics", "candidateId", "interventionId", "family", "noveltyClass", "requiredCapability", "falsifierCodes", "control", "challenger", "changeSummary"],
+      "properties": {
+        "templateId": { "$ref": "#/$defs/templateId" }, "methodSemantics": { "$ref": "#/$defs/methodSemantics" }, "candidateId": { "$ref": "#/$defs/devId" },
+        "interventionId": { "$ref": "#/$defs/devId" },
+        "family": { "enum": ["selection_policy", "modality_fusion", "ontology_reasoning", "candidate_sources", "phylogeny", "external_predictor", "score_calibration", "aspect_router", "pipeline"] },
+        "noveltyClass": { "enum": ["none", "new_predictor", "new_information_source", "new_router", "new_calibrator", "pipeline_fix"] },
+        "requiredCapability": { "enum": ["stage_count_instrumentation", "aspect_isolated_routing", "group_aware_calibration_split", "paired_structure_sequence_predictor", "ontology_aware_candidate_decoder"] },
+        "falsifierCodes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["no_material_overall_gain", "populated_aspect_regression", "method_channel_inactive", "pipeline_invariant_violation", "precision_recall_tradeoff"] } },
+        "control": { "$ref": "#/$defs/generation" },
+        "challenger": { "oneOf": [{ "$ref": "#/$defs/ordinaryGenerationPlan" }, { "$ref": "#/$defs/groupedGenerationPlan" }] },
+        "changeSummary": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "methodSemantics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["hypothesis", "control", "falsifier"],
+      "properties": {
+        "hypothesis": { "enum": ["restored_pipeline_activation_improves_evaluable_signal", "aspect_isolation_preserves_local_gain_without_cross_aspect_regression", "grouped_oof_calibration_improves_precision_recall_tradeoff", "structure_gcn_adds_signal_beyond_sequence_cnn_control", "ontology_decoder_expands_useful_candidates_without_precision_collapse"] },
+        "control": { "enum": ["retained_parent_identical_evidence_and_policy", "shared_candidate_stream_router_disabled", "uncalibrated_scores_same_group_split", "sequence_cnn_same_model_release", "retained_parent_without_decoder_source"] },
+        "falsifier": { "enum": ["pipeline_invariant_or_activation_not_restored", "no_guarded_aspect_gain_or_other_aspect_regression", "no_oof_gain_or_fresh_fold_regression", "gcn_no_gain_over_cnn_or_overlap_guard_failure", "no_candidate_recall_gain_or_precision_regression"] }
+      }
+    },
+    "proposalSpec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "round", "problemCodes", "hypothesis", "researchCardBundleHash", "researchEvidenceIds", "experiment"],
+      "properties": {
+        "schemaVersion": { "const": "pi-outer-adaptive-proposal-spec.v1" },
+        "round": { "type": "integer", "minimum": 2, "maximum": 32 },
+        "problemCodes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["candidate_recall_risk", "precision_risk", "aspect_tradeoff_risk", "score_calibration_risk", "source_correlation_risk", "pipeline_activation_risk", "method_saturation_risk"] } },
+        "hypothesis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "researchCardBundleHash": { "$ref": "#/$defs/hash" },
+        "researchEvidenceIds": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "type": "string", "pattern": "^EXT-[0-9]{4}$" } },
+        "experiment": { "$ref": "#/$defs/proposalExperiment" }
+      }
+    }
+  }
+}

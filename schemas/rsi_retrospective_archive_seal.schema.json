@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-retrospective-archive-seal.v1",
+  "title": "Offline-verifiable seal for a retrospective RSI artifact archive",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "spec",
+    "publicManifest",
+    "privateManifest",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-retrospective-archive-seal.v1"
+    },
+    "spec": {
+      "$ref": "#/$defs/specBinding"
+    },
+    "publicManifest": {
+      "$ref": "#/$defs/publicBinding"
+    },
+    "privateManifest": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/privateBinding"
+        }
+      ]
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "fileSha256",
+        "canonicalHash"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "fileSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "canonicalHash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "specBinding": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/binding"
+        },
+        {
+          "properties": {
+            "path": {
+              "const": "archive_spec.json"
+            }
+          }
+        }
+      ]
+    },
+    "publicBinding": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/binding"
+        },
+        {
+          "properties": {
+            "path": {
+              "const": "public/public_manifest.json"
+            }
+          }
+        }
+      ]
+    },
+    "privateBinding": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/binding"
+        },
+        {
+          "properties": {
+            "path": {
+              "const": "private/private_manifest.json"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

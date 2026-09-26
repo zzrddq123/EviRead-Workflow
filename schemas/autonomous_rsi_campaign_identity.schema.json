@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-autonomous-rsi-campaign-identity.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "campaignDir", "repositoryRoot", "workspaceRoot", "worktreePath", "baselineCommit", "evaluatorContractHash", "status", "archiveManifestHash", "promotionReceiptHash", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-campaign-identity.v1" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "campaignDir": { "$ref": "#/$defs/absolutePath" },
+    "repositoryRoot": { "$ref": "#/$defs/absolutePath" },
+    "workspaceRoot": { "$ref": "#/$defs/absolutePath" },
+    "worktreePath": { "$ref": "#/$defs/absolutePath" },
+    "baselineCommit": { "$ref": "#/$defs/gitObject" },
+    "evaluatorContractHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "status": { "enum": ["running", "terminal", "archived", "promoted"] },
+    "archiveManifestHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "promotionReceiptHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,95}$" },
+    "absolutePath": { "type": "string", "pattern": "^/", "minLength": 2 },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+  }
+}

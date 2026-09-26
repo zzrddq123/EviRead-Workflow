@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pi.local/schemas/autonomous_rsi_formal_bridge_receipt.schema.json",
+  "title": "Autonomous RSI Formal Bridge Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "authorizationId", "authorizationHash", "campaignId", "candidate", "controllerBundleHash", "controllerSourceCommit", "status", "operations", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-autonomous-rsi-formal-bridge-receipt.v1" },
+    "authorizationId": { "$ref": "#/$defs/safeId" },
+    "authorizationHash": { "$ref": "#/$defs/hash" },
+    "campaignId": { "$ref": "#/$defs/safeId" },
+    "candidate": { "type": "object" },
+    "controllerBundleHash": { "$ref": "#/$defs/hash" },
+    "controllerSourceCommit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "status": { "enum": ["running", "completed", "reconciliation_required"] },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["operationId", "command", "state", "stdoutSha256", "stderrSha256"],
+        "properties": {
+          "operationId": { "$ref": "#/$defs/safeId" },
+          "command": { "type": "string" },
+          "state": { "enum": ["pending", "running", "completed", "uncertain"] },
+          "stdoutSha256": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+          "stderrSha256": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }
+        }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "pi-rsi-five-cell-design-input.v1",
+  "experimentId": "iclr-confirmatory-e1",
+  "phase": "confirmatory",
+  "replicateCount": 5,
+  "blockPrefix": "paired-block",
+  "latestInitialCandidate": {
+    "candidateId": "strict-blind-go-bootstrap-v0-d24a111",
+    "artifactHash": "REPLACE_WITH_LATEST_64_HEX_ARTIFACT_HASH",
+    "sourceCommit": "REPLACE_WITH_LATEST_EXPERIMENT_START_COMMIT"
+  },
+  "earlyInitialCandidate": {
+    "candidateId": "strict-blind-go-bootstrap-v0-d24a111",
+    "artifactHash": "REPLACE_WITH_EARLY_64_HEX_ARTIFACT_HASH",
+    "sourceCommit": "REPLACE_WITH_EARLY_EXPERIMENT_START_COMMIT"
+  },
+  "bindings": {
+    "scientificBaselineHash": "20b3fb9c0dca95eeb901b50f9a3419de0cfa0b425d92f1667414e7e6f8857243",
+    "evaluatorContractHash": "REPLACE_WITH_64_HEX_EVALUATOR_HASH",
+    "developmentDataHash": "REPLACE_WITH_64_HEX_DEVELOPMENT_DATA_HASH",
+    "sealedDataCommitmentHash": "REPLACE_WITH_64_HEX_UNOPENED_SEALED_DATA_COMMITMENT",
+    "modelConfigHash": "REPLACE_WITH_64_HEX_MODEL_CONFIG_HASH",
+    "promptConfigHash": "REPLACE_WITH_64_HEX_PROMPT_CONFIG_HASH",
+    "toolConfigHash": "REPLACE_WITH_64_HEX_TOOL_CONFIG_HASH",
+    "runtimeConfigHash": "REPLACE_WITH_64_HEX_RUNTIME_CONFIG_HASH"
+  },
+  "budget": {
+    "targetValidUpdates": 10,
+    "maxPatchAttempts": 14,
+    "maxEvaluatorCalls": 15,
+    "maxStageAttempts": 2,
+    "maxWallClockSeconds": 1209600
+  },
+  "stopping": {
+    "allowEvaluatorStop": false,
+    "allowPlateauStop": false,
+    "plateauPatience": null,
+    "invalidCandidatePolicy": "record_rollback_continue"
+  },
+  "seedRootHash": "REPLACE_WITH_64_HEX_RANDOMIZATION_ROOT_HASH"
+}

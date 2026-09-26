@@ -1,0 +1,17 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#",
+  "$id":"pi-autonomous-rsi-training-screen-result.v1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schemaVersion","candidate","metric","threshold","passed","screeningAttempt","maxScreeningAttempts","canonicalHash"],
+  "properties":{
+    "schemaVersion":{"const":"pi-autonomous-rsi-training-screen-result.v1"},
+    "candidate":{"type":"object","additionalProperties":false,"required":["candidateId","artifactHash","sourceCommit"],"properties":{"candidateId":{"type":"string"},"artifactHash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"sourceCommit":{"type":"string","pattern":"^[a-f0-9]{40}$"}}},
+    "metric":{"type":"object","additionalProperties":false,"required":["metricId","value"],"properties":{"metricId":{"type":"string"},"value":{"type":"number"}}},
+    "threshold":{"type":"number"},
+    "passed":{"type":"boolean"},
+    "screeningAttempt":{"type":"integer","minimum":1},
+    "maxScreeningAttempts":{"type":"integer","minimum":1},
+    "canonicalHash":{"type":"string","pattern":"^[a-f0-9]{64}$"}
+  }
+}

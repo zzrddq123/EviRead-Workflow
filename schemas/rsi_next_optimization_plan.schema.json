@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-next-optimization-plan.v1",
+  "title": "Canonical pre-implementation optimization plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sourceVersionId",
+    "sourceEvaluationId",
+    "baseVersionId",
+    "history",
+    "evaluationAnalysisHash",
+    "teacherDistillation",
+    "action",
+    "plannedVersionId",
+    "problemAssessment",
+    "problemCodes",
+    "hypothesis",
+    "plannedChangeSummary",
+    "codeChangeTargets",
+    "controls",
+    "expectedEffects",
+    "experiment",
+    "researchCardBundleHash",
+    "researchCards",
+    "rollbackCondition",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-next-optimization-plan.v1"
+    },
+    "sourceVersionId": { "$ref": "#/$defs/id" },
+    "sourceEvaluationId": { "$ref": "#/$defs/id" },
+    "baseVersionId": { "$ref": "#/$defs/id" },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contextHash",
+        "eventSequence",
+        "eventManifestHash",
+        "selectedVersionId"
+      ],
+      "properties": {
+        "contextHash": { "$ref": "#/$defs/hash" },
+        "eventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999
+        },
+        "eventManifestHash": { "$ref": "#/$defs/hash" },
+        "selectedVersionId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "evaluationAnalysisHash": { "$ref": "#/$defs/hash" },
+    "teacherDistillation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proteinEvaluation",
+        "hypothesisVerdict",
+        "mechanismVerdict",
+        "diagnoses",
+        "prioritizedActions"
+      ],
+      "properties": {
+        "proteinEvaluation": { "type": "boolean" },
+        "hypothesisVerdict": {
+          "oneOf": [
+            {
+              "enum": [
+                "supported",
+                "partially_supported",
+                "falsified",
+                "not_tested"
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "mechanismVerdict": {
+          "oneOf": [
+            {
+              "enum": [
+                "pipeline_invariant_violation",
+                "inactive",
+                "localized_gain_precision_tradeoff",
+                "no_material_effect",
+                "general_gain",
+                "cross_aspect_interference",
+                "localized_gain",
+                "general_regression",
+                "not_evaluable"
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "diagnoses": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "pipeline_stage_count_inconsistent",
+              "learned_channel_inactive",
+              "learned_channel_dropped_before_admission",
+              "learned_channel_dropped_before_selection_eligibility",
+              "learned_channel_not_selected",
+              "learned_channel_activation_sparse",
+              "method_no_material_effect",
+              "method_localized_gain",
+              "precision_recall_tradeoff",
+              "cross_aspect_interference",
+              "method_general_gain",
+              "method_general_regression",
+              "effect_not_evaluable",
+              "candidate_rejected_by_aspect_guardrail",
+              "candidate_not_retained",
+              "same_mechanism_saturated"
+            ]
+          }
+        },
+        "prioritizedActions": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "repair_pipeline_invariant",
+              "activate_method_channel",
+              "inspect_admission_gate",
+              "inspect_selection_eligibility_gate",
+              "add_new_router",
+              "add_new_calibrator",
+              "isolate_effective_aspect_path",
+              "switch_exhausted_mechanism",
+              "change_predictor_or_information_source",
+              "validate_on_fresh_cohort",
+              "hold_baseline"
+            ]
+          }
+        }
+      }
+    },
+    "action": { "enum": ["proceed", "stop"] },
+    "plannedVersionId": {
+      "oneOf": [
+        { "$ref": "#/$defs/id" },
+        { "type": "null" }
+      ]
+    },
+    "problemAssessment": { "$ref": "#/$defs/text" },
+    "problemCodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/problemCode" }
+    },
+    "hypothesis": { "$ref": "#/$defs/text" },
+    "plannedChangeSummary": { "$ref": "#/$defs/text" },
+    "codeChangeTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "expectedEffects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall",
+        "molecularFunction",
+        "biologicalProcess",
+        "cellularComponent"
+      ],
+      "properties": {
+        "overall": { "$ref": "#/$defs/effect" },
+        "molecularFunction": { "$ref": "#/$defs/effect" },
+        "biologicalProcess": { "$ref": "#/$defs/effect" },
+        "cellularComponent": { "$ref": "#/$defs/effect" }
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "strategy",
+        "requiredCapabilities",
+        "falsifiers"
+      ],
+      "properties": {
+        "component": { "$ref": "#/$defs/component" },
+        "strategy": { "$ref": "#/$defs/text" },
+        "requiredCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/capability" }
+        },
+        "falsifiers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/shortText" }
+        }
+      }
+    },
+    "researchCardBundleHash": { "$ref": "#/$defs/hash" },
+    "researchCards": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/researchCard" }
+    },
+    "rollbackCondition": { "$ref": "#/$defs/text" },
+    "claimBoundary": {
+      "const": "Developer-visible aggregate evaluation analysis and pre-implementation plan only; no gold GO labels, target identities, sequences, per-protein errors, evaluator-private paths, or evaluator-private artifacts."
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "action": { "const": "proceed" } },
+        "required": ["action"]
+      },
+      "then": {
+        "properties": {
+          "plannedVersionId": { "$ref": "#/$defs/id" }
+        }
+      },
+      "else": {
+        "properties": {
+          "plannedVersionId": { "type": "null" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "shortText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    },
+    "effect": {
+      "enum": ["improve", "hold", "not_targeted"]
+    },
+    "problemCode": {
+      "enum": [
+        "candidate_recall_risk",
+        "precision_risk",
+        "aspect_tradeoff_risk",
+        "score_calibration_risk",
+        "source_correlation_risk",
+        "pipeline_activation_risk",
+        "method_saturation_risk",
+        "evidence_coverage_risk",
+        "ontology_consistency_risk"
+      ]
+    },
+    "component": {
+      "enum": [
+        "candidate_generation",
+        "evidence_acquisition",
+        "external_tool_fusion",
+        "ontology_reasoning",
+        "aspect_routing",
+        "score_calibration",
+        "go_selection",
+        "pipeline"
+      ]
+    },
+    "researchCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "finding",
+        "limitations",
+        "supportedComponents"
+      ],
+      "properties": {
+        "evidenceId": {
+          "type": "string",
+          "pattern": "^EXT-[0-9]{4}$"
+        },
+        "finding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1600
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/shortText" }
+        },
+        "supportedComponents": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/component" }
+        }
+      }
+    }
+  }
+}

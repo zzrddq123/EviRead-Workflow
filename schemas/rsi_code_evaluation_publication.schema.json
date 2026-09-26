@@ -1,0 +1,1229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-code-evaluation-publication.v1",
+  "title": "Public, immutable summary of one completed RSI code evaluation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "evaluationId",
+    "tagRef",
+    "version",
+    "opening",
+    "result",
+    "publicationMode",
+    "publicSummary",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-code-evaluation-publication.v1"
+    },
+    "evaluationId": {
+      "$ref": "#/$defs/id"
+    },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/evaluation/[a-z0-9][a-z0-9._-]{0,63}/publication$"
+    },
+    "version": {
+      "$ref": "#/$defs/versionBinding"
+    },
+    "opening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestHash",
+        "tagObjectId",
+        "protocolId",
+        "protocolHash"
+      ],
+      "properties": {
+        "manifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "tagObjectId": {
+          "$ref": "#/$defs/oid"
+        },
+        "protocolId": {
+          "$ref": "#/$defs/id"
+        },
+        "protocolHash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestHash",
+        "tagObjectId",
+        "kind",
+        "artifactHash",
+        "stateRootPublicManifestHash"
+      ],
+      "properties": {
+        "manifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "tagObjectId": {
+          "$ref": "#/$defs/oid"
+        },
+        "kind": {
+          "enum": [
+            "adaptive_development",
+            "software_verification",
+            "frozen_replay"
+          ]
+        },
+        "artifactHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "stateRootPublicManifestHash": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "publicationMode": {
+      "enum": [
+        "prospective",
+        "retrospective_legacy"
+      ]
+    },
+    "publicSummary": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/adaptivePublicSummary"
+        },
+        {
+          "$ref": "#/$defs/genericPublicSummary"
+        }
+      ]
+    },
+    "claimBoundary": {
+      "$ref": "#/$defs/text"
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "result": {
+              "properties": {
+                "kind": {
+                  "const": "adaptive_development"
+                }
+              }
+            },
+            "publicationMode": {
+              "const": "prospective"
+            },
+            "publicSummary": {
+              "$ref": "#/$defs/adaptivePublicSummary"
+            }
+          }
+        },
+        {
+          "properties": {
+            "result": {
+              "properties": {
+                "kind": {
+                  "const": "software_verification"
+                }
+              }
+            },
+            "publicationMode": {
+              "const": "prospective"
+            },
+            "publicSummary": {
+              "$ref": "#/$defs/softwareVerificationPublicSummary"
+            }
+          }
+        },
+        {
+          "properties": {
+            "result": {
+              "properties": {
+                "kind": {
+                  "const": "software_verification"
+                }
+              }
+            },
+            "publicationMode": {
+              "const": "retrospective_legacy"
+            },
+            "publicSummary": {
+              "$ref": "#/$defs/softwareVerificationPublicSummary"
+            }
+          }
+        },
+        {
+          "properties": {
+            "result": {
+              "properties": {
+                "kind": {
+                  "const": "frozen_replay"
+                }
+              }
+            },
+            "publicationMode": {
+              "const": "prospective"
+            },
+            "publicSummary": {
+              "$ref": "#/$defs/frozenReplayPublicSummary"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "nullableUnitNumber": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullableNonnegativeNumber": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "versionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "manifestHash",
+        "sourceCommit",
+        "tagObjectId"
+      ],
+      "properties": {
+        "versionId": {
+          "$ref": "#/$defs/id"
+        },
+        "manifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "sourceCommit": {
+          "$ref": "#/$defs/oid"
+        },
+        "tagObjectId": {
+          "$ref": "#/$defs/oid"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluable",
+        "proteinCount",
+        "fmax",
+        "precisionAtFmax",
+        "recallAtFmax",
+        "coverageAtFmax",
+        "aupr",
+        "smin"
+      ],
+      "properties": {
+        "evaluable": {
+          "type": "boolean"
+        },
+        "proteinCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "fmax": {
+          "$ref": "#/$defs/nullableUnitNumber"
+        },
+        "precisionAtFmax": {
+          "$ref": "#/$defs/nullableUnitNumber"
+        },
+        "recallAtFmax": {
+          "$ref": "#/$defs/nullableUnitNumber"
+        },
+        "coverageAtFmax": {
+          "$ref": "#/$defs/nullableUnitNumber"
+        },
+        "aupr": {
+          "$ref": "#/$defs/nullableUnitNumber"
+        },
+        "smin": {
+          "$ref": "#/$defs/nullableNonnegativeNumber"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall",
+        "aspects"
+      ],
+      "properties": {
+        "overall": {
+          "$ref": "#/$defs/scope"
+        },
+        "aspects": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "molecular_function",
+            "biological_process",
+            "cellular_component"
+          ],
+          "properties": {
+            "molecular_function": {
+              "$ref": "#/$defs/scope"
+            },
+            "biological_process": {
+              "$ref": "#/$defs/scope"
+            },
+            "cellular_component": {
+              "$ref": "#/$defs/scope"
+            }
+          }
+        }
+      }
+    },
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "estimate",
+        "lower",
+        "upper"
+      ],
+      "properties": {
+        "estimate": {
+          "type": "number"
+        },
+        "lower": {
+          "type": "number"
+        },
+        "upper": {
+          "type": "number"
+        }
+      }
+    },
+    "directionalDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "direction",
+        "deltaDefinition",
+        "baselineEstimate",
+        "candidateEstimate",
+        "candidateMinusBaseline",
+        "improvement"
+      ],
+      "properties": {
+        "direction": {
+          "enum": [
+            "higher_is_better",
+            "lower_is_better"
+          ]
+        },
+        "deltaDefinition": {
+          "const": "candidate_minus_baseline"
+        },
+        "baselineEstimate": {
+          "type": "number"
+        },
+        "candidateEstimate": {
+          "type": "number"
+        },
+        "candidateMinusBaseline": {
+          "$ref": "#/$defs/interval"
+        },
+        "improvement": {
+          "$ref": "#/$defs/interval"
+        }
+      }
+    },
+    "deltaScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmax",
+        "aupr",
+        "smin",
+        "coverageAtFmax",
+        "brier",
+        "ece"
+      ],
+      "properties": {
+        "fmax": {
+          "$ref": "#/$defs/directionalDelta"
+        },
+        "aupr": {
+          "$ref": "#/$defs/directionalDelta"
+        },
+        "smin": {
+          "$ref": "#/$defs/directionalDelta"
+        },
+        "coverageAtFmax": {
+          "$ref": "#/$defs/directionalDelta"
+        },
+        "brier": {
+          "$ref": "#/$defs/directionalDelta"
+        },
+        "ece": {
+          "$ref": "#/$defs/directionalDelta"
+        }
+      }
+    },
+    "nullableDeltaScope": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/deltaScope"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pairedDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall",
+        "aspects"
+      ],
+      "properties": {
+        "overall": {
+          "$ref": "#/$defs/nullableDeltaScope"
+        },
+        "aspects": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "molecular_function",
+            "biological_process",
+            "cellular_component"
+          ],
+          "properties": {
+            "molecular_function": {
+              "$ref": "#/$defs/nullableDeltaScope"
+            },
+            "biological_process": {
+              "$ref": "#/$defs/nullableDeltaScope"
+            },
+            "cellular_component": {
+              "$ref": "#/$defs/nullableDeltaScope"
+            }
+          }
+        }
+      }
+    },
+    "adaptivePublicSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "campaignId",
+        "round",
+        "cohort",
+        "metricInterpretation",
+        "sourceDocuments",
+        "control",
+        "challenger",
+        "teacher",
+        "method"
+      ],
+      "properties": {
+        "kind": {
+          "const": "adaptive_protein_function"
+        },
+        "campaignId": {
+          "$ref": "#/$defs/id"
+        },
+        "round": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "cohort": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "caseCount",
+            "cohortHash"
+          ],
+          "properties": {
+            "role": {
+              "const": "adaptive_development"
+            },
+            "caseCount": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000
+            },
+            "cohortHash": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        "metricInterpretation": {
+          "const": "in_sample_descriptive_only"
+        },
+        "sourceDocuments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "proposalHash",
+            "feedbackHash",
+            "outcomeHash",
+            "developerPlanHash",
+            "codeVersionHistoryHash",
+            "researchCardBundleHash"
+          ],
+          "properties": {
+            "proposalHash": { "$ref": "#/$defs/hash" },
+            "feedbackHash": { "$ref": "#/$defs/hash" },
+            "outcomeHash": { "$ref": "#/$defs/hash" },
+            "developerPlanHash": {
+              "oneOf": [
+                { "$ref": "#/$defs/hash" },
+                { "type": "null" }
+              ]
+            },
+            "codeVersionHistoryHash": {
+              "oneOf": [
+                { "$ref": "#/$defs/hash" },
+                { "type": "null" }
+              ]
+            },
+            "researchCardBundleHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        "control": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metrics"
+          ],
+          "properties": {
+            "metrics": {
+              "$ref": "#/$defs/metrics"
+            }
+          }
+        },
+        "challenger": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metrics",
+            "pairedDelta",
+            "overallFmaxGain",
+            "maximumPopulatedAspectFmaxDrop",
+            "decision"
+          ],
+          "properties": {
+            "metrics": {
+              "$ref": "#/$defs/metrics"
+            },
+            "pairedDelta": {
+              "$ref": "#/$defs/pairedDelta"
+            },
+            "overallFmaxGain": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "maximumPopulatedAspectFmaxDrop": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "decision": {
+              "enum": [
+                "selected_successor",
+                "reject_no_gain",
+                "reject_aspect_guardrail",
+                "reject_falsifier"
+              ]
+            }
+          }
+        },
+        "teacher": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hypothesisVerdict",
+            "mechanismVerdict",
+            "diagnoses",
+            "prioritizedActions"
+          ],
+          "properties": {
+            "hypothesisVerdict": {
+              "enum": [
+                "supported",
+                "partially_supported",
+                "falsified",
+                "not_tested"
+              ]
+            },
+            "mechanismVerdict": {
+              "enum": [
+                "pipeline_invariant_violation",
+                "inactive",
+                "localized_gain_precision_tradeoff",
+                "no_material_effect",
+                "general_gain",
+                "cross_aspect_interference",
+                "localized_gain",
+                "general_regression",
+                "not_evaluable"
+              ]
+            },
+            "diagnoses": {
+              "type": "array",
+              "maxItems": 128,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "pipeline_stage_count_inconsistent",
+                  "learned_channel_inactive",
+                  "learned_channel_dropped_before_admission",
+                  "learned_channel_dropped_before_selection_eligibility",
+                  "learned_channel_not_selected",
+                  "learned_channel_activation_sparse",
+                  "method_no_material_effect",
+                  "method_localized_gain",
+                  "precision_recall_tradeoff",
+                  "cross_aspect_interference",
+                  "method_general_gain",
+                  "method_general_regression",
+                  "effect_not_evaluable",
+                  "candidate_rejected_by_aspect_guardrail",
+                  "candidate_not_retained",
+                  "same_mechanism_saturated"
+                ]
+              }
+            },
+            "prioritizedActions": {
+              "type": "array",
+              "maxItems": 128,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "repair_pipeline_invariant",
+                  "activate_method_channel",
+                  "inspect_admission_gate",
+                  "inspect_selection_eligibility_gate",
+                  "add_new_router",
+                  "add_new_calibrator",
+                  "isolate_effective_aspect_path",
+                  "switch_exhausted_mechanism",
+                  "change_predictor_or_information_source",
+                  "validate_on_fresh_cohort",
+                  "hold_baseline"
+                ]
+              }
+            }
+          }
+        },
+        "method": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "templateId",
+            "family",
+            "hypothesis",
+            "changeSummary",
+            "externalEvidenceIds"
+          ],
+          "properties": {
+            "templateId": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/templateId"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "family": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/causalFamily"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "hypothesis": {
+              "$ref": "#/$defs/text"
+            },
+          "changeSummary": {
+            "$ref": "#/$defs/text"
+          },
+          "externalEvidenceIds": {
+            "type": "array",
+            "maxItems": 32,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^EXT-[0-9]{4}$"
+            }
+          }
+          }
+        }
+      }
+    },
+    "genericPublicSummary": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/softwareVerificationPublicSummary"
+        },
+        {
+          "$ref": "#/$defs/frozenReplayPublicSummary"
+        }
+      ]
+    },
+    "softwareVerificationPublicSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "summary",
+        "artifactClaimBoundary",
+        "checks",
+        "teacher"
+      ],
+      "properties": {
+        "kind": {
+          "const": "software_verification"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "artifactClaimBoundary": {
+          "$ref": "#/$defs/text"
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "contains": {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "passed"
+              }
+            }
+          },
+          "minContains": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "checkId",
+              "status"
+            ],
+            "properties": {
+              "checkId": {
+                "$ref": "#/$defs/id"
+              },
+              "status": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_applicable"
+                ]
+              }
+            }
+          }
+        },
+        "teacher": {
+          "type": "null"
+        }
+      }
+    },
+    "frozenReplayPublicSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "summary",
+        "artifactClaimBoundary",
+        "checks",
+        "evidenceBinding",
+        "teacher"
+      ],
+      "properties": {
+        "kind": {
+          "const": "frozen_replay"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "artifactClaimBoundary": {
+          "$ref": "#/$defs/text"
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/frozenReplayOverallCheck"
+            },
+            {
+              "$ref": "#/$defs/frozenReplayMfCheck"
+            },
+            {
+              "$ref": "#/$defs/frozenReplayNonTargetCheck"
+            },
+            {
+              "$ref": "#/$defs/frozenReplayQueryLikeCheck"
+            },
+            {
+              "$ref": "#/$defs/frozenReplayCoherenceCheck"
+            },
+            {
+              "$ref": "#/$defs/frozenReplayTestCheck"
+            }
+          ],
+          "items": false
+        },
+        "evidenceBinding": {
+          "$ref": "#/$defs/frozenReplayEvidenceBinding"
+        },
+        "teacher": {
+          "type": "null"
+        }
+      }
+    },
+    "frozenReplayCheckStatus": {
+      "enum": [
+        "passed",
+        "failed"
+      ]
+    },
+    "frozenReplayOverallCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "selection_overall_fmax_gain_positive"
+        },
+        "status": {
+          "$ref": "#/$defs/frozenReplayCheckStatus"
+        }
+      }
+    },
+    "frozenReplayMfCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "selection_molecular_function_fmax_gain_positive"
+        },
+        "status": {
+          "$ref": "#/$defs/frozenReplayCheckStatus"
+        }
+      }
+    },
+    "frozenReplayNonTargetCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "selection_bp_cc_predictions_unchanged"
+        },
+        "status": {
+          "$ref": "#/$defs/frozenReplayCheckStatus"
+        }
+      }
+    },
+    "frozenReplayQueryLikeCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "selection_query_like_predictions_unchanged"
+        },
+        "status": {
+          "$ref": "#/$defs/frozenReplayCheckStatus"
+        }
+      }
+    },
+    "frozenReplayCoherenceCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "finalist_selection_decision_coherent"
+        },
+        "status": {
+          "const": "passed"
+        }
+      }
+    },
+    "frozenReplayTestCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkId",
+        "status"
+      ],
+      "properties": {
+        "checkId": {
+          "const": "test_result_present"
+        },
+        "status": {
+          "const": "passed"
+        }
+      }
+    },
+    "frozenReplayEvidenceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptSchemaVersion",
+        "receiptCanonicalHash",
+        "protocolId",
+        "protocolHash",
+        "formalOpeningHash",
+        "formalOpeningTagObjectId",
+        "finalistHash",
+        "baselineBatchCanonicalHash",
+        "baselineAcquisitionCanonicalHash",
+        "baselineAcquisition",
+        "prospective20PrivateEvidenceAudit",
+        "liveReplayCanonicalHash",
+        "controlPredictionHash",
+        "candidatePredictionHash",
+        "selectionDecision",
+        "selectedVariantId",
+        "candidateVariantId",
+        "candidateGenomeHash",
+        "controlGenomeHash",
+        "deepGoPlusMethodHash",
+        "ontologySha256"
+      ],
+      "properties": {
+        "receiptSchemaVersion": {
+          "const": "pi-deepgoplus-hybrid-rsi-public-summary.v1"
+        },
+        "receiptCanonicalHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "protocolId": {
+          "const": "z55-prospective20-mf-consensus-v1"
+        },
+        "protocolHash": {
+          "const": "b64d0d560e8222f8ad0f09a13ba2d71453746f668bf9fceee0551e9b333b501e"
+        },
+        "formalOpeningHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "formalOpeningTagObjectId": {
+          "$ref": "#/$defs/oid"
+        },
+        "finalistHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "baselineBatchCanonicalHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "baselineAcquisitionCanonicalHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "baselineAcquisition": {
+          "$ref": "#/$defs/frozenReplayBaselineAcquisition"
+        },
+        "prospective20PrivateEvidenceAudit": {
+          "$ref": "#/$defs/frozenReplayPrivateEvidenceAudit"
+        },
+        "liveReplayCanonicalHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "controlPredictionHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "candidatePredictionHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "selectionDecision": {
+          "enum": [
+            "promote_candidate",
+            "retain_baseline"
+          ]
+        },
+        "selectedVariantId": {
+          "enum": [
+            "g3_consensus_rerank_mf_scale_1_floor_0_35_top_10",
+            "agent_baseline"
+          ]
+        },
+        "candidateVariantId": {
+          "const": "g3_consensus_rerank_mf_scale_1_floor_0_35_top_10"
+        },
+        "candidateGenomeHash": {
+          "const": "ad34fbe9bcf993d9a2353d6485734dd182128887b659f3fdfe0cea851a1892c0"
+        },
+        "controlGenomeHash": {
+          "const": "3f36e088c3eaa654a16a2f8ef0340421a75869ad64fac903be89d1ea6854af03"
+        },
+        "deepGoPlusMethodHash": {
+          "const": "b9090c140adbaeef96a97ae0b98dd1eba5edc23f4d333a159e4ec94dc46a5bbc"
+        },
+        "ontologySha256": {
+          "const": "c72fc198a86983d55e43aac585d1ffdbeb6e3601475b3f18b6045acdc0a0734c"
+        }
+      }
+    },
+    "frozenReplayPrivateEvidenceAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "samplingReceiptHash",
+        "homologyAuditHash",
+        "excludedPriorSuiteCount",
+        "excludedPriorIdentityCount",
+        "matchedSourceRecordCount",
+        "selectedPairCount",
+        "sharedInterproPairCount",
+        "pairsAtOrAboveKmerThreshold"
+      ],
+      "properties": {
+        "samplingReceiptHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "homologyAuditHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "excludedPriorSuiteCount": {
+          "const": 8
+        },
+        "excludedPriorIdentityCount": {
+          "const": 122
+        },
+        "matchedSourceRecordCount": {
+          "const": 122
+        },
+        "selectedPairCount": {
+          "const": 190
+        },
+        "sharedInterproPairCount": {
+          "const": 0
+        },
+        "pairsAtOrAboveKmerThreshold": {
+          "const": 0
+        }
+      }
+    },
+    "frozenReplayBaselineAcquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "suiteId",
+        "publicManifestHash",
+        "privateExclusionsHash",
+        "genomeHash",
+        "ontologySha256",
+        "batchManifestHash",
+        "planHash",
+        "planFileSha256",
+        "receiptHash",
+        "receiptFileSha256",
+        "sourceManifestHash",
+        "sourceManifestFileSha256",
+        "executionScope",
+        "sourceKind",
+        "acquisitionEpochId",
+        "status",
+        "caseCount",
+        "completedCaseCount",
+        "canonicalHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pi-prospective20-baseline-acquisition-binding.v1"
+        },
+        "suiteId": {
+          "const": "bioreason-pro-z55-prospective20"
+        },
+        "publicManifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "privateExclusionsHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "genomeHash": {
+          "const": "3f36e088c3eaa654a16a2f8ef0340421a75869ad64fac903be89d1ea6854af03"
+        },
+        "ontologySha256": {
+          "const": "c72fc198a86983d55e43aac585d1ffdbeb6e3601475b3f18b6045acdc0a0734c"
+        },
+        "batchManifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "planHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "planFileSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "receiptHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "receiptFileSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "sourceManifestHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "sourceManifestFileSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "executionScope": {
+          "enum": [
+            "portable_remote",
+            "developer_local_snapshot"
+          ]
+        },
+        "sourceKind": {
+          "enum": [
+            "remote_exact_cache",
+            "local_content_snapshot"
+          ]
+        },
+        "acquisitionEpochId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "status": {
+          "const": "completed"
+        },
+        "caseCount": {
+          "const": 20
+        },
+        "completedCaseCount": {
+          "const": 20
+        },
+        "canonicalHash": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "executionScope": {
+              "const": "portable_remote"
+            },
+            "sourceKind": {
+              "const": "remote_exact_cache"
+            }
+          }
+        },
+        {
+          "properties": {
+            "executionScope": {
+              "const": "developer_local_snapshot"
+            },
+            "sourceKind": {
+              "const": "local_content_snapshot"
+            }
+          }
+        }
+      ]
+    },
+    "templateId": {
+      "enum": [
+        "repair_learned_channel_pipeline",
+        "route_learned_signal_by_aspect",
+        "calibrate_sources_grouped_oof_by_aspect",
+        "compare_mdeepfri_gcn_vs_cnn",
+        "add_ontology_decoder_source"
+      ]
+    },
+    "causalFamily": {
+      "enum": [
+        "selection_policy",
+        "modality_fusion",
+        "ontology_reasoning",
+        "candidate_sources",
+        "phylogeny",
+        "external_predictor",
+        "score_calibration",
+        "aspect_router",
+        "pipeline"
+      ]
+    }
+  }
+}

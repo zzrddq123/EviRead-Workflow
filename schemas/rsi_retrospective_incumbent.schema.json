@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-retrospective-incumbent.v1",
+  "title": "Immutable adoption of a retrospective operational incumbent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "adoptionId",
+    "tagRef",
+    "recordCommit",
+    "historyPrefix",
+    "formalSelection",
+    "incumbentVersion",
+    "evidence",
+    "nextCandidate",
+    "policies",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-retrospective-incumbent.v1"
+    },
+    "adoptionId": { "$ref": "#/$defs/id" },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/retrospective-incumbent/[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "recordCommit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceCommit", "sourceTree"],
+      "properties": {
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "sourceTree": { "$ref": "#/$defs/oid" }
+      }
+    },
+    "historyPrefix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventSequence",
+        "eventManifestHash",
+        "selectedVersionId",
+        "operationalIncumbentVersionId"
+      ],
+      "properties": {
+        "eventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999
+        },
+        "eventManifestHash": { "$ref": "#/$defs/hash" },
+        "selectedVersionId": { "$ref": "#/$defs/id" },
+        "operationalIncumbentVersionId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "formalSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selectedVersion", "formalDecisionMutation"],
+      "properties": {
+        "selectedVersion": { "$ref": "#/$defs/versionBinding" },
+        "formalDecisionMutation": { "type": "null" }
+      }
+    },
+    "incumbentVersion": { "$ref": "#/$defs/versionBinding" },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteId",
+        "reportPath",
+        "reportSha256",
+        "reportBlobObjectId",
+        "cohort",
+        "metric",
+        "selectedVariantId",
+        "selectionOverallFmax",
+        "testOverallFmax",
+        "artifactCanonicalHashes",
+        "claimBoundary"
+      ],
+      "properties": {
+        "suiteId": { "$ref": "#/$defs/id128" },
+        "reportPath": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*$",
+          "maxLength": 512
+        },
+        "reportSha256": { "$ref": "#/$defs/hash" },
+        "reportBlobObjectId": { "$ref": "#/$defs/oid" },
+        "cohort": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "development",
+            "calibration",
+            "selection",
+            "test",
+            "total"
+          ],
+          "properties": {
+            "development": { "const": 40 },
+            "calibration": { "const": 20 },
+            "selection": { "const": 20 },
+            "test": { "const": 20 },
+            "total": { "const": 100 }
+          }
+        },
+        "metric": {
+          "const": "hierarchical_protein_centric_fmax_v1"
+        },
+        "selectedVariantId": { "$ref": "#/$defs/id128" },
+        "selectionOverallFmax": { "$ref": "#/$defs/comparison" },
+        "testOverallFmax": { "$ref": "#/$defs/comparison" },
+        "artifactCanonicalHashes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "opening",
+            "finalist",
+            "testOpening",
+            "publicSummary"
+          ],
+          "properties": {
+            "opening": { "$ref": "#/$defs/hash" },
+            "finalist": { "$ref": "#/$defs/hash" },
+            "testOpening": { "$ref": "#/$defs/hash" },
+            "publicSummary": { "$ref": "#/$defs/hash" }
+          }
+        },
+        "claimBoundary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    },
+    "nextCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "plannedVersionId",
+        "reason",
+        "hypothesis",
+        "plannedChangeSummary",
+        "codeChangeTargets",
+        "controls",
+        "verificationRequirements",
+        "evaluationPolicy",
+        "retrospectiveEvidencePolicy",
+        "planHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "pi-rsi-retrospective-incumbent-spec.v1"
+        },
+        "plannedVersionId": { "$ref": "#/$defs/id" },
+        "reason": { "$ref": "#/$defs/text" },
+        "hypothesis": { "$ref": "#/$defs/text" },
+        "plannedChangeSummary": { "$ref": "#/$defs/text" },
+        "codeChangeTargets": { "$ref": "#/$defs/textList" },
+        "controls": { "$ref": "#/$defs/textList" },
+        "verificationRequirements": { "$ref": "#/$defs/textList" },
+        "evaluationPolicy": {
+          "const": "fresh_prospective_opening_required_for_future_candidate_v1"
+        },
+        "retrospectiveEvidencePolicy": {
+          "const": "development_signal_never_formal_promotion_evidence_v1"
+        },
+        "planHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "operationalRole",
+        "formalSelection",
+        "evidenceTiming",
+        "promotionEligibility",
+        "candidateOrder"
+      ],
+      "properties": {
+        "authority": {
+          "const": "immutable_annotated_tag_and_serial_event_v1"
+        },
+        "operationalRole": {
+          "const": "developer_and_runtime_incumbent_v1"
+        },
+        "formalSelection": {
+          "const": "unchanged_until_prospective_decision_v1"
+        },
+        "evidenceTiming": {
+          "const": "retrospective_preexisting_development_and_procedural_holdout_v1"
+        },
+        "promotionEligibility": {
+          "const": "ineligible_retrospective_evidence_never_promotes_v1"
+        },
+        "candidateOrder": {
+          "const": "incumbent_plan_before_candidate_commit_and_registration_v1"
+        }
+      }
+    },
+    "claimBoundary": {
+      "const": "Retrospective incumbent adoption changes the operational development baseline only; formal prospective selection remains unchanged, the adopted version remains prospectively unevaluated, and all future promotion claims require a fresh prospective opening."
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "id128": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "shortText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    },
+    "textList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/shortText" }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline",
+        "candidate",
+        "candidateMinusBaseline"
+      ],
+      "properties": {
+        "baseline": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "candidate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "candidateMinusBaseline": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
+    },
+    "versionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "manifestHash",
+        "sourceCommit",
+        "tagObjectId"
+      ],
+      "properties": {
+        "versionId": { "$ref": "#/$defs/id" },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "tagObjectId": { "$ref": "#/$defs/oid" }
+      }
+    }
+  }
+}

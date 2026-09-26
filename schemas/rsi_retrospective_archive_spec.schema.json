@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-retrospective-archive-spec.v1",
+  "title": "Closed specification for a retrospective RSI artifact archive",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifacts",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "pi-rsi-retrospective-archive-spec.v1"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifactId",
+          "visibility",
+          "sourceRelativePath"
+        ],
+        "properties": {
+          "artifactId": {
+            "$ref": "#/$defs/id"
+          },
+          "visibility": {
+            "enum": [
+              "public",
+              "private"
+            ]
+          },
+          "sourceRelativePath": {
+            "$ref": "#/$defs/relativePath"
+          }
+        }
+      }
+    },
+    "canonicalHash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f](?:[^\\\\\\u0000-\\u001f\\u007f]*[^/\\\\\\u0000-\\u001f\\u007f])?$"
+    }
+  }
+}

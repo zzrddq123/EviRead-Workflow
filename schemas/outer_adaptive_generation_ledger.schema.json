@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "pi-outer-adaptive-generation-ledger.v1",
+  "title": "Cross-generation source, implementation, test and outcome ledger", "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "campaignId", "objectiveHash", "entries", "headEntryHash", "canonicalHash"],
+  "properties": {
+    "schemaVersion": { "const": "pi-outer-adaptive-generation-ledger.v1" }, "campaignId": { "$ref": "#/$defs/id" }, "objectiveHash": { "$ref": "#/$defs/hash" },
+    "entries": { "type": "array", "minItems": 1, "maxItems": 33, "items": { "type": "object", "additionalProperties": false, "required": ["generation", "parentGeneration", "previousEntryHash", "parentOutcomeHash", "proposalHash", "outcomeHash", "sourceCommit", "implementationHash", "testReceiptHash", "researchCardBundleHash", "methodCapability", "controlPredictionHash", "candidatePredictionHash", "freezeReceiptHash", "openingHash", "retained", "entryHash"], "properties": {
+      "generation": { "type": "integer", "minimum": 0, "maximum": 32 }, "parentGeneration": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 31 }, { "type": "null" }] }, "previousEntryHash": { "$ref": "#/$defs/nullableHash" }, "parentOutcomeHash": { "$ref": "#/$defs/nullableHash" }, "proposalHash": { "$ref": "#/$defs/nullableHash" }, "outcomeHash": { "$ref": "#/$defs/nullableHash" }, "sourceCommit": { "$ref": "#/$defs/commit" }, "implementationHash": { "$ref": "#/$defs/hash" }, "testReceiptHash": { "$ref": "#/$defs/hash" }, "researchCardBundleHash": { "$ref": "#/$defs/hash" }, "methodCapability": { "$ref": "#/$defs/capability" }, "controlPredictionHash": { "$ref": "#/$defs/nullableHash" }, "candidatePredictionHash": { "$ref": "#/$defs/hash" }, "freezeReceiptHash": { "$ref": "#/$defs/nullableHash" }, "openingHash": { "$ref": "#/$defs/nullableHash" }, "retained": { "type": "boolean" }, "entryHash": { "$ref": "#/$defs/hash" }
+    } } },
+    "headEntryHash": { "$ref": "#/$defs/hash" }, "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": { "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }, "nullableHash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] }, "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" }, "capability": { "enum": ["frozen_replay", "cafa_hierarchical_metrics", "detailed_teacher_attribution", "stage_count_instrumentation", "aspect_isolated_routing", "group_aware_calibration_split", "paired_structure_sequence_predictor", "ontology_aware_candidate_decoder"] } }
+}

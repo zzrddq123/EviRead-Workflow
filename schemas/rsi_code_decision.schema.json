@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-code-decision.v1",
+  "title": "Append-only RSI code-version selection decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "decisionId",
+    "tagRef",
+    "previousDecision",
+    "evaluation",
+    "selectionBefore",
+    "candidateVersion",
+    "selectedVersion",
+    "action",
+    "rationale",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-code-decision.v1" },
+    "decisionId": { "$ref": "#/$defs/id" },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/decision/[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "previousDecision": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decisionId", "manifestHash"],
+          "properties": {
+            "decisionId": { "$ref": "#/$defs/id" },
+            "manifestHash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluationId", "resultManifestHash"],
+      "properties": {
+        "evaluationId": { "$ref": "#/$defs/id" },
+        "resultManifestHash": { "$ref": "#/$defs/hash" },
+        "publicationManifestHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "selectionBefore": { "$ref": "#/$defs/versionBinding" },
+    "candidateVersion": { "$ref": "#/$defs/versionBinding" },
+    "selectedVersion": { "$ref": "#/$defs/versionBinding" },
+    "action": { "enum": ["continue", "backtrack", "retain"] },
+    "rationale": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "versionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "manifestHash",
+        "sourceCommit",
+        "tagObjectId"
+      ],
+      "properties": {
+        "versionId": { "$ref": "#/$defs/id" },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "tagObjectId": { "$ref": "#/$defs/oid" }
+      }
+    }
+  }
+}

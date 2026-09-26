@@ -1,0 +1,41 @@
+{
+  "schema": "eviread-functionbench-gaf1389-query-embeddings.v1",
+  "query_count": 1389,
+  "models": {
+    "esm2": {
+      "file": "query-embeddings-1389-esm2.npy",
+      "shape": [
+        1389,
+        1280
+      ],
+      "dtype": "float32",
+      "sha256": "99fc78ed462d1b83b722c6fc45c4e97aa76d786b2e2429e1d427d04db8d04931",
+      "bytes": 7111808
+    },
+    "esmc": {
+      "file": "query-embeddings-1389-esmc.npy",
+      "shape": [
+        1389,
+        1152
+      ],
+      "dtype": "float32",
+      "sha256": "a0a1c1fd7148e9ee1c1c8750421c628012295e754d50de8e5318b6281375cc67",
+      "bytes": 6400640
+    },
+    "protrek": {
+      "file": "query-embeddings-1389-protrek.npy",
+      "shape": [
+        1389,
+        1024
+      ],
+      "dtype": "float32",
+      "sha256": "c65d2ff27b5a9422d0f9f449cbb475c9e519d0a133d3d69e11e07ef281f2a7bd",
+      "bytes": 5689472
+    }
+  },
+  "target_sequence_source": "/path/to/FunctionBench-Bio-GAF1389/cohorts/all/targets.fasta",
+  "donor_index_manifest": "full-swissprot-index-manifest.json",
+  "donor_references": "full-swissprot-references.json",
+  "provenance": "Recomputed with locally pinned ESM2/ESMC/ProTrek checkpoints; GPU 0/1; residue-weighted 1022-chunk pooling and L2 normalization.",
+  "donor_references_sha256": "bff469a7be9ac81f63537602e22bf019126c34592b18ec878db60be13b851834"
+}

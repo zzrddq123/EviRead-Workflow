@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-epoch-resume.v1",
+  "title": "Immutable bridge from a terminal stop into a separately planned RSI epoch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "resumeId",
+    "tagRef",
+    "terminalStop",
+    "historyPrefix",
+    "selectedVersion",
+    "baseVersion",
+    "nextEpoch",
+    "policies",
+    "claimBoundary",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-epoch-resume.v1" },
+    "resumeId": { "$ref": "#/$defs/id" },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/epoch-resume/[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "terminalStop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "explorationId",
+        "manifestHash",
+        "tagObjectId",
+        "eventSequence",
+        "eventManifestHash"
+      ],
+      "properties": {
+        "explorationId": { "$ref": "#/$defs/id" },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "tagObjectId": { "$ref": "#/$defs/oid" },
+        "eventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999
+        },
+        "eventManifestHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "historyPrefix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventSequence",
+        "eventManifestHash",
+        "selectedVersionId"
+      ],
+      "properties": {
+        "eventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99999999
+        },
+        "eventManifestHash": { "$ref": "#/$defs/hash" },
+        "selectedVersionId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "selectedVersion": { "$ref": "#/$defs/versionBinding" },
+    "baseVersion": { "$ref": "#/$defs/versionBinding" },
+    "nextEpoch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "epochId",
+        "plannedVersionId",
+        "reason",
+        "hypothesis",
+        "plannedChangeSummary",
+        "codeChangeTargets",
+        "controls",
+        "verificationRequirements",
+        "evaluationPolicy",
+        "retrospectiveEvidencePolicy",
+        "planHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "pi-rsi-epoch-resume-spec.v1" },
+        "epochId": { "$ref": "#/$defs/id" },
+        "plannedVersionId": { "$ref": "#/$defs/id" },
+        "reason": { "$ref": "#/$defs/text" },
+        "hypothesis": { "$ref": "#/$defs/text" },
+        "plannedChangeSummary": { "$ref": "#/$defs/text" },
+        "codeChangeTargets": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/shortText" }
+        },
+        "controls": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/shortText" }
+        },
+        "verificationRequirements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/shortText" }
+        },
+        "evaluationPolicy": {
+          "const": "fresh_prospective_opening_required_before_private_evaluation_v1"
+        },
+        "retrospectiveEvidencePolicy": {
+          "const": "knowledge_only_never_promotion_eligible_v1"
+        },
+        "planHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "resumption",
+        "selection",
+        "candidateOrder"
+      ],
+      "properties": {
+        "authority": {
+          "const": "immutable_annotated_tag_and_serial_event_v1"
+        },
+        "resumption": {
+          "const": "explicit_append_only_new_epoch_after_terminal_stop_v1"
+        },
+        "selection": {
+          "const": "unchanged_until_prospective_decision_v1"
+        },
+        "candidateOrder": {
+          "const": "resume_plan_before_candidate_commit_and_registration_v1"
+        }
+      }
+    },
+    "claimBoundary": {
+      "const": "Epoch resumption authorizes a planned code candidate only; it does not change formal selection, promote a version, or make retrospective evidence prospective."
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "shortText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    },
+    "versionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "versionId",
+        "manifestHash",
+        "sourceCommit",
+        "tagObjectId"
+      ],
+      "properties": {
+        "versionId": { "$ref": "#/$defs/id" },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "sourceCommit": { "$ref": "#/$defs/oid" },
+        "tagObjectId": { "$ref": "#/$defs/oid" }
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pi-rsi-code-event.v1",
+  "title": "Serialized immutable mutation in the RSI code-version graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sequence",
+    "tagRef",
+    "previousEvent",
+    "mutation",
+    "canonicalHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "pi-rsi-code-event.v1" },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999
+    },
+    "tagRef": {
+      "type": "string",
+      "pattern": "^refs/tags/rsi/event/[0-9]{8}$"
+    },
+    "previousEvent": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sequence", "manifestHash", "tagObjectId"],
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99999999
+            },
+            "manifestHash": { "$ref": "#/$defs/hash" },
+            "tagObjectId": { "$ref": "#/$defs/oid" }
+          }
+        }
+      ]
+    },
+    "mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref", "manifestHash", "tagObjectId"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "version",
+            "evaluation_opening",
+            "evaluation_result",
+            "evaluation_publication",
+            "decision",
+            "developer_exploration",
+            "epoch_resume",
+            "retrospective_experiment",
+            "retrospective_incumbent"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "pattern": "^refs/tags/rsi/(?:version/[a-z0-9][a-z0-9._-]{0,63}|evaluation/[a-z0-9][a-z0-9._-]{0,63}/(?:opening|result|publication)|decision/[a-z0-9][a-z0-9._-]{0,63}|exploration/[a-z0-9][a-z0-9._-]{0,63}|epoch-resume/[a-z0-9][a-z0-9._-]{0,63}|retrospective/[a-z0-9][a-z0-9._-]{0,63}|retrospective-incumbent/[a-z0-9][a-z0-9._-]{0,63})$"
+        },
+        "manifestHash": { "$ref": "#/$defs/hash" },
+        "tagObjectId": { "$ref": "#/$defs/oid" }
+      }
+    },
+    "canonicalHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "oid": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    }
+  }
+}
