@@ -1,12 +1,12 @@
 {
   "schemaVersion": "pi-rsi-operational-source-release.v1",
-  "codebase": "EviRead-CodeBase1-BioLM-RSI",
+  "codebase": "EviRead-Workflow",
   "purpose": "Codebase1 Codex RSI with retained high-similarity homologs and training-gated validation",
   "claimBoundary": "Current operational source inventory; does not replace historical G0 identity or establish test generalization",
   "files": [
     {
       "path": ".gitignore",
-      "sha256": "e5e718b06e5c931d590a054b148aa46656094b6b9d2a8f1b5553ee9f011b8de5"
+      "sha256": "3e2a6602c4011d765abcb202781506d61431cf3a3e0b96bc51e34f1f42a9d184"
     },
     {
       "path": "AGENTS.md",
@@ -14,7 +14,7 @@
     },
     {
       "path": "CODEBASE_COMPOSITION.json",
-      "sha256": "8465c10cd697d9dcecc33e7b3192aecdd90b826f54a7905e3c3dff79f150c5b3"
+      "sha256": "223c2e69002d6c3eaa94879413e9321097deb6f65c6099a4c00524a87c1954ca"
     },
     {
       "path": "CODEBASE_COMPOSITION.md",
@@ -22,11 +22,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "6730b58ef1610c465dd0f63cb996c056b06cfd6a662824efecb0d894e670e3c6"
+      "sha256": "cc730b7424e30736e7048b924aa879bd1d6a9781e3d473bf82abd0aa7c316045"
     },
     {
       "path": "README_CODEBASE1.md",
-      "sha256": "a7c34312d0af74ce2f04b50e896070cf2723e2a430eb6bcfabb30375e0cdd439"
+      "sha256": "9cfb49130eff83de5c88556cd0234f758d5c245c9c504f9c677fa1ebb98e7ecf"
     },
     {
       "path": "bootstrap/bootstrap.py",
@@ -78,11 +78,11 @@
     },
     {
       "path": "config/biolm_policy.json",
-      "sha256": "7e8b98fb460d081bf84cf3117f3d52996915f989776bea6f19610c092dc99194"
+      "sha256": "ef48d7c6c8bbf42511a69a68807492470e35a30ce4d16072814ac82d38812a69"
     },
     {
       "path": "config/codebase1-dual-fmax-policy.json",
-      "sha256": "0fd49f601ef3b7186fc39da4fb435ab29064a5ce16122721e5e1ee83304afb88"
+      "sha256": "537eec56349ebdc65d4908c9146751ef39b2ad561b2d0e4e8f02fcbe8615ce90"
     },
     {
       "path": "config/r09-v140-source-provenance.json",
@@ -122,19 +122,27 @@
     },
     {
       "path": "docs/CODEBASE1_BIOLM_ONLY.md",
-      "sha256": "4d025604e962d809f6f7a0ad39f3c1037f077007185a84ce979a1c4fc7989f82"
+      "sha256": "9e191f935fa185dfcc48df500040d7576c14858f42ac90e60809712e32f6fcc5"
     },
     {
       "path": "docs/CODEBASE1_RSI.md",
-      "sha256": "1c7e569d7343c68c506e9ad325cbe3923c55683431d7e1b2ba63804e8530ed08"
+      "sha256": "d23936bd3acc05fc869fc4d0a41548a9e111bf4ca5603243fe686af1103cadf2"
     },
     {
       "path": "docs/EVIDENCE_PROFILES.md",
       "sha256": "83512e66190e85076a8a2279c5b62118b93040d622a70710044940b0a504b418"
     },
     {
+      "path": "docs/EVIREAD_NEXT_VERSION_PLAN_ZH.md",
+      "sha256": "c70f9a0506b7d7f71085f71f8e758d8b0ec4514337ac7075bf56fd736f44b500"
+    },
+    {
       "path": "docs/EVIREAD_READ_PIPELINE.md",
       "sha256": "208fb2bdf589b3629d333edcc751c0f624a5a23524d49dd941933d86bb1d42dc"
+    },
+    {
+      "path": "docs/FUNCTION_PREDICTION_DEVELOPMENT.md",
+      "sha256": "bd738f8d67a8cdbf49b16a41e9b63217a7fcbc34371945420d746a3f50b3640d"
     },
     {
       "path": "docs/ICLR_EXPERIMENT_PROTOCOL.md",
@@ -142,7 +150,7 @@
     },
     {
       "path": "docs/ICLR_RESOURCE_POLICY.md",
-      "sha256": "5bb3d67296debbd755ee1972ec0093ff5c8697ed05fa1d86b9a5814941db2185"
+      "sha256": "46e803ff540897607ce07d2e70a1c81b2bdfbefafd51eb616ce85cf6ca650623"
     },
     {
       "path": "docs/RSI_METHOD_DEVELOPMENT_POLICY.md",
@@ -166,7 +174,7 @@
     },
     {
       "path": "docs/rsi/RSI_CODE_VERSION_GRAPH_ZH.md",
-      "sha256": "0b27409149968b2cf9862ab5778d73e0f7ba634f6bf394db305e890094818705"
+      "sha256": "402e09838c295f916991e1a4eb07157b16eab2a9202712bce403ec45106c744e"
     },
     {
       "path": "docs/rsi/RSI_DEVELOPER_EVALUATOR_LOOP_ZH.md",
@@ -226,11 +234,11 @@
     },
     {
       "path": "python/biolm.py",
-      "sha256": "0caf12671a4ad0fb906a001b7b8ada5d98be9f7b2912cdc0db06b383dccedfc5"
+      "sha256": "5b6392b9bb5875f136d1dbccc85bc846cde395d42a7e5b3557dbf90083921338"
     },
     {
       "path": "python/biolm_embed.py",
-      "sha256": "cbf3409f4e096f668083467de368e39c529e4ea4412a87e2e49c92eaaddc0740"
+      "sha256": "d7c0dfca96562640d2d0c642c1adf5232b3ca8ea8eff51b2bf869885a0575694"
     },
     {
       "path": "python/biolm_evidence_from_tsv.py",
@@ -550,7 +558,7 @@
     },
     {
       "path": "schemas/release_resource_lock.schema.json",
-      "sha256": "bb2b2bf0a03c9353127234a88277628ac416b78e99d8342955ab221a1176c8e6"
+      "sha256": "c8c7f215a5a6b76512dab6ac9e88701a24d9e8e3fbc220173b068435eb0e935d"
     },
     {
       "path": "schemas/rsi_agent_prediction.schema.json",
@@ -722,15 +730,15 @@
     },
     {
       "path": "scripts/functionbench_dual_split_evaluator.py",
-      "sha256": "90c26289e400bfcb11663870695133570d1ebc31c865e8328b0feeba1dc9dba1"
+      "sha256": "e7c56af8d123ddfb9018175f5ff06a9eb1ca9fd2100715bac35bbbaa5d8b7344"
     },
     {
       "path": "scripts/functionbench_training_gated_evaluator.py",
-      "sha256": "99f6c9c5d989947d54212336b4549cac2f94ec73f884d313cbf86e29abe353d9"
+      "sha256": "b6a8d68ffdd38385fd8754e934191dc2af11949c6a34303178f5749f5f90fb40"
     },
     {
       "path": "scripts/prepare_dual_fmax_campaign.py",
-      "sha256": "740a7769a2c29160cbe0ea0d59dd2539c0832b5d162d66137e3388b62b4615ef"
+      "sha256": "0af9c9c9b0581e501ade63e061bca918006315586999c16b41c3509a21576fda"
     },
     {
       "path": "scripts/prepare_training_gated_profile.py",
@@ -802,7 +810,7 @@
     },
     {
       "path": "src/codex_runtime.ts",
-      "sha256": "f79e2ab8b03b300edece2afdad7030538c512a2a4b87f6601a540b95565f7b43"
+      "sha256": "58bf7676aba9a9c1c7158baa8ef5c9241ba8112780f45a6e87cad5c549349963"
     },
     {
       "path": "src/config.ts",
@@ -1022,7 +1030,7 @@
     },
     {
       "path": "src/outer/autonomous/contracts.ts",
-      "sha256": "0b350753cf2277c4b4b8ebdd81894e64da4752c964f7c483a2b62aa7acd517f9"
+      "sha256": "46e0be90962100a193ee1ef100125ed7a413d613fbf9c1bf7d02de6c02e44e57"
     },
     {
       "path": "src/outer/autonomous/formal_bridge.ts",
@@ -1038,7 +1046,7 @@
     },
     {
       "path": "src/outer/autonomous/orchestrator.ts",
-      "sha256": "8956af6f0dcdd9c00c6458ecd862d2b81878563d256b7c45f8388b94397dcf10"
+      "sha256": "d60463e7b8e70eb54a8e601746d5e539e7e0a7085d0d83b49540dbb06d9483bd"
     },
     {
       "path": "src/outer/autonomous/production_init.ts",
@@ -1050,7 +1058,7 @@
     },
     {
       "path": "src/outer/autonomous/production_worker.ts",
-      "sha256": "2216ec35246d1e25498d8056d5e60d0c2ae8c07ed9e1d20f9e9ba5d0674d3251"
+      "sha256": "9a8c41e4d18bc03087b529285e237a981acdb0d22dea9ced0ddb1b2483bfd83c"
     },
     {
       "path": "src/outer/autonomous/training_screening.ts",
@@ -1222,7 +1230,7 @@
     },
     {
       "path": "test/rsi/latest_tree_search.test.ts",
-      "sha256": "2563541eec50d760a0820da2f69da29fba22e40784f67b82747d5746700d00d5"
+      "sha256": "41ffda2efc65a406d5e565e51e7d69c45149dac281f7f89e68a64e4b90bb0694"
     },
     {
       "path": "test/rsi/production_start_model_binding.test.ts",
@@ -1233,5 +1241,5 @@
       "sha256": "3c204078994d14e1f659c9affa56ed72757935d259e97fbaf6c3b372c1da4224"
     }
   ],
-  "canonicalHash": "2656076276eb508a4a7106d41a2841de1406958d53a6979463828dba7da5ed32"
+  "canonicalHash": "24a7e9a717f435bcca886dc00ae0d774e6bcbcfe8af35ddb4c11ad71fbde5dd2"
 }

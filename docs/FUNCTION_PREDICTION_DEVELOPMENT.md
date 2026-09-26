@@ -9,7 +9,7 @@
 3. **输出**：只保留候选生成、ontology closure 和校验；不把长历史、重复模型上下文传给 develop。保留 hash、release、evidence code 和 donor provenance，保证可审计。
 
 ## 模型选择规则
-每个模型先单独作为 baseline；只有在同一 split、同一参考库、无 query-like 泄漏下，验证指标超过当前 baseline 且没有其他 GO aspect 回退时才启用。Benchmark 的冻结历史结果显示，BioLM 三者中 ProTrek（macro-Fmax 0.4056）高于 ESM2（0.3322）和 ESMC（0.2864），因此默认使用 ProTrek；ESMC/ESM2 通过 `config/biolm_policy.json` 的 `models` 和 `model_weights` 显式加入，权重由 OOF 验证指标确定，而不是预先假定“模型越多越好”。
+每个模型先单独作为 baseline；只有在同一 split、同一参考库、无 query-like 泄漏下，验证指标超过当前 baseline 且没有其他 GO aspect 回退时才启用。Benchmark 的冻结历史结果显示，BioLM 三者中 ProTrek 高于 ESM2 和 ESMC，因此默认使用 ProTrek；ESMC/ESM2 通过 `config/biolm_policy.json` 的 `models` 和 `model_weights` 显式加入，权重由 OOF 验证指标确定，而不是预先假定“模型越多越好”。
 
 ## RSI develop contract
 开发循环只提交一个可证伪变化：`select model → evidence-weighted retrieval → validate → retain/revert`。训练/验证可用于开发；测试保持冻结。资源 release/hash 必须随 artifact 记录，不能在线混用当前 UniProt 数据。

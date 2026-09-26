@@ -1,7 +1,7 @@
 {
   "schemaVersion": "eviread-dual-split-fmax.v1",
-  "baselineTrainMacroFmax": 0.466231799394,
-  "baselineValidationMacroFmax": 0.460259766007,
+  "baselineTrainMacroFmax": null,
+  "baselineValidationMacroFmax": null,
   "baselineMethod": "interlabelgo_plus",
   "baselineSource": "/path/to/FunctionBench-Bio-GAF1389/Baseline_Subset_Results",
   "metric": "ontology_macro:Fmax",
