@@ -1,4 +1,4 @@
-# EviRead-CodeBase2-Augmented-RSI
+# EviRead-Workflow
 
 Protein function prediction agent with an autonomous recursive self-improvement (RSI) loop, prepared for anonymous ICLR 2027 supplementary code release.
 
